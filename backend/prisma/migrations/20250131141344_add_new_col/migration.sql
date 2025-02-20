@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Event" ADD COLUMN     "endAt" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "startAt" TEXT NOT NULL DEFAULT '';

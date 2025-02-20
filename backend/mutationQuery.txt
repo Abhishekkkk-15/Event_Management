@@ -1,0 +1,22 @@
+{
+  "query": "mutation SignUp($user: SignUpInput!) { signUp(user: $user) { id name email } }",
+  "variables": {
+    "user": {
+      "name": "John Doe",
+      "email": "johndoe@example.com",
+      "password": "securepassword123"
+    }
+  }
+}
+
+{
+  "query": "mutation login($input: LoginInput!) { login(input: $input) { id name email } }",
+  "variables": {
+    "input": {
+      "email": "mrabhi748@gmail.com",
+      "password": "abhi2193"
+    }
+  }
+}
+
+  

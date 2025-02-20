@@ -1,0 +1,16 @@
+# Ignore TypeScript files
+*.ts
+*.tsx
+
+# Ignore node_modules
+node_modules/
+
+# Ignore build files
+build/
+.env
+
+# Keep dist folder (compiled JS)
+!dist/
+
+# Keep prisma folder (for schema and migrations)
+!prisma/

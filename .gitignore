@@ -1,0 +1,17 @@
+# Ignore node_modules
+frontend/node_modules/
+backend/node_modules/
+
+# Ignore build files globally
+/build/
+
+# Ignore IDE related files
+.idea/
+.vscode/
+
+# Ignore the frontend build folder (if any)
+frontend/build/
+backend/src
+
+# Ignore Docker volumes
+!docker-compose.yml/

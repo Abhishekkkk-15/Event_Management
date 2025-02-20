@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2021", 
+    "module": "CommonJS", 
+    "lib": ["ES2021"], 
+    "strict": true, 
+    "moduleResolution": "Node", 
+    "esModuleInterop": true, 
+    "skipLibCheck": true, 
+    "forceConsistentCasingInFileNames": true, 
+    "resolveJsonModule": true, 
+    "outDir": "dist",
+    "rootDir": "src",
+    "typeRoots": ["./node_modules/@types", "./@types"],
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "prisma/**/*.ts"], 
+  "exclude": ["node_modules", "dist"]
+}

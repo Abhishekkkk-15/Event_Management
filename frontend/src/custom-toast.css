@@ -1,0 +1,28 @@
+/* Customize the Toast container */
+.Toastify__toast {
+    border-radius: 20px; /* For rounded corners (3x1 shape) */
+    padding: 16px; /* Adjust padding for your design */
+    background-color: #ff5733; /* Set your custom background color */
+    color: white; /* Set text color */
+    font-size: 14px; /* Font size */
+    font-family: 'Arial', sans-serif; /* Custom font */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow effect */
+  }
+  
+  /* Optionally customize success, error, info, and other toast types */
+  .Toastify__toast--success {
+    background-color: #28a745; /* Green for success */
+  }
+  
+  .Toastify__toast--error {
+    background-color: #dc3545; /* Red for error */
+  }
+  
+  .Toastify__toast--info {
+    background-color: #17a2b8; /* Blue for info */
+  }
+  
+  .Toastify__toast--warning {
+    background-color: #ffc107; /* Yellow for warning */
+  }
+  

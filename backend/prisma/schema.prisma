@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  avatar    String?   @default("https://res.cloudinary.com/dha7ofrer/image/upload/v1738293176/kgg4vvc27a1uf9ep6eef.jpg")
+  events    Event[] // One-to-many relationship
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
+}
+
+model Event {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  userId      String
+  startAt     String    @default("")
+  endAt       String    @default("")
+  user        User      @relation(fields: [userId], references: [id])
+  eventImages String[]
+  price       Float?
+  category    String    @default("Sports")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  maxSlots    Int
+  bookedSlots Int       @default(0)
+  bookings    Booking[]
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  tickets   Int      @default(1)
+  createdAt DateTime @default(now())
+  isUsed    Boolean  @default(false)
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+}
