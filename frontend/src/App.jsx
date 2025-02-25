@@ -16,6 +16,8 @@ import EditUserProfile from "./components/UserProfile";
 import Account1 from "./free/AddComponent";
 import UserProfile from "./page/UserProfile";
 import { GET_AUTH_USER } from "./graphql/query/user";
+// import VerifyEmail from "./components/VerifiyEmail";
+import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
   const user = useSelector(state => state.auth.user)
@@ -43,6 +45,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/e" element={<EditUserProfile />} />
           <Route path="/loggedUser" element={<UserProfile />} />
+          <Route path="/verifyEmail" element={<VerifyEmailPage />} />
         </Routes>
       </Router>
     </div>

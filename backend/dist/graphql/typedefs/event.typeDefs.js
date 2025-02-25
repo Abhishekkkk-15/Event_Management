@@ -24,7 +24,15 @@ scalar Upload
         events(query:String,category:String,limit:Int,page:Int): [Event!]!
         event(id: String,limit:Int): Event
         bookedSlots(id:String!):Booking
+        eventAnalystics(id:String!):eventAnalysticsData
     },
+
+    type eventAnalysticsData{
+        totalBookings: Float
+        totalAttendees: Float
+        totalEarnings: Float
+        attendanceRate: Float
+    }
 
     type Booking{
         createdAt: String!

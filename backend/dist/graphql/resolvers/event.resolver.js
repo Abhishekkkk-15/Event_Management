@@ -88,6 +88,36 @@ exports.eventResolver = {
             if (!events)
                 throw new Error("No Events create by user");
             return { events, id };
+        },
+        eventAnalystics: async (_, { eventId }, { user }) => {
+            if (!user) {
+                throw new Error("Aunthecated!!");
+            }
+            const totalBookings = await db_1.db.booking.count({
+                where: {
+                    eventId: eventId
+                }
+            });
+            const totalAttendees = await db_1.db.booking.count({
+                where: {
+                    eventId: eventId,
+                    isUsed: true
+                }
+            });
+            const totalEarnings = await db_1.db.booking.aggregate({
+                where: { eventId: eventId,
+                },
+                _sum: {
+                    pricePaid: true
+                }
+            });
+            const attendanceRate = totalBookings > 0 ? (totalAttendees / totalBookings) * 100 : 0;
+            return {
+                totalBookings,
+                totalAttendees,
+                totalEarnings,
+                attendanceRate
+            };
         }
     },
     Event: {

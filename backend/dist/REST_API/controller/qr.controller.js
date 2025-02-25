@@ -26,7 +26,7 @@ const bookTicket = async (req, res) => {
         const pdfPath = await (0, generatePdf_1.generateTicketPDF)(ticketId, userEmail);
         console.log(pdfPath);
         const mailOptions = {
-            from: "mrabhi748@gmail.com",
+            from: "jangidabhishek276@gmail.com",
             to: userEmail,
             subject: "Your Event Ticket",
             text: `Downlaod your ticker : http://localhost:5000/download-ticket/${ticketId}`,

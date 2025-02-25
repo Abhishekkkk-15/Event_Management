@@ -11,6 +11,7 @@ scalar Upload
         events: [Event]
         avatar:String
         bookings: [Booking]  
+        isVerified: Boolean
     }
 
     input UpdateUserInput {

@@ -23,6 +23,8 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   bookings  Booking[]
+  isVerified Boolean  @default(false)
+  verificationCode String? 
 }
 
 model Event {
@@ -52,6 +54,7 @@ model Booking {
   tickets   Int      @default(1)
   createdAt DateTime @default(now())
   isUsed    Boolean  @default(false)
+  pricePaid Float  @default(1)
   user  User  @relation(fields: [userId], references: [id])
   event Event @relation(fields: [eventId], references: [id])
 }
