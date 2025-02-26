@@ -18,14 +18,25 @@ scalar Upload
         startAt: String
         endAt: String
         eventImages:[String]
-        category : String
+        category: String
     },
+    type Review{
+        id: String!
+        comment: String!
+        rating: Int
+        user: User
+        event: Event
+        createdAt: String
+    }
     type Query {
         events(query:String,category:String,limit:Int,page:Int): [Event!]!
         event(id: String,limit:Int): Event
         bookedSlots(id:String!):Booking
         eventAnalystics(id:String!):eventAnalysticsData
+        getReview(eventId: String): [Review]
     },
+
+  
 
     type eventAnalysticsData{
         totalBookings: Float

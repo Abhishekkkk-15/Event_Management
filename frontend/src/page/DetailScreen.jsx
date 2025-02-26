@@ -7,6 +7,7 @@ import EventDetail from "../components/AboutEvent.jsx";
 import { showError, showInfo, showSuccess } from "../utils/toast.js";
 import { ticketBooking } from "../REST_API/booking.js";
 import { useSelector } from "react-redux";
+import ReviewsList from "../components/ReviewsList.jsx";
 
 function DetailScreen() {
   const [event, setEvent] = useState({});
@@ -237,6 +238,7 @@ function DetailScreen() {
           </div>
         </div>
       )}
+      <ReviewsList eventId={event.id}/>
     </div>
   );
 }

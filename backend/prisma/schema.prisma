@@ -23,6 +23,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   bookings  Booking[]
+  reviews   Review[]
   isVerified Boolean  @default(false)
   verificationCode String? 
 }
@@ -45,6 +46,7 @@ model Event {
   maxSlots    Int
   bookedSlots Int       @default(0)
   bookings    Booking[]
+  reviews     Review[]
 }
 
 model Booking {
@@ -57,4 +59,16 @@ model Booking {
   pricePaid Float  @default(1)
   user  User  @relation(fields: [userId], references: [id])
   event Event @relation(fields: [eventId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  rating    Int      @default(0) 
+  comment   String?
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }

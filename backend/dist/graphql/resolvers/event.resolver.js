@@ -105,7 +105,8 @@ exports.eventResolver = {
                 }
             });
             const totalEarnings = await db_1.db.booking.aggregate({
-                where: { eventId: eventId,
+                where: {
+                    eventId: eventId,
                 },
                 _sum: {
                     pricePaid: true
@@ -118,6 +119,15 @@ exports.eventResolver = {
                 totalEarnings,
                 attendanceRate
             };
+        },
+        getReview: async (_, { eventId }) => {
+            if (!eventId)
+                throw new Error("Event id not provided!");
+            return await db_1.db.review.findMany({
+                where: {
+                    eventId
+                }
+            });
         }
     },
     Event: {
@@ -138,6 +148,24 @@ exports.eventResolver = {
         }
     },
     Booking: {
+        user: async (parent) => {
+            const fetchedUser = await db_1.db.user.findUnique({
+                where: {
+                    id: parent.userId
+                }
+            });
+            return fetchedUser;
+        },
+        event: async (parent) => {
+            const fetchedEvent = await db_1.db.event.findUnique({
+                where: {
+                    id: parent.eventId
+                }
+            });
+            return fetchedEvent;
+        }
+    },
+    Review: {
         user: async (parent) => {
             const fetchedUser = await db_1.db.user.findUnique({
                 where: {

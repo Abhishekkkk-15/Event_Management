@@ -34,9 +34,9 @@ exports.userResolver = {
             if (!user)
                 return { message: "User not authenticate" };
             const userInCache = await redis_js_1.redisClient.hGetAll(`user:${user.payload.id}`);
-            if (Object.keys(userInCache).length > 0) {
-                return userInCache;
-            }
+            // if (Object.keys(userInCache).length > 0) {
+            //     return userInCache
+            // }
             const userInfo = await db_1.db.user.findUnique({
                 where: {
                     id: user.payload.id
@@ -50,10 +50,8 @@ exports.userResolver = {
                 id: userInfo.id,
                 email: userInfo.email,
                 name: userInfo.name,
-                avatar: userInfo.avatar || "", // Ensure avatar exists
-                // events: JSON.stringify(userInfo.events), // Convert array to string,
-                // bookings: JSON.stringify(userInfo.bookings), // Convert array to string,
-                // bookedSlots: userInfo.bookedSlots // Convert array to string,
+                avatar: userInfo.avatar || "",
+                isVerified: userInfo.isVerified.toString()
             });
             // console.log(userInfo)
             return userInfo;

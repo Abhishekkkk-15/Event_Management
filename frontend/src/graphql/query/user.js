@@ -7,6 +7,7 @@ const GET_AUTH_USER = gql`
       name
       email
       avatar
+      isVerified
     }
   }
 `;
@@ -17,6 +18,7 @@ const GET_LOGGED_USER_INFO = gql`
 
       name
       avatar
+      isVerified
       events{
         id
         date

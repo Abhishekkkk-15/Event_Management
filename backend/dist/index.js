@@ -18,6 +18,7 @@ const graphql_upload_minimal_1 = require("graphql-upload-minimal");
 const redis_1 = require("./services/redis");
 const booking_route_js_1 = __importDefault(require("./REST_API/routes/booking.route.js"));
 const verification_route_1 = __importDefault(require("./REST_API/routes/verification.route"));
+const review_route_1 = __importDefault(require("./REST_API/routes/review.route"));
 const dotenv_1 = require("dotenv");
 const statusMonitor = require('express-status-monitor')();
 const app = (0, express_1.default)();
@@ -46,6 +47,7 @@ const startServer = async () => {
     await server.start();
     app.use('/booking', booking_route_js_1.default);
     app.use('/emailVerification', verification_route_1.default);
+    app.use('/review', review_route_1.default);
     app.use('/graphql', (0, express4_1.expressMiddleware)(server, {
         context: async ({ req, res }) => ({ req, res, user: req.user }),
     }));

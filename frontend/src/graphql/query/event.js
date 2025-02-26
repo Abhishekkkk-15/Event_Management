@@ -13,6 +13,21 @@ const GET_EVENTS = gql`
   }
 `;
 
+const GET_ALL_REVIEWS = gql`
+  query GetReview($eventId: String!) {
+  getReview(eventId: $eventId) {
+    id
+    rating
+    comment
+   user{
+    name 
+    avatar
+   }
+   createdAt
+  }
+}
+`;
 
 
-export {GET_EVENTS}
+
+export {GET_EVENTS,GET_ALL_REVIEWS}

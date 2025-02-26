@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { sendVerificationEmail, verifyCode } from "../REST_API/emailVerification";
+import { Badge } from "@/components/ui/badge"
 
 const VerifyEmailPage = ({ onVerifyCode }) => {
   const [step, setStep] = useState("request"); // "request" or "verify"
@@ -93,6 +94,7 @@ const VerifyEmailPage = ({ onVerifyCode }) => {
           {message}
         </p>
       )}
+      <Badge>Badge</Badge>
     </div>
   );
 };
