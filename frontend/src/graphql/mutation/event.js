@@ -28,15 +28,7 @@ const GET_EVENT_BY_ID = gql`
 const CREATE_EVENT = gql`
   mutation createEvent($event: CreateEventInput!, $files: [Upload!]!) {
     createEvent(event: $event, files: $files) {
-      id
-      title
-      description
-      location
-      date
-      maxSlots
-      price
-      eventImages
-      category
+     message
     }
   }
 `;

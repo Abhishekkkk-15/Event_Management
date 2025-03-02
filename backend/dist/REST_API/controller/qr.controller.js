@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyTicket = exports.downloadTicket = exports.bookTicket = void 0;
 const generatePdf_1 = require("../../lib/generatePdf");
 const db_js_1 = require("../../lib/db.js");
-const mailTransporter_js_1 = require("../../lib/mailTransporter.js");
 const fs_1 = __importDefault(require("fs"));
 const redis_js_1 = require("../../services/redis.js");
+const queue_1 = require("../../bullMQ/queue");
 // import {} from "../../../"
 const bookTicket = async (req, res) => {
     const { eventId, userEmail, tickets } = req.body;
@@ -35,15 +35,12 @@ const bookTicket = async (req, res) => {
                     path: pdfPath
                 }]
         };
-        try {
-            await (0, mailTransporter_js_1.sendEmail)(ticketId, userEmail);
-            console.log("Mail sent");
-        }
-        catch (error) {
-            console.log("Error while Sending Email : ", error);
-        }
+        queue_1.sendEmailQueue.add("book-ticket-email", {
+            ticketId,
+            userEmail
+        });
         // await   sendTicketEmail(ticketId,ticketId,userEmail)       
-        return res.json({ success: true, message: "Ticket generated & email sent", ticketId });
+        return res.json({ success: true, message: "Ticket generated", ticketId });
     }
     catch (error) {
         res.status(500).json({ success: false, message: "Error generating ticket" });

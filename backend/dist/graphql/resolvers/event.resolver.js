@@ -1,11 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.eventResolver = void 0;
-const fileHandling_js_1 = __importDefault(require("../../lib/fileHandling.js"));
-const cloudinaryConfig_js_1 = __importDefault(require("../../lib/cloudinaryConfig.js"));
 const db_1 = require("../../lib/db");
 const redis_js_1 = require("../../services/redis.js");
 exports.eventResolver = {
@@ -184,56 +179,37 @@ exports.eventResolver = {
         }
     },
     Mutation: {
-        createEvent: async (_, { event, files }, { req, res, user }) => {
-            if (!user) {
-                throw new Error('Not authenticated');
-            }
-            const date = new Date(event.date).toISOString();
-            const images = [];
-            if (files) {
-                for (const file of files) {
-                    const filePath = await (0, fileHandling_js_1.default)(file);
-                    const upload = await (0, cloudinaryConfig_js_1.default)(filePath);
-                    images.push(upload);
-                    // fs.unlinkSync(filePath);
-                }
-            }
-            else {
-                throw new Error('There should be at least two image');
-            }
-            const newEvent = await db_1.db.event.create({
-                data: {
-                    title: event.title,
-                    description: event.description,
-                    location: event.location,
-                    date: date,
-                    userId: req.user.payload.id,
-                    maxSlots: Number(event.maxSlots) || 10,
-                    eventImages: images,
-                    price: event.price,
-                    category: event.category,
-                    startAt: event.startAt,
-                    endAt: event.endAt
-                }
-            });
-            return newEvent;
-        },
-        updateEvent: async (_, { event }, { user }) => {
-            if (!user) {
-                throw new Error('Not authenticated');
-            }
-            return await db_1.db.event.update({
-                where: {
-                    id: event.id
-                },
-                data: {
-                    title: event.title,
-                    description: event.description,
-                    location: event.location,
-                    date: event.date
-                }
-            });
-        },
+        // createEvent: async (_: any, { event, files }: { event: CreateEventInput, files: any }, { user }: any) => {
+        //     if (!user) {
+        //         throw new Error('Not authenticated');
+        //     }
+        //     if (!files || !Array.isArray(files) || files.length < 2) {
+        //         throw new Error("There should be at least two images");
+        //     }
+        //     console.log("Files received (before resolving):", files);
+        //     try {
+        //         const resolvedFiles = await Promise.all(
+        //             files.map(async (filePromise: any, index: number) => {
+        //                 console.log(`Resolving file ${index + 1} promise...`);
+        //                 const file = await filePromise; // Explicitly resolve each file promise
+        //                 console.log(`File ${index + 1} resolved:`, file);
+        //                 return file;
+        //             })
+        //         );
+        //         console.log("All files resolved:", resolvedFiles);
+        //         const job = await eventQueue.add("create-event", {
+        //             event,
+        //             files: resolvedFiles,
+        //             userId: user.id
+        //         });
+        //         console.log(`Job added to queue: ${job.id}`);
+        //         return { message: "Event creation job queued", jobId: job.id };
+        //     } catch (error) {
+        //         console.error("Error resolving file uploads:", error);
+        //         throw new Error("Failed to resolve file uploads");
+        //     }
+        // }
+        // ,
         deleteEvent: async (_, { eventID }, { user }) => {
             try {
                 if (!user) {

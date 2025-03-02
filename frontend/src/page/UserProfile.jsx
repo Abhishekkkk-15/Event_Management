@@ -177,9 +177,9 @@ const UserProfile = () => {
         {
           navigation == 'MyEvents' && <UserBookings userBookings={userBookings}/>
         }
-        {/* {
+        {
           navigation == "qrScanner" && <QRScanner/>
-        } */}
+        }
       </main>
     </div>
   );

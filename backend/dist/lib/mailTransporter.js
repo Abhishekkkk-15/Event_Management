@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.transporter = void 0;
+exports.failureMailOptions = exports.successMailOptions = exports.transporter = void 0;
 exports.sendEmail = sendEmail;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const fs_1 = __importDefault(require("fs"));
@@ -14,9 +14,7 @@ exports.transporter = nodemailer_1.default.createTransport({
     auth: {
         user: "jangidabhishek276@gmail.com",
         pass: "wihb dagq jfys xgne", // Replace this with your correct App Password
-    },
-    logger: true, // Enable debugging logs
-    debug: true,
+    }
 });
 async function sendEmail(ticketId, toEmail) {
     // Read QR code and PDF files
@@ -52,5 +50,42 @@ async function sendEmail(ticketId, toEmail) {
     });
     console.log('✅ Email sent successfully!');
 }
-// Run function
-// sendEmail("1c30db43-3026-4c96-b823-249d40655ef6","mrabhi748@gmail.com")
+const successMailOptions = (userEmail, eventTitle, eventDate) => ({
+    from: '"Event Manager" <your-email@example.com>', // Replace with your email
+    to: userEmail,
+    subject: "🎉 Event Created Successfully!",
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+          <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+              <h2 style="color: #4CAF50;">🎉 Your Event Has Been Successfully Created!</h2>
+              <p>Dear Organizer,</p>
+              <p>We are excited to inform you that your event <strong>"${eventTitle}"</strong> has been successfully created and is now live.</p>
+              <p><strong>📅 Event Date:</strong> ${eventDate}</p>
+              <p>You can manage your event and view more details from your dashboard.</p>
+              <p>Thank you for using our platform!</p>
+              <hr style="border: 0; border-top: 1px solid #ddd;">
+              <p style="color: #555;">Best Regards, <br><strong>Event Manager Team</strong></p>
+          </div>
+      </div>
+  `,
+});
+exports.successMailOptions = successMailOptions;
+const failureMailOptions = (userEmail, eventTitle, errorMessage) => ({
+    from: '"Event Manager" <your-email@example.com>', // Replace with your email
+    to: userEmail,
+    subject: "⚠️ Event Creation Failed",
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+          <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+              <h2 style="color: #FF5733;">⚠️ Event Creation Failed</h2>
+              <p>Dear Organizer,</p>
+              <p>Unfortunately, we were unable to create your event <strong>"${eventTitle}"</strong> due to an error.</p>
+              <p><strong>🔍 Error Details:</strong> ${errorMessage}</p>
+              <p>Please try again later or contact support if the issue persists.</p>
+              <hr style="border: 0; border-top: 1px solid #ddd;">
+              <p style="color: #555;">Best Regards, <br><strong>Event Manager Team</strong></p>
+          </div>
+      </div>
+  `,
+});
+exports.failureMailOptions = failureMailOptions;

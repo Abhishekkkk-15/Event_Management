@@ -14,12 +14,14 @@ const typedefs_1 = require("./graphql/typedefs");
 const resolvers_1 = require("./graphql/resolvers");
 const authincate_1 = __importDefault(require("./lib/authincate"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const graphql_upload_minimal_1 = require("graphql-upload-minimal");
+// import { graphqlUploadExpress  } from 'graphql-upload';
 const redis_1 = require("./services/redis");
 const booking_route_js_1 = __importDefault(require("./REST_API/routes/booking.route.js"));
 const verification_route_1 = __importDefault(require("./REST_API/routes/verification.route"));
 const review_route_1 = __importDefault(require("./REST_API/routes/review.route"));
+const event_route_1 = __importDefault(require("./REST_API/routes/event.route"));
 const dotenv_1 = require("dotenv");
+const body_parser_1 = __importDefault(require("body-parser"));
 const statusMonitor = require('express-status-monitor')();
 const app = (0, express_1.default)();
 (0, redis_1.initRedis)();
@@ -27,12 +29,14 @@ const app = (0, express_1.default)();
 app.use(statusMonitor);
 app.get('/status', statusMonitor.pageRoute);
 app.use((0, cookie_parser_1.default)());
-app.use(express_1.default.json());
+app.use(express_1.default.json({ limit: "10mb" }));
+// app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(body_parser_1.default.urlencoded({ limit: "10mb", extended: true }));
+// app.use(graphqlUploadExpress({t
+//   maxFileSize:5*1024*1024,
+//   maxFiles:3
+// }));
 app.use(authincate_1.default);
-app.use((0, graphql_upload_minimal_1.graphqlUploadExpress)({
-    maxFileSize: 5 * 1024 * 1024,
-    maxFiles: 3
-}));
 app.use((0, cors_1.default)({
     origin: 'http://localhost:5173',
     credentials: true,
@@ -45,12 +49,13 @@ const startServer = async () => {
         introspection: true, // ✅ Allow testing in Postman
     });
     await server.start();
-    app.use('/booking', booking_route_js_1.default);
-    app.use('/emailVerification', verification_route_1.default);
-    app.use('/review', review_route_1.default);
+    app.use('/events', event_route_1.default);
     app.use('/graphql', (0, express4_1.expressMiddleware)(server, {
         context: async ({ req, res }) => ({ req, res, user: req.user }),
     }));
+    app.use('/booking', booking_route_js_1.default);
+    app.use('/emailVerification', verification_route_1.default);
+    app.use('/review', review_route_1.default);
     if (cluster_1.default.isMaster) {
         const numCPUs = os_1.default.cpus().length;
         console.log(`Master process ${process.pid} forking ${numCPUs} workers...`);

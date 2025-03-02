@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.eventTypeDefs = void 0;
 exports.eventTypeDefs = `#graphql
 scalar Upload
-
     type Event {
         id: String!
         title: String!
@@ -51,8 +50,10 @@ scalar Upload
         user:User
     },
 
+ 
+
     type Mutation {
-        createEvent(event: CreateEventInput!,files:[Upload!]): Event
+        # createEvent(event: CreateEventInput!,files:[Upload!]!): Message
         updateEvent(event: UpdateEventInput!): Event
         deleteEvent(eventID: String!): Message
         bookSlot(eventId:String!,noOfTicket:Int):Booking
@@ -73,6 +74,7 @@ scalar Upload
         category:String!
         startAt:String !
         endAt:String!
+        userEmail:String!
         # images: [Upload!]!
     },
     input UpdateEventInput {
