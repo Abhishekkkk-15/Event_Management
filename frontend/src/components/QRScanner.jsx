@@ -1,23 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { BrowserMultiFormatReader } from "@zxing/browser";
 import { ticketScanner } from "../REST_API/booking.js";
 
 function QRScanner() {
   const [ticketStatus, setTicketStatus] = useState("");
+  const videoRef = useRef(null);
   const scannerRef = useRef(null);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const scanner = new Html5QrcodeScanner("qr-reader", {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-      });
+      const codeReader = new BrowserMultiFormatReader();
 
-      scanner.render(
-        async (decodedText) => {
+      codeReader.decodeFromVideoDevice(undefined, videoRef.current, async (result, err) => {
+        if (result) {
           try {
             const { data } = await ticketScanner({
-              ticketId: decodedText,
+              ticketId: result.getText(),
               eventId: "1f6f0360-be7e-4c18-bc94-4be95bb2167e",
             });
             console.log(data.message);
@@ -26,17 +24,16 @@ function QRScanner() {
             console.log(error.response?.data?.message || "Scan failed");
             setTicketStatus(error.response?.data?.message || "Scan failed");
           }
-        },
-        (errorMessage) => console.log("QR Scan Error:", errorMessage)
-      );
+        }
+      });
 
-      scannerRef.current = scanner;
-    }, 2000); // 2 seconds delay
+      scannerRef.current = codeReader;
+    }, 2000); // 2-second delay before starting scanner
 
     return () => {
-      clearTimeout(timeoutId); // Clear timeout if component unmounts
+      clearTimeout(timeoutId);
       if (scannerRef.current) {
-        scannerRef.current.clear();
+        scannerRef.current.reset();
       }
     };
   }, []);
@@ -44,7 +41,7 @@ function QRScanner() {
   return (
     <div>
       <h3>Scan Ticket</h3>
-      <div id="qr-reader"></div>
+      <video ref={videoRef} style={{ width: "100%", maxWidth: "400px" }}></video>
       <p>{ticketStatus}</p>
     </div>
   );

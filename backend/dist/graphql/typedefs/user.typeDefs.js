@@ -38,8 +38,6 @@ type Booking{
         login(input:LoginInput!): User
         updateUser(userInput: UpdateUserInput!): User!
         logout: String!
-
-        uploadAvatar(file: Upload!): String!
     }
 
     input SignUpInput {

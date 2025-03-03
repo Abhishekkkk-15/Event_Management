@@ -8,9 +8,6 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const db_1 = require("../../lib/db");
 const jwt_1 = require("../../lib/jwt");
 const graphql_upload_minimal_1 = require("graphql-upload-minimal");
-const cloudinaryConfig_js_1 = __importDefault(require("../../lib/cloudinaryConfig.js"));
-const fileHandling_js_1 = __importDefault(require("../../lib/fileHandling.js"));
-const fs_1 = __importDefault(require("fs"));
 const redis_js_1 = require("../../services/redis.js");
 exports.userResolver = {
     Query: {
@@ -145,31 +142,6 @@ exports.userResolver = {
                 throw new Error("User is not logged in");
             res.clearCookie("token");
             return "Done";
-        },
-        uploadAvatar: async (_, { file }, { req, res, user }) => {
-            try {
-                const isUserExist = db_1.db.user.findUnique({
-                    where: {
-                        id: user.id
-                    },
-                });
-                if (!isUserExist)
-                    return { message: "User does not exist" };
-                if (!file)
-                    return { message: "File not provided" };
-                const filePath = await (0, fileHandling_js_1.default)(file);
-                const upload = await (0, cloudinaryConfig_js_1.default)(filePath);
-                await db_1.db.user.update({
-                    where: { id: user.payload.id },
-                    data: { avatar: upload },
-                });
-                fs_1.default.unlinkSync(filePath);
-                return `File uploaded successfully: ${upload}`;
-            }
-            catch (error) {
-                console.error("Upload error:", error);
-                throw new Error("Failed to upload file");
-            }
         },
         updateUser: async (_, { userInput }, { req, res, user }) => {
             try {

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import HomePage from "./page/HomePage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Auth from "./page/Auth";
-import FileUpload from "./page/FileUpload";
+import FileUpload from "./page/UserProfileUpdate";
 import SignUp from "./page/SignUp";
 import { useQuery ,gql} from "@apollo/client";
 import { useDispatch ,useSelector} from "react-redux";
@@ -19,6 +19,7 @@ import { GET_AUTH_USER } from "./graphql/query/user";
 // import VerifyEmail from "./components/VerifiyEmail";
 import VerifyEmailPage from "./components/VerifyEmailPage";
 import QRScanner from "./components/QRScanner";
+import UserProfileUpdate from "./page/UserProfileUpdate";
 
 function App() {
   const user = useSelector(state => state.auth.user)
@@ -48,6 +49,7 @@ function App() {
           <Route path="/loggedUser" element={<UserProfile />} />
           <Route path="/verifyEmail" element={<VerifyEmailPage />} />
           <Route path="/qr" element={<QRScanner />} />
+          <Route path="/updateUserProfile" element={<UserProfileUpdate />} />
 
         </Routes>
       </Router>

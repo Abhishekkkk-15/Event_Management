@@ -20,6 +20,7 @@ const booking_route_js_1 = __importDefault(require("./REST_API/routes/booking.ro
 const verification_route_1 = __importDefault(require("./REST_API/routes/verification.route"));
 const review_route_1 = __importDefault(require("./REST_API/routes/review.route"));
 const event_route_1 = __importDefault(require("./REST_API/routes/event.route"));
+const user_route_1 = __importDefault(require("./REST_API/routes/user.route"));
 const dotenv_1 = require("dotenv");
 const body_parser_1 = __importDefault(require("body-parser"));
 const statusMonitor = require('express-status-monitor')();
@@ -56,6 +57,7 @@ const startServer = async () => {
     app.use('/booking', booking_route_js_1.default);
     app.use('/emailVerification', verification_route_1.default);
     app.use('/review', review_route_1.default);
+    app.use('/user', user_route_1.default);
     if (cluster_1.default.isMaster) {
         const numCPUs = os_1.default.cpus().length;
         console.log(`Master process ${process.pid} forking ${numCPUs} workers...`);

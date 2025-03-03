@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { showError, showSuccess } from "../utils/toast";
 import axios from "axios";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Label } from "../components/ui/label";
 
 const CreateEventForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
-  const [maxSlots, setMaxSlots] = useState(0);
+  const [maxSlots, setMaxSlots] = useState("");
   const [files, setFiles] = useState([]);
-  const [price, setPrice] = useState(0);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
@@ -19,12 +24,14 @@ const CreateEventForm = () => {
   const user = useSelector((state) => state.auth.user);
 
   const handleFileChange = (e) => {
-    setFiles(Array.from(e.target.files)); // Convert FileList to an array
+    const selectedFiles = Array.from(e.target.files);
+    setFiles(selectedFiles);
+    const previews = selectedFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviews(previews);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (files.length < 2) {
       showError("You need to upload at least two images.");
       return;
@@ -45,135 +52,84 @@ const CreateEventForm = () => {
     formData.append("startAt", startAt);
     formData.append("endAt", endAt);
     formData.append("userEmail", user.email);
-
-    // Append multiple files correctly
     files.forEach((file) => formData.append("files", file));
-    console.log("Form Data:", formData);
+
     setLoading(true);
-
     try {
-      const {data} = await axios.post("http://localhost:4000/events/create", formData,{
-        withCredentials:true,
-        headers:{
-          "Content-Type":"multipart/form-data"
-        }
+      const { data } = await axios.post("http://localhost:4000/events/create", formData, {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
       });
-
-
-      showSuccess("Email will be sent when the event is approved and created"); 
-      console.log("Response:", data);
-
-      // Reset form
+      showSuccess("Email will be sent when the event is approved and created");
       setTitle("");
       setDescription("");
       setLocation("");
       setDate("");
-      setMaxSlots(0);
+      setMaxSlots("");
       setFiles([]);
-      setPrice(0);
+      setImagePreviews([]);
+      setPrice("");
       setCategory("");
       setStartAt("");
       setEndAt("");
     } catch (error) {
       showError("Upload failed. Try again!");
-      console.log(error)
-      console.error("Upload Error:", error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
-      <h1 className="text-4xl font-bold text-center mb-6 text-indigo-600">
-        Create Event
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter event title"
-          required
-          className="w-full p-4 border"
-        />
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Enter event description"
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Enter event location"
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="text"
-          value={startAt}
-          onChange={(e) => setStartAt(e.target.value)}
-          placeholder="Start At"
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="text"
-          value={endAt}
-          onChange={(e) => setEndAt(e.target.value)}
-          placeholder="End At"
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="number"
-          value={maxSlots}
-          onChange={(e) => setMaxSlots(e.target.value)}
-          placeholder="Max Slots"
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          placeholder="Category"
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Event Price"
-          required
-          className="w-full p-4 border"
-        />
-        <input
-          type="file"
-          multiple
-          onChange={handleFileChange}
-          required
-          className="w-full p-4 border"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg"
-        >
-          {loading ? "Creating..." : "Create Event"}
-        </button>
-      </form>
+    <div className="flex justify-center items-center min-h-screen p-4">
+      <Card className="w-full max-w-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-xl">Create Event</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Label>Title</Label>
+            <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            
+            <Label>Description</Label>
+            <Input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
+            
+            <Label>Location</Label>
+            <Input type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
+            
+            <Label>Date</Label>
+            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+            
+            <Label>Start At</Label>
+            <Input type="time" value={startAt} onChange={(e) => setStartAt(e.target.value)} required />
+            
+            <Label>End At</Label>
+            <Input type="time" value={endAt} onChange={(e) => setEndAt(e.target.value)} required />
+            
+            <Label>Max Slots</Label>
+            <Input type="number" value={maxSlots} onChange={(e) => setMaxSlots(e.target.value)} required />
+            
+            <Label>Category</Label>
+            <Input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required />
+            
+            <Label>Price</Label>
+            <Input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
+            
+            <Label>Upload Images (Min 2)</Label>
+            <Input type="file" multiple onChange={handleFileChange} required />
+            
+            <div className="flex flex-wrap gap-2">
+              {imagePreviews.map((src, index) => (
+                <img key={index} src={src} alt="Preview" className="w-20 h-20 object-cover rounded-lg" />
+              ))}
+            </div>
+            
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? "Creating..." : "Create Event"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
