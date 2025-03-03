@@ -14,8 +14,8 @@ const GET_EVENTS = gql`
 `;
 
 const GET_ALL_REVIEWS = gql`
-  query GetReview($eventId: String!) {
-  getReview(eventId: $eventId) {
+  query GetReview($eventId: String, $page: Int!, $limit: Int!) {
+  getReview(eventId: $eventId, page: $page, limit: $limit) {
     id
     rating
     comment

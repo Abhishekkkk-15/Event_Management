@@ -115,10 +115,12 @@ exports.eventResolver = {
                 attendanceRate
             };
         },
-        getReview: async (_, { eventId }) => {
-            if (!eventId)
-                throw new Error("Event id not provided!");
+        getReview: async (_, { eventId, page, limit }) => {
+            // if (!eventId) throw new Error("Event id not provided!")
+            //     console.log(page,limit)
             return await db_1.db.review.findMany({
+                skip: (Number(page) - 1) * Number(limit),
+                take: Number(limit),
                 where: {
                     eventId
                 }

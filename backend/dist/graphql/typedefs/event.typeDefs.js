@@ -32,7 +32,7 @@ scalar Upload
         event(id: String,limit:Int): Event
         bookedSlots(id:String!):Booking
         eventAnalystics(id:String!):eventAnalysticsData
-        getReview(eventId: String): [Review]
+        getReview(eventId: String, page: Int, limit: Int): [Review]
     },
 
   
