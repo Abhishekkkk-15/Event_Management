@@ -21,7 +21,7 @@ const AddReview = ({ onSubmit }) => {
   };
 
   return (
-    <Card className="w-full p-4 bg-white shadow-md rounded-2xl">
+    <Card className="w-full bg-white shadow-md rounded-2xl " style={{ padding: "10px" }}>
       <CardContent className="flex flex-col gap-4">
         {/* Star Rating Input */}
         <div className="flex items-center gap-2">

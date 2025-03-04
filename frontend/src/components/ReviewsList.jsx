@@ -65,21 +65,30 @@ const ReviewSection = ({ eventId }) => {
   };
 
   return (
-    <div className="space-y-6 w-[95%] h-[500px]  bottom-0 right-0 bg-white shadow-lg p-4 overflow-hidden flex flex-col">
-      <h2 className="text-2xl font-semibold">Add a Review</h2>
+    <div className="space-y-6 w-[100%] h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col">
+      {/* <h2 className="text-2xl font-semibold">Add a Review</h2> */}
+      
       <AddReview onSubmit={handleAddReview} />
-      <h2 className="text-2xl font-semibold">Reviews</h2>
+
+    
+      {/* <h2 className="text-2xl font-semibold">Reviews</h2> */}
+      
       <div 
         ref={reviewContainerRef} 
-        className="space-y-4 overflow-y-auto flex-1"
+        className="overflow-y-auto flex-1"
         style={{ maxHeight: "400px" }}
       >
         {reviews.map((review, index) => (
-          <ReviewCard key={index} {...review} />
+          <div className="mt-2 " key={index} style={{marginTop: "10px"}}>
+
+            <ReviewCard  {...review} />
+          </div>
         ))}
         <div id="load-more" className="h-10" />
         {loading && <AiOutlineLoading3Quarters className="animate-spin text-2xl mx-auto" />}
       </div>
+      
+      
     </div>
   );
 };

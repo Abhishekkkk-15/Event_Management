@@ -6,6 +6,7 @@ const LOGIN_MUTATION = gql`
       name
       email
       avatar
+      isVerified
     }
   }
 `;

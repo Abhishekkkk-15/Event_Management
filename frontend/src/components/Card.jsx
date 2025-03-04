@@ -36,7 +36,7 @@ function Card({ data }) {
       {/* Arrow icon */}
       <div
         onClick={() => handleNavigate(data?.id)}
-        className="h-14 w-14 bg-white/20 backdrop-blur-md flex justify-center items-center rounded-full relative right-3 sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16"
+        className="h-14 w-14 bg-white/20  cursor-pointer backdrop-blur-md flex justify-center items-center rounded-full relative right-3 sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16"
       >
         <GoArrowUpRight className="text-white" />
       </div>

@@ -13,7 +13,13 @@ scalar Upload
         bookings: [Booking]  
         isVerified: Boolean
     }
-
+type AuthUser{
+  id: String!
+        email: String!
+        name: String!
+        avatar:String
+        isVerified: Boolean
+}
     input UpdateUserInput {
   name: String!
   email: String!
@@ -30,7 +36,7 @@ type Booking{
     type Query{
         users: [User!]
         user: User
-        getAuthuser:User
+        getAuthuser:AuthUser
     }
 
     type Mutation { 

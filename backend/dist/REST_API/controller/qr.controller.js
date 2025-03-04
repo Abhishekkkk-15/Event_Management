@@ -13,6 +13,14 @@ const queue_1 = require("../../bullMQ/queue");
 const bookTicket = async (req, res) => {
     const { eventId, userEmail, tickets } = req.body;
     try {
+        const event = await db_js_1.db.event.findFirst({
+            where: {
+                id: eventId
+            }
+        });
+        if (event.bookedSlots > event.maxSlots) {
+            return res.status(400).json({ success: false, message: "Tickets are full" });
+        }
         const userId = req.user.payload.id;
         const ticket = await db_js_1.db.booking.create({
             data: {

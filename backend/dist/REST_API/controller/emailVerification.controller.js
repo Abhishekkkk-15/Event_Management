@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifiyEmail = exports.sendVerificationCode = void 0;
 const mailTransporter_1 = require("../../lib/mailTransporter");
 const db_1 = require("../../lib/db");
+const redis_1 = require("../../services/redis");
 const sendVerificationCode = async (req, res) => {
     const userId = req.user.payload.id;
     try {
@@ -73,6 +74,7 @@ const verifiyEmail = async (req, res) => {
                 isVerified: true
             }
         });
+        redis_1.redisClient.del(`user:${userId}`);
         res.status(201).json({ success: true, message: "User Email verified" });
     }
     catch (error) {

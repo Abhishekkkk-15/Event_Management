@@ -52,10 +52,6 @@ exports.eventResolver = {
             return data;
         },
         event: async (_, { id, limit }, { user }) => {
-            // console.log(limit)
-            if (!user) {
-                throw new Error('Not authenticated');
-            }
             const cachedEvent = await redis_js_1.redisClient.get(`event:${id}`);
             if (cachedEvent) {
                 return JSON.parse(cachedEvent);
@@ -123,6 +119,9 @@ exports.eventResolver = {
                 take: Number(limit),
                 where: {
                     eventId
+                },
+                orderBy: {
+                    createdAt: 'desc'
                 }
             });
         }

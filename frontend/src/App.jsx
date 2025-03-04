@@ -20,6 +20,7 @@ import { GET_AUTH_USER } from "./graphql/query/user";
 import VerifyEmailPage from "./components/VerifyEmailPage";
 import QRScanner from "./components/QRScanner";
 import UserProfileUpdate from "./page/UserProfileUpdate";
+import EventListingPage from "./page/eventPage";
 
 function App() {
   const user = useSelector(state => state.auth.user)
@@ -46,10 +47,11 @@ function App() {
           <Route path="/app" element={<EventsPage />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/e" element={<EditUserProfile />} />
-          <Route path="/loggedUser" element={<UserProfile />} />
+          {/* <Route path="/userProfile" element={<UserProfile />} /> */}
           <Route path="/verifyEmail" element={<VerifyEmailPage />} />
           <Route path="/qr" element={<QRScanner />} />
-          <Route path="/updateUserProfile" element={<UserProfileUpdate />} />
+          <Route path="/userProfile" element={<UserProfileUpdate />} />
+          <Route path="/eve" element={<EventListingPage />} />
 
         </Routes>
       </Router>

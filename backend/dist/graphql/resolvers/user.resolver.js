@@ -30,10 +30,10 @@ exports.userResolver = {
         getAuthuser: async (_, __, { req, res, user }) => {
             if (!user)
                 return { message: "User not authenticate" };
-            const userInCache = await redis_js_1.redisClient.hGetAll(`user:${user.payload.id}`);
-            // if (Object.keys(userInCache).length > 0) {
-            //     return userInCache
-            // }
+            const userInCache = await redis_js_1.redisClient.get(`user:${user.payload.id}`);
+            if (userInCache) {
+                return JSON.parse(userInCache);
+            }
             const userInfo = await db_1.db.user.findUnique({
                 where: {
                     id: user.payload.id
@@ -43,13 +43,14 @@ exports.userResolver = {
                 console.log("User not found");
                 return { message: "User not found" };
             }
-            await redis_js_1.redisClient.hSet(`user:${user.payload.id}`, {
+            const chachData = {
                 id: userInfo.id,
                 email: userInfo.email,
                 name: userInfo.name,
                 avatar: userInfo.avatar || "",
-                isVerified: userInfo.isVerified.toString()
-            });
+                isVerified: userInfo.isVerified,
+            };
+            await redis_js_1.redisClient.set(`user:${user.payload.id}`, JSON.stringify(chachData));
             // console.log(userInfo)
             return userInfo;
         },

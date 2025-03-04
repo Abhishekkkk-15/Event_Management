@@ -46,20 +46,13 @@ function DetailScreen() {
   if (loading) return <p>Loading...</p>;
   if (mutationError) showInfo(mutationError.message);
 
-  // const handleBookEvent = async () => {
-  //   try {
-  //     await bookSlot({
-  //       variables: { eventId: event.id, noOfTicket: ticketCount },
-  //     });
-  //     setIsModalOpen(false);
-  //     showInfo("Booking successful!");
-  //   } catch (error) {
-  //     console.error("Booking error", error.message);
-  //   }
-  // };
 
   const handleBookEvent = async(eventId,userEmail,tickets)=>{
     if(!eventId && !userEmail) return
+    if(!user.isVerified){
+      showError("Please verify your email to book tickets")
+      return
+    }
     try {
      const {data} = await ticketBooking({eventId,userEmail,tickets})
      console.log(data)
@@ -221,7 +214,7 @@ function DetailScreen() {
             </div>
 
             {/* Buttons */}
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-2 z-30">
               <button
                 className="px-4 py-2 bg-gray-300 rounded-lg cursor-pointer"
                 onClick={() => setIsModalOpen(false)}
@@ -238,7 +231,9 @@ function DetailScreen() {
           </div>
         </div>
       )}
+      <div className="w-[95%] h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col">
       <ReviewsList eventId={event.id}/>
+      </div>
     </div>
   );
 }
