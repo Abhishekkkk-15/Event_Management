@@ -33,7 +33,8 @@ function Header() {
     );
   }, []);
 
-  const countryName = country.find((c) => c.code === location.country)?.name || "India";
+  const countryName =
+    country.find((c) => c.code === location.country)?.name || "India";
   console.log("User from store", user);
 
   const handleSearching = () => {};
@@ -70,38 +71,40 @@ function Header() {
 
             {/* Dropdown Menu */}
             {isMenuOpen && (
-  <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
-    <ul className="py-2 text-gray-700">
-      <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
-        <Link to="/userProfile" className="w-full flex items-center">
-          <span className="text-gray-600">👤</span> User Profile
-        </Link>
-      </li>
-      <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
-        <Link to="/bookings" className="w-full flex items-center">
-          <span className="text-gray-600">📅</span> User Booking
-        </Link>
-      </li>
-      <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
-        <Link to="/dashboard" className="w-full flex items-center">
-          <span className="text-gray-600">📊</span> Dashboard
-        </Link>
-      </li>
-      <hr className="border-t border-gray-300 mx-3" />
-      <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
-        <Link to="/settings" className="w-full flex items-center">
-          <span className="text-gray-600">⚙️</span> Settings
-        </Link>
-      </li>
-      <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
-        <Link to="/about" className="w-full flex items-center">
-          <span className="text-gray-600">ℹ️</span> About Page
-        </Link>
-      </li>
-    </ul>
-  </div>
-)}
-
+              <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
+                <ul className="py-2 text-gray-700">
+                  <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
+                    <Link
+                      to="/userProfile"
+                      className="w-full flex items-center"
+                    >
+                      <span className="text-gray-600">👤</span> User Profile
+                    </Link>
+                  </li>
+                  <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
+                    <Link to="/bookings" className="w-full flex items-center">
+                      <span className="text-gray-600">📅</span> User Booking
+                    </Link>
+                  </li>
+                  <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
+                    <Link to="/dashboard" className="w-full flex items-center">
+                      <span className="text-gray-600">📊</span> Dashboard
+                    </Link>
+                  </li>
+                  <hr className="border-t border-gray-300 mx-3" />
+                  <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
+                    <Link to="/settings" className="w-full flex items-center">
+                      <span className="text-gray-600">⚙️</span> Settings
+                    </Link>
+                  </li>
+                  <li className="px-5 py-3 hover:bg-gray-100 cursor-pointer flex items-center gap-2 transition-all duration-200">
+                    <Link to="/about" className="w-full flex items-center">
+                      <span className="text-gray-600">ℹ️</span> About Page
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Search Bar - Positioned at Bottom Center */}

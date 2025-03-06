@@ -8,6 +8,7 @@ import { showError, showInfo, showSuccess } from "../utils/toast.js";
 import { ticketBooking } from "../REST_API/booking.js";
 import { useSelector } from "react-redux";
 import ReviewsList from "../components/ReviewsList.jsx";
+import Congratulations from "../components/Congratulations.jsx";
 
 function DetailScreen() {
   const [event, setEvent] = useState({});
@@ -22,7 +23,8 @@ function DetailScreen() {
   });
   const [avatars, setAvatars] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const [isBooked, setIsBooked] = useState(false);
+  const [ticketId, setTicketId] = useState("");
   const [bookSlot, { loading: mutationLoading, error: mutationError }] =
     useMutation(BOOK_TICKET);
 
@@ -56,6 +58,9 @@ function DetailScreen() {
     try {
      const {data} = await ticketBooking({eventId,userEmail,tickets})
      console.log(data)
+     setIsModalOpen(false)
+     setIsBooked(true)
+     setTicketId(data.ticketId)
      showSuccess(data.message)
     } catch (error) {
      console.log(error)
@@ -64,12 +69,13 @@ function DetailScreen() {
   }
 
   return (
-    <div className="flex flex-col items-center h-full px-4 pb-44 gap-2">
+    <div className="flex flex-col items-center h-full px-4 pb-44 gap-2 bg-[#000000]">
       {/* Image Section */}
-      <div className="h-80 w-[95%] flex justify-center items-center rounded-3xl overflow-hidden relative">
+     
+      <div className="h-80 w-[95%] flex justify-center items-center rounded-3xl overflow-hidden relative"style={{marginTop:"20px"}} > 
         {/* Image Slider */}
         <div
-          className="flex transition-all duration-700 ease-in-out bg-white gap-x-2 rounded-3xl"
+          className="flex transition-all duration-700 ease-in-out gap-x-2 rounded-3xl"
           style={{
             transform: `translateX(-${currentIndex * 102}%)`,
             marginTop: "17px",
@@ -105,40 +111,42 @@ function DetailScreen() {
       </div>
 
       {/* Title, Date & Location */}
-      <div className="flex items-center h-24 w-[95%] bg-white rounded-3xl mt-4">
+      <div className="flex items-center justify-between h-24 w-[95%] bg-[#404040] rounded-3xl mt-4" >
         <div
           className="w-44 flex flex-col text-wrap"
-          style={{ marginLeft: "12px" }}
+          style={{marginLeft:"6px"}}
         >
-          <span className="font-bold text-2xl">{event?.title}</span>
-          <div className="flex items-center">
+          <span className="font-bold text-2xl text-[#FEFEFE]">{event?.title}</span>
+          <div className="flex items-center text-[#FEFEFE] ">
             <CiCalendar />
             {formattedDate} . {event?.location?.slice(0, 10)}
           </div>
         </div>
-        <div className="relative left-17 float-end h-[90%] w-24 rounded-3xl flex justify-center items-center flex-col text-gray-700 bg-gray-200">
-          <span className="text-2xl font-medium">₹ {event?.price}</span>
-          <span className="text-lg font-medium">{event?.maxSlots} Seats</span>
+        <div className=" h-[90%] w-24 rounded-3xl flex justify-center items-center flex-col text-[#FEFEFE] bg-gray-500" 
+      style={{marginRight:"6px"}}
+        >
+          <span className="text-2xl font-medium text-[#F2Fb62]">₹ {event?.price}</span>
+          <span className="text-lg font-medium text-[#FEFEFE]">{event?.maxSlots} Seats</span>
         </div>
       </div>
 
       {/* Description Section */}
-      <div className="min-h-48 max-h-64 bg-white rounded-3xl w-[95%] flex flex-col p-4">
+      <div className="min-h-48 max-h-64 bg-[#404040] rounded-3xl w-[95%] flex flex-col p-4">
         <div className="flex flex-col items-center h-full 4 gap-2">
           {/* Description Section */}
           <div
             className=" rounded-3xl w-[95%] flex flex-col"
             style={{ padding: "15px" }}
           >
-            <h4 className="text-lg font-semibold">About Event</h4>
+            <h4 className="text-lg font-semibold text-[#FEFEFE]">About Event</h4>
 
             {/* Description */}
-            <div className="text-gray-700 mt-3">
+            <div className="text-[#FEFEFE] mt-3">
               {isExpanded
                 ? event?.description
                 : `${event?.description?.slice(0, 100)}...`}{" "}
               <span
-                className="text-blue-500 mt-2"
+                className="text-[#F2F862] mt-2"
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 {isExpanded ? "Read Less" : "Read More"}
@@ -148,7 +156,7 @@ function DetailScreen() {
 
             {/* Read More Button */}
           </div>
-
+        
           {/* User Avatars Section */}
           <div className="flex flex-row items-center">
             <div className="flex flex-row relative">
@@ -173,24 +181,27 @@ function DetailScreen() {
         </div>
       </div>
 
+
+
       {/* Buy Ticket Button */}
-      <div className="fixed bottom-10 flex w-[95%] items-center gap-4">
+      <div className="fixed bottom-10 flex w-[95%] items-center gap-4 z-50 ">
         <div
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center text-2xl justify-center h-16 w-[80%] bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl text-white text-center cursor-pointer"
+          className="flex items-center text-2xl justify-center h-16 w-[80%] bg-gradient-to-r bg-[#F2F862] rounded-3xl text-[#000000] text-center cursor-pointer"
         >
           Buy Ticket
         </div>
 
-        <div className="h-16 w-[20%] bg-gray-300 rounded-full flex items-center justify-center">
-          <CiHeart className="w-full h-10 text-center" />
+        <div className="text-[#FEFEFE] flex items-center justify-center  w-[60px]">
+          <CiHeart className="w-full h-14 text-center bg-gray-500 rounded-full " />
         </div>
       </div>
+      {/* { isBooked && <Congratulations eventId={ticketId} onClose={()=> setIsBooked(false)}/>} */}
 
       {/* Modal for Ticket Selection */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+          <div className="bg-[#404040] p-6 rounded-lg shadow-lg w-[90%] max-w-md">
             <h2 className="text-xl font-bold mb-4">Select Tickets</h2>
 
             {/* Ticket Selector */}
@@ -209,7 +220,7 @@ function DetailScreen() {
                   </option>
                 ))}
               </select>
-              <input type="email" placeholder="email"/>
+              
               <div>Total amount : {ticketCount * event.price}</div>
             </div>
 
@@ -222,7 +233,7 @@ function DetailScreen() {
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-purple-500 text-white rounded-lg cursor-pointer"
+                className="px-4 py-2 bg-[#F2F862] text-white rounded-lg cursor-pointer"
                 onClick={()=>handleBookEvent(event.id,user.email,ticketCount)}
               >
                 {mutationLoading ? "Booking..." : "Confirm"}
@@ -231,6 +242,7 @@ function DetailScreen() {
           </div>
         </div>
       )}
+      { isBooked && <Congratulations ticketId={ticketId} onClose={()=> setIsBooked(false)}/>}
       <div className="w-[95%] h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col">
       <ReviewsList eventId={event.id}/>
       </div>

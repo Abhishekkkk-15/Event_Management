@@ -65,7 +65,7 @@ const ReviewSection = ({ eventId }) => {
   };
 
   return (
-    <div className="space-y-6 w-[100%] h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col">
+    <div className="space-y-6 w-[100%]  h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col ">
       {/* <h2 className="text-2xl font-semibold">Add a Review</h2> */}
       
       <AddReview onSubmit={handleAddReview} />

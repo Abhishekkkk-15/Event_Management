@@ -1,11 +1,11 @@
 import React from 'react'
-import Header from '../components/Header'
+import Header from '../components/NewHeader'
 import Cards from '../components/Cards'
 import EmailVerificationBanner from '../components/EmailVerificationBanner'
 
 function HomePage() {
   return (
-    <div>
+    <div className='bg-[#000000]'>
         <Header/>
         <EmailVerificationBanner/>
         <Cards/>

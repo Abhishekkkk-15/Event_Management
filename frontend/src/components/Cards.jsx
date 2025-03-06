@@ -3,14 +3,13 @@ import { CiMusicNote1 } from "react-icons/ci";
 import { MdOutlineSportsBaseball } from "react-icons/md";
 import { TiThSmallOutline } from "react-icons/ti";
 import { IoMdAdd } from "react-icons/io";
-import Card from "./Card";
+import Card from "./NewCard";
 import { Link } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 import CardSkeleton from "../Skeleton/Card";
 import { GET_EVENTS } from "../graphql/query/event";
 import { showSuccess } from "../utils/toast";
-
-
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 function Cards() {
   const [queryToFetch, setQueryToFetch] = useState("");
@@ -24,6 +23,8 @@ function Cards() {
     variables: { query: queryToFetch || "", category: categoryDataToFetch ,limit: 3, page },
     fetchPolicy: "cache-and-network",
   });
+
+  console.log(data)
 
   useEffect(() => {
     if (data) {
@@ -57,18 +58,18 @@ function Cards() {
   if (error) console.log(error);
 
   const category = [
-    { symbol: <TiThSmallOutline className="text-white bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-full" />, name: "All" },
-    { symbol: <CiMusicNote1 className="text-purple-500" />, name: "Music" },
-    { symbol: <MdOutlineSportsBaseball className="text-yellow-500" />, name: "Sports" },
+    { img:"../../Public/CMusic.png", name: "All" },
+    { img:"../../Public/CMusic.png", name: "Music" },
+    { img:"", name: "Sports" },
   ];
 
   return (
-    <div className="h-full">
-      <div className="flex flex-row flex-wrap justify-start gap-4 p-4 h-14 items-center" style={{margin:"0 5px 0 10px"}}>
+    <div className="h-full bg-[#000000] mt-10">
+      <div className="flex flex-row flex-wrap  justify-start gap-4 p-4 h-14 items-center" style={{margin:"0 5px 0 10px"}}>
         {category.map((c, idx) => (
           <div
             key={idx}
-            className="flex justify-center text-[12px] items-center h-10 w-28 rounded-2xl bg-white gap-2 shadow-md hover:bg-gray-100 cursor-pointer transition duration-300 ease-in-out"
+            className="flex items-center justify-evenly text-[12px]  h-12 w-28 rounded-3xl bg-[#F2F862] gap-2 shadow-md hover:bg-gray-100 cursor-pointer transition duration-300 ease-in-out"
             onClick={() => {
               setEvents([]); // Reset events on category change
               setPage(1);
@@ -77,17 +78,24 @@ function Cards() {
               setQueryToFetch('')
             }}
           >
-            {c.symbol} {c.name}
+            <Avatar
+                className=" h-9 w-9"
+              >
+                <AvatarImage src={c.img} />
+              </Avatar>
+              <span>
+                {c.name}
+              </span>
           </div>
         ))}
       </div>
 
-      <Link
+      {/* <Link
         to="/addEvent"
         className="fixed bottom-19 right-14 h-12 w-12 flex justify-center items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-300 z-50"
       >
         <IoMdAdd className="h-10 w-5" />
-      </Link>
+      </Link> */}
 
       <div className="flex justify-center items-center flex-col gap-3 lg:grid lg:grid-cols-3" style={{ marginBottom: "10px" }}>
         {events.map((event, index) => <Card data={event} key={index} />)}

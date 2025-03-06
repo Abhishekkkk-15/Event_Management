@@ -9,6 +9,11 @@ const GET_EVENTS = gql`
       price
       eventImages
       date
+      bookings{
+        user{
+          avatar
+        }
+      }
     }
   }
 `;

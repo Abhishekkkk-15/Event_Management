@@ -15,19 +15,19 @@ const ReviewCard = ({ user, createdAt, comment, rating }) => {
   };
 
   return (
-    <Card className="w-full mt-1 p-6 bg-white shadow-lg rounded-2xl transition-transform transform hover:scale-105 duration-300">
+    <Card className="w-full mt-1 p-6  bg-[#404040] shadow-lg rounded-2xl transition-transform transform hover:scale-105 duration-300 ">
       <CardContent className="flex flex-col gap-4" style={{ padding: "10px" }}>
         {/* User Info */}
         <div className="flex items-center gap-4">
-          <Avatar className="w-14 h-14 border-2 border-gray-200 shadow-sm ">
+          <Avatar className="w-14 h-14 border-2  shadow-sm ">
             <AvatarImage src={user?.avatar} alt={user?.name} />
-            <AvatarFallback className="bg-gray-300 text-gray-600 font-semibold">
+            <AvatarFallback className="bg-[#404040] text-gray-600 font-semibold">
               {user?.name?.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="text-lg font-semibold text-gray-900">{user?.name}</p>
-            <p className="text-sm text-gray-500">{formattedDate(createdAt)}</p>
+            <p className="text-lg font-semibold text-[#FEFEFE]">{user?.name}</p>
+            <p className="text-sm text-[#FEFEFE]">{formattedDate(createdAt)}</p>
           </div>
         </div>
 
@@ -42,7 +42,7 @@ const ReviewCard = ({ user, createdAt, comment, rating }) => {
         </div>
 
         {/* Comment */}
-        <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+        <p className="text-[#FEFEFE] leading-relaxed text-sm md:text-base">
           {comment.length > 150 ? comment.substring(0, 150) + "..." : comment}
         </p>
       </CardContent>

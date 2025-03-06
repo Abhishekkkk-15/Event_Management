@@ -8,7 +8,7 @@ exports.eventResolver = {
         events: async (_, { query, category, page, limit }, { user }) => {
             console.log(user);
             if (category) {
-                return await db_1.db.event.findMany({
+                const categoryData = await db_1.db.event.findMany({
                     skip: (page - 1) * limit,
                     take: limit,
                     where: {
@@ -18,6 +18,7 @@ exports.eventResolver = {
                         date: 'asc'
                     }
                 });
+                return categoryData;
             }
             if (query) {
                 const queryData = await db_1.db.event.findMany({
@@ -37,7 +38,6 @@ exports.eventResolver = {
                         ]
                     }
                 });
-                console.log(queryData);
                 return queryData;
             }
             const today = new Date().toISOString();
@@ -48,7 +48,6 @@ exports.eventResolver = {
                     date: 'desc'
                 }
             });
-            console.log("Process handled by : ", process.pid);
             return data;
         },
         event: async (_, { id, limit }, { user }) => {

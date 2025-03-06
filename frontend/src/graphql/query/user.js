@@ -28,8 +28,8 @@ const GET_LOGGED_USER_INFO = gql`
         price
       }
       bookings{
-        userId
         id
+        userId
         event{
           title
           startAt

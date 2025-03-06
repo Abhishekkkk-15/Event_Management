@@ -21,7 +21,7 @@ const AddReview = ({ onSubmit }) => {
   };
 
   return (
-    <Card className="w-full bg-white shadow-md rounded-2xl " style={{ padding: "10px" }}>
+    <Card className="w-full bg-[#404040] shadow-md rounded-2xl " style={{ padding: "10px", backgroundColor: "#404040" }}>
       <CardContent className="flex flex-col gap-4">
         {/* Star Rating Input */}
         <div className="flex items-center gap-2">
@@ -30,7 +30,7 @@ const AddReview = ({ onSubmit }) => {
               key={i}
               size={28}
               className={`cursor-pointer transition ${
-                (hoveredStar !== null ? i <= hoveredStar : i < rating) ? "text-yellow-500" : "text-gray-300"
+                (hoveredStar !== null ? i <= hoveredStar : i < rating) ? "text-yellow-500" : "text-[#FEFEFE]"
               }`}
               fill={(hoveredStar !== null ? i <= hoveredStar : i < rating) ? "currentColor" : "none"}
               stroke="currentColor"
@@ -46,7 +46,8 @@ const AddReview = ({ onSubmit }) => {
           placeholder="Write your review..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="resize-none"
+          className=" text-[#FEFEFE] bg-[#404040] border-none"
+          style={{ backgroundColor: "#404040", color: "#FEFEFE" , border: "none"}}
         />
 
         {/* Submit Button */}
