@@ -5,76 +5,135 @@ import { useDispatch, useSelector } from "react-redux";
 import { LOGIN_MUTATION } from "../graphql/mutation/user";
 import { loginSuccess } from "../store/slice/user.slice";
 import loginImage from "../assets/login-image.webp"; // Add your image here
+import { CiSearch } from "react-icons/ci";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { showError, showSuccess } from "../utils/toast";
 
 export default function Login() {
-  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(true);
+
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await login({ variables: { input: { email, password } } });
+      const response = await login({
+        variables: { input: { email, password } },
+      });
       dispatch(loginSuccess(response.data.login));
       setTimeout(() => navigate("/"), 3000);
+      showSuccess("Login successfully")
     } catch (err) {
+      showError(error.message)
       console.error("Login Error:", err);
     }
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left Side - Image */}
-      <div className="hidden md:flex w-1/2 h-screen bg-gray-100">
-        <img src={loginImage} alt="Login" className="object-cover w-full h-full" />
-      </div>
-
-      {/* Right Side - Login Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div className="max-w-md w-full space-y-6">
-          <h2 className="text-2xl font-bold text-gray-800 text-center">
+    <div className="flex min-h-screen justify-center items-center w-full ">
+      {/* Login Form Container (Centered) */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-6">
+        <div className="w-full flex flex-col items-center justify-center text-center">
+          <h2 className="text-2xl font-bold text-[#C1C1C1]">
             {location?.state ? "Login First" : "Welcome Back"}
           </h2>
-          <p className="text-center text-gray-600">Login to continue exploring!</p>
-          
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block font-medium text-gray-700" htmlFor="email">Email</label>
-              <input id="email" type="email" value={email} placeholder="Enter your email" 
-                     onChange={(e) => setEmail(e.target.value)} 
-                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" required />
+          <p className="text-[#FEFEFE]">Login to continue exploring!</p>
+
+          <form
+            onSubmit={handleLogin}
+            className="space-y-4 w-[80%] flex flex-col items-center gap-6"
+          >
+            <div className="w-full flex flex-col items-center justify-center gap-3">
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="email"
+                >
+                  E-mail
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{ border: "1px solid #C1C1C1", paddingLeft: "15px" }}
+                >
+                  <input
+                    type="text"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="email@gmail.com"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="w-full">
+                <label
+                  className="block font-medium text-[#FEFEFE] float-start"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{ border: "1px solid #C1C1C1", paddingLeft: "15px" , paddingRight:"10px"}}
+                >
+                  <input
+                    type={showPassword ? "password":"text"}
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE] "
+                    placeholder="********"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-[#FEFEFE]  focus:outline-none"
+                  >
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                  </button>
+                </div>
+                <div className="text-end w-full" style={{ marginTop: "7px" }}>
+                  <Link
+                    to="/forget-password"
+                    className="text-[#C1C1C1] text-sm"
+                  >
+                    <span className="text-[#C1C1C1] text-sm">
+                      Forgot Password?
+                    </span>
+                  </Link>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label className="block font-medium text-gray-700" htmlFor="password">Password</label>
-              <input id="password" type="password" value={password} placeholder="Enter your password" 
-                     onChange={(e) => setPassword(e.target.value)} 
-                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none" required />
+            {/* {error && (
+              <div className="bg-red-100 text-red-800 border-l-4 border-red-500 p-2 w-full text-center">
+                {error.message}
+              </div>
+            )} */}
+
+            <div
+              className=" bg-[#F2F862] h-12 w-[100%] rounded-3xl flex items-center justify-center cursor-pointer"
+              onClick={(e) => handleLogin(e)}
+            >
+              <button className="bg-[#F2F862] ">Login</button>
             </div>
-
-            {error && <div className="bg-red-100 text-red-800 border-l-4 border-red-500 p-2">{error.message}</div>}
-
-            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </button>
           </form>
-          
-          <div className="text-center">
-            <Link to="/forget-password" className="text-blue-500 hover:text-blue-600 text-sm">Forgot Password?</Link>
-          </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center w-full my-4">
             <hr className="flex-grow border-gray-300" />
-            <span className="px-4 text-gray-500">OR</span>
+            <span className="px-4 text-[#C1C1C1]">OR</span>
             <hr className="flex-grow border-gray-300" />
           </div>
 
-          <div className="text-center">
-            <p className="text-sm text-gray-600">Don't have an account? <Link to="/signUp" className="text-blue-500 hover:text-blue-600">Sign Up</Link></p>
+          <div className="text-center w-full">
+            <p className="text-sm text-[#C1C1C1]">
+              Don't have an account?{" "}
+              <Link to="/signUp" className="text-blue-500 hover:text-blue-600">
+                Sign Up
+              </Link>
+            </p>
           </div>
         </div>
       </div>

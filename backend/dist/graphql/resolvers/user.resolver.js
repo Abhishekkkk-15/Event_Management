@@ -50,7 +50,9 @@ exports.userResolver = {
                 avatar: userInfo.avatar || "",
                 isVerified: userInfo.isVerified,
             };
-            await redis_js_1.redisClient.set(`user:${user.payload.id}`, JSON.stringify(chachData));
+            await redis_js_1.redisClient.set(`user:${user.payload.id}`, JSON.stringify(chachData), {
+                EX: 600
+            });
             // console.log(userInfo)
             return userInfo;
         },
@@ -77,7 +79,6 @@ exports.userResolver = {
     Upload: graphql_upload_minimal_1.GraphQLUpload,
     Mutation: {
         signUp: async (_, { user }) => {
-            console.log(user);
             const { email, password, name } = user;
             if (!email || !name || !password) {
                 throw new Error("All fields are required");
@@ -99,7 +100,6 @@ exports.userResolver = {
                         name: name,
                     }
                 });
-                console.log(newUser);
                 return newUser;
             }
             catch (error) {

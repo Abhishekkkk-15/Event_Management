@@ -11,6 +11,15 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
+const SIGN_UP_MUTATION = gql`
+  mutation signUp($user: SignUpInput!) {
+    signUp(user: $user) {
+      name
+      email
+    }
+  }
+`;
+
 
 
 const UPDATE_USER_MUTATION = gql`
@@ -33,4 +42,4 @@ const LOGOUT_USER = gql`
   }
 `
 
-export { LOGIN_MUTATION, UPDATE_USER_MUTATION,LOGOUT_USER };
+export { LOGIN_MUTATION, UPDATE_USER_MUTATION,LOGOUT_USER ,SIGN_UP_MUTATION};

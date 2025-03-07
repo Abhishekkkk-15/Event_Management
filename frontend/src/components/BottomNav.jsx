@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const BottomNav = () => {
   const [active, setActive] = useState("home");
- let navigate = useNavigate();
-  
+  let navigate = useNavigate();
 
   return (
     <div
@@ -14,9 +13,10 @@ const BottomNav = () => {
     >
       <button
         className="flex items-center justify-between  text-black bg-[#1C1C1C]  w-24 h-10"
-        onClick={() => {setActive("home"); navigate("/")}
-          
-        }
+        onClick={() => {
+          setActive("home");
+          navigate("/");
+        }}
         style={{
           backgroundColor: active === "home" ? "#F2F862" : "transparent",
           borderRadius: "30px 30px 30px 30px",
@@ -29,13 +29,13 @@ const BottomNav = () => {
         />{" "}
         {active === "home" && <span>Home</span>}
       </button>
-     
+
       <button
         className="flex items-center justify-between p-2 bg-gray-800 text-white  w-24 h-10"
-        onClick={
-          () => {setActive("search"); navigate("/search")}
-          
-        }
+        onClick={() => {
+          setActive("search");
+          navigate("/search");
+        }}
         style={{
           backgroundColor: active === "search" ? "#F2F862" : "transparent",
           borderRadius: "30px 30px 30px 30px",
@@ -48,10 +48,13 @@ const BottomNav = () => {
         />
         {active === "search" && <span>Search</span>}
       </button>
-      
+
       <button
         className="flex items-center justify-between  bg-gray-800 text-white w-24 h-10 "
-        onClick={() => {setActive("ticket"); navigate("/detailsScreen/bookticket")}}
+        onClick={() => {
+          setActive("ticket");
+          navigate("/");
+        }}
         style={{
           backgroundColor: active === "ticket" ? "#F2F862" : "transparent",
           borderRadius: "30px 30px 30px 30px",
@@ -65,8 +68,11 @@ const BottomNav = () => {
         {active === "ticket" && <span>Tickets</span>}
       </button>
       <button
-        className="flex items-center justify-between bg-gray-800 text-white  w-24 h-10"
-        onClick={() => {setActive("profile"); navigate("/userProfile")}}
+        className="flex items-center justify-between bg-gray-800 text-white   h-10"
+        onClick={() => {
+          setActive("profile");
+          navigate("/proflleSettings");
+        }}
         style={{
           backgroundColor: active === "profile" ? "#F2F862" : "transparent",
           padding: "8px",
@@ -76,8 +82,8 @@ const BottomNav = () => {
         <User
           size={20}
           className={`${active == "profile" ? "text-black" : "text-white"}`}
-          />
-          {active === "profile" && <span>Profile</span>}
+        />
+        {active === "profile" && <span style={{marginLeft:"10px"}} >Profile</span>}
       </button>
     </div>
   );

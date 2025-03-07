@@ -1,100 +1,103 @@
 import { useState } from "react";
-import { sendVerificationEmail, verifyCode } from "../REST_API/emailVerification";
-import { Badge } from "@/components/ui/badge"
+import {
+  sendVerificationEmail,
+  verifyCode,
+} from "../REST_API/emailVerification";
+import { Badge } from "@/components/ui/badge";
+import { showError, showSuccess } from "../utils/toast";
 
-const VerifyEmailPage = ({ onVerifyCode }) => {
+const VerifyEmailPage = ({onVerifyCode}) => {
   const [step, setStep] = useState("request"); // "request" or "verify"
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const [code, setCode] = useState("");
 
   const handleSendVerification = async () => {
     setLoading(true);
-    setMessage("");
 
     try {
-      const {data} = await sendVerificationEmail(); // Backend function to send the email
-      console.log(data)
-      setMessage(data.message);
+      const { data } = await sendVerificationEmail(); // Backend function to send the email
+      console.log(data);
+      showSuccess(data.message);
       setStep("verify");
+      setLoading(false)
     } catch (error) {
-      setMessage("Failed to send verification email. Try again.");
+      showError("Failed to send verification email. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyCode = async () => {
+  const handleVerifyCode = async (code) => {
+    console.log(code)
     if (!code.trim()) {
-      setMessage("Please enter the verification code.");
+      showError("Please enter the verification code.");
       return;
     }
 
-   
-    const {data} = await verifyCode(code)
-         console.log(data)
-
-    setMessage(data.message);
-
-    // try {
-    //     const {data} = await verifyCode(code)
-    //     console.log(data)
-
-    //     setMessage(data.message);
-
-    // } catch (error) {
-    //   setMessage(error.message);
-    //   console.log(error)
-    // } finally {
-    //   setLoading(false);
-    // }
+    setLoading(true);
+    try {
+      const { data } = await verifyCode(code);
+      console.log(data);
+      showSuccess(data.message);
+      if (onVerifyCode) onVerifyCode();
+    } catch (error) {
+      showError("Incorrect Code");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-gray-900 shadow-lg rounded-xl p-6 text-center">
-      {step === "request" ? (
-        <>
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Verify Your Email</h2>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">
-            Click the button below to receive a verification email.
-          </p>
-          <button
-            onClick={handleSendVerification}
-            disabled={loading}
-            className="mt-4 w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all disabled:bg-blue-400"
-          >
-            {loading ? "Sending..." : "Send Verification Email"}
-          </button>
-        </>
-      ) : (
-        <>
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Enter Verification Code</h2>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">
-            We've sent a code to your email. Enter it below to verify.
-          </p>
-          <input
-            type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="Enter code"
-            className="mt-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring focus:ring-blue-300 dark:bg-gray-800 dark:text-white"
-          />
-          <button
-            onClick={handleVerifyCode}
-            disabled={loading}
-            className="mt-4 w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all disabled:bg-green-400"
-          >
-            {loading ? "Verifying..." : "Verify Code"}
-          </button>
-        </>
-      )}
+    <div className="h-screen w-full flex justify-center items-center">
+      <div className="w-full max-w-md p-6 shadow-xl rounded-xl flex flex-col justify-center items-center text-center gap-3 ">
+        <h2 className="text-2xl font-bold text-[#FEFEFE]">Verify Your Email</h2>
+        {step === "request" ? (
+          <>
+            <p className="text-[#C1C1C1] mt-2">
+              Click the button below to receive a verification email.
+            </p>
+            <div className=" bg-[#F2F862] h-10 w-[50%] rounded-3xl flex items-center justify-center cursor-pointer">
+              <button
+                onClick={handleSendVerification}
+                disabled={loading}
+                className="bg-[#F2F862]"
+              >
+                {loading ? "Sending..." : "Send Verification Email"}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="text-2xl font-bold text-[#FEFEFE]">
+              Enter Verification Code
+            </h2>
 
-      {message && (
-        <p className={`mt-3 text-sm font-medium ${message.includes("successfully") ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-          {message}
-        </p>
-      )}
-      <Badge>Badge</Badge>
+            <div
+              className="h-10 w-[50%] bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+              style={{ border: "1px solid #C1C1C1", paddingLeft: "15px" }}
+            >
+              <input
+                type="text"
+                className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                onChange={(e) => setCode(e.target.value)}
+
+              />
+            </div>
+            <div className=" bg-[#F2F862] h-10 w-[50%] rounded-3xl flex items-center justify-center cursor-pointer">
+              <button
+                onClick={()=>handleVerifyCode(code)}
+                disabled={loading}
+                className="bg-[#F2F862]"
+              >
+                {loading ? "Verifying..." : "Verify Code"}
+              </button>
+            </div>
+          </>
+        )}
+        <Badge className="mt-4 px-3 py-1 text-sm bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg">
+          Email Verification
+        </Badge>
+      </div>
     </div>
   );
 };

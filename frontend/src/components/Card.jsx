@@ -24,7 +24,7 @@ function Card({ data }) {
     className="w-full h-full object-cover"
   />
   
-  {/* Text content with glass effect at the bottom */}
+
   <div className="absolute bottom-2 left-4 w-[92%] bg-transparent">
     <div className="backdrop-blur-lg rounded-4xl flex items-center justify-between h-20 sm:h-16 md:h-18 lg:h-20">
       {/* Text content */}
