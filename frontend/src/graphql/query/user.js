@@ -13,13 +13,12 @@ const GET_AUTH_USER = gql`
 `;
 
 const GET_LOGGED_USER_INFO = gql`
-  query{
-    user{
-
+  query {
+    user {
       name
       avatar
       isVerified
-      events{
+      events {
         id
         date
         bookedSlots
@@ -27,17 +26,25 @@ const GET_LOGGED_USER_INFO = gql`
         title
         price
       }
-      bookings{
+      bookings {
         id
         userId
-        event{
+        event {
+          id
           title
-          startAt
+          location
+          price
+          eventImages
           date
+          bookings {
+            user {
+              avatar
+            }
+          }
         }
       }
     }
   }
 `;
 
-export {GET_AUTH_USER,GET_LOGGED_USER_INFO}
+export { GET_AUTH_USER, GET_LOGGED_USER_INFO };

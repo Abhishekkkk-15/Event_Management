@@ -10,6 +10,7 @@ import CardSkeleton from "../Skeleton/Card";
 import { GET_EVENTS } from "../graphql/query/event";
 import { showSuccess } from "../utils/toast";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 
 function Cards() {
   const [queryToFetch, setQueryToFetch] = useState("");
@@ -20,19 +21,22 @@ function Cards() {
   const [hasMore, setHasMore] = useState(true); // Track if there's more data
 
   const { loading, error, data } = useQuery(GET_EVENTS, {
-    variables: { query: queryToFetch || "", category: categoryDataToFetch ,limit: 3, page },
+    variables: {
+      query: queryToFetch || "",
+      category: categoryDataToFetch,
+      limit: 3,
+      page,
+    },
     fetchPolicy: "cache-and-network",
   });
-
-  console.log(data)
 
   useEffect(() => {
     if (data) {
       if (data.events.length === 0) {
         setHasMore(false);
-        return; 
+        return;
       }
-      setEvents((prev) => [...prev, ...data.events]); 
+      setEvents((prev) => [...prev, ...data.events]);
     }
   }, [data]);
 
@@ -58,14 +62,17 @@ function Cards() {
   if (error) console.log(error);
 
   const category = [
-    { img:"../../Public/CMusic.png", name: "All" },
-    { img:"../../Public/CMusic.png", name: "Music" },
-    { img:"", name: "Sports" },
+    { img: "../../Public/CMusic.png", name: "All" },
+    { img: "../../Public/CMusic.png", name: "Music" },
+    { img: "", name: "Sports" },
   ];
 
   return (
     <div className="h-full bg-[#000000] mt-10">
-      <div className="flex flex-row flex-wrap  justify-start gap-4 p-4 h-14 items-center" style={{margin:"0 5px 0 10px"}}>
+      <div
+        className="flex flex-row flex-wrap  justify-start gap-4 p-4 h-14 items-center"
+        style={{ margin: "0 5px 0 10px" }}
+      >
         {category.map((c, idx) => (
           <div
             key={idx}
@@ -75,17 +82,13 @@ function Cards() {
               setPage(1);
               setHasMore(true);
               setCategoryDataToFetch(c.name === "All" ? "" : c.name);
-              setQueryToFetch('')
+              setQueryToFetch("");
             }}
           >
-            <Avatar
-                className=" h-9 w-9"
-              >
-                <AvatarImage src={c.img} />
-              </Avatar>
-              <span>
-                {c.name}
-              </span>
+            <Avatar className=" h-9 w-9">
+              <AvatarImage src={c.img} />
+            </Avatar>
+            <span>{c.name}</span>
           </div>
         ))}
       </div>
@@ -97,10 +100,23 @@ function Cards() {
         <IoMdAdd className="h-10 w-5" />
       </Link> */}
 
-      <div className="flex justify-center items-center flex-col gap-3 lg:grid lg:grid-cols-3" style={{ marginBottom: "10px" }}>
-        {events.map((event, index) => <Card data={event} key={index} />)}
-        {loading && <CardSkeleton />}
+      <div
+        className="flex justify-center items-center flex-col gap-3 lg:grid lg:grid-cols-3"
+        style={{ paddingBottom: "10px" }}
+      >
+        {events.map((event, index) => (
+          <Card data={event} key={index} />
+        ))}
+
       </div>
+        {loading && (
+          <div className="w-full h-[full flex justify-center items-center backdrop-blur-sm">
+            <div  className="w-[50px] h-[50px] flex justify-center items-center backdrop-blur-sm">
+
+            <img src={loadingSvg} alt="Loading..." className="h-[10px]" />
+            </div>
+          </div>
+        )}
 
       {hasMore && <div ref={observerRef} className="h-10 w-full"></div>}
     </div>

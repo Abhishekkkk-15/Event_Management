@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { showError, showSuccess } from "../utils/toast";
 import { SIGN_UP_MUTATION } from "../graphql/mutation/user";
-import loadingSvg from "../../public/Double Ring@1x-1.0s-200px-200px.svg";
+import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 import { LOGIN_MUTATION } from "../graphql/mutation/user";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../store/slice/user.slice";

@@ -4,8 +4,14 @@ import { showError, showSuccess } from "../utils/toast";
 import axios from "axios";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { Label } from "../components/ui/label";
+import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 
 const CreateEventForm = () => {
   const [title, setTitle] = useState("");
@@ -56,10 +62,14 @@ const CreateEventForm = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:4000/events/create", formData, {
-        withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { data } = await axios.post(
+        "http://localhost:4000/events/create",
+        formData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       showSuccess("Email will be sent when the event is approved and created");
       setTitle("");
       setDescription("");
@@ -81,52 +91,265 @@ const CreateEventForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4">
-      <Card className="w-full max-w-lg">
+    <div className="flex justify-center items-center min-h-screen w-full">
+      <Card className="w-full  flex justify-center items-center">
         <CardHeader>
           <CardTitle className="text-center text-xl">Create Event</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Label>Title</Label>
-            <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-            
-            <Label>Description</Label>
-            <Input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
-            
-            <Label>Location</Label>
-            <Input type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
-            
-            <Label>Date</Label>
-            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-            
-            <Label>Start At</Label>
-            <Input type="time" value={startAt} onChange={(e) => setStartAt(e.target.value)} required />
-            
-            <Label>End At</Label>
-            <Input type="time" value={endAt} onChange={(e) => setEndAt(e.target.value)} required />
-            
-            <Label>Max Slots</Label>
-            <Input type="number" value={maxSlots} onChange={(e) => setMaxSlots(e.target.value)} required />
-            
-            <Label>Category</Label>
-            <Input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required />
-            
-            <Label>Price</Label>
-            <Input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
-            
-            <Label>Upload Images (Min 2)</Label>
-            <Input type="file" multiple onChange={handleFileChange} required />
-            
+          <form
+            onSubmit={handleSubmit}
+            className="w-[100%] flex flex-col items-center gap-5 "
+          >
+            <div className="w-[full] flex flex-col items-center justify-center text-center">
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Title
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{ border: "1px solid #C1C1C1", paddingLeft: "15px" }}
+                >
+                  <input
+                    type="text"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="Sports Event"
+                    onChange={(e) => setTitle(e.target.value)}
+                    minLength={5}
+                    maxLength={50}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Location
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{ border: "1px solid #C1C1C1", paddingLeft: "15px" }}
+                >
+                  <input
+                    type="text"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="New York"
+                    onChange={(e) => setLocation(e.target.value)}
+                    minLength={5}
+                    maxLength={50}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-full ">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Date
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE] "
+                  style={{
+                    border: "1px solid #C1C1C1",
+                    paddingLeft: "15px",
+                    paddingRight: "10px",
+                  }}
+                >
+                  <input
+                    type="date"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="John Doe"
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Start Time
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{
+                    border: "1px solid #C1C1C1",
+                    paddingLeft: "15px",
+                    paddingRight: "10px",
+                  }}
+                >
+                  <input
+                    type="time"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="John Doe"
+                    onChange={(e) => setStartAt(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  End Time
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{
+                    border: "1px solid #C1C1C1",
+                    paddingLeft: "15px",
+                    paddingRight: "10px",
+                  }}
+                >
+                  <input
+                    type="time"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="11:00 PM"
+                    onChange={(e) => setEndAt(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Max Slots
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{
+                    border: "1px solid #C1C1C1",
+                    paddingLeft: "15px",
+                    paddingRight: "10px",
+                  }}
+                >
+                  {loading && (
+                    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white/30 backdrop-blur-sm">
+                      <img src={loadingSvg} alt="Loading..." />
+                    </div>
+                  )}
+                  <input
+                    type="number"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="20"
+                    onChange={(e) => setMaxSlots(e.target.value)}
+                    min={20}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Category
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{
+                    border: "1px solid #C1C1C1",
+                    paddingLeft: "15px",
+                    paddingRight: "10px",
+                  }}
+                >
+                  <input
+                    type="text"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="Sports"
+                    onChange={(e) => setCategory(e.target.value)}
+                    minLength={5}
+                    maxLength={20}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Price
+                </label>
+                <div
+                  className="h-10 w-full bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{
+                    border: "1px solid #C1C1C1",
+                    paddingLeft: "15px",
+                    paddingRight: "10px",
+                  }}
+                >
+                  <input
+                    type="text"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="1000"
+                    onChange={(e) => setPrice(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <label
+                  className="font-medium text-[#FEFEFE] float-start"
+                  htmlFor="text"
+                >
+                  Descripition
+                </label>
+                <div
+                  className=" w-full bg-white/20 rounded-3xl  flex items-center px-4 shadow-lg text-[#FEFEFE]"
+                  style={{ border: "1px solid #C1C1C1", paddingLeft: "15px" }}
+                >
+                  <textarea
+                    type="text"
+                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
+                    placeholder="Some Descripition"
+                    onChange={(e) => setDescription(e.target.value)}
+                    minLength={100}
+                    maxLength={600}
+                    required
+                  />
+                </div>
+              </div>
+
+              <Label style={{ marginTop: "20px" }}>Upload Images (Min 2)</Label>
+              <Input
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                required
+                style={{ marginTop: "15px" }}
+              />
+            </div>
             <div className="flex flex-wrap gap-2">
               {imagePreviews.map((src, index) => (
-                <img key={index} src={src} alt="Preview" className="w-20 h-20 object-cover rounded-lg" />
+                <img
+                  key={index}
+                  src={src}
+                  alt="Preview"
+                  className="w-20 h-20 object-cover rounded-lg"
+                />
               ))}
             </div>
-            
-            <Button type="submit" disabled={loading} className="w-full">
-              {loading ? "Creating..." : "Create Event"}
-            </Button>
+            <div
+              type="submit"
+              className=" bg-[#F2F862] h-12 w-[100%] rounded-3xl flex items-center justify-center cursor-pointer"
+              onClick={(e) => handleSubmit(e)}
+            >
+              <button className="bg-[#F2F862] " disabled={loading}>
+                {loading ? "Creating..." : "Create Event"}
+              </button>
+            </div>
           </form>
         </CardContent>
       </Card>

@@ -11,16 +11,14 @@ import FileUpload from "./page/UserProfileUpdate";
 import SignUp from "./page/SignUp";
 import AddEvent from "./page/AddEvent";
 import DetailScreen from "./page/DetailScreen";
-import TicketBooking from "./components/TicketBooking";
 import EventsPage from "./components/New";
 import NotFoundPage from "./page/NotFoundPage";
-import EditUserProfile from "./components/UserProfile";
 import VerifyEmailPage from "./components/VerifyEmailPage";
 import QRScanner from "./components/QRScanner";
-import EventListingPage from "./page/eventPage";
 import BottomNav from "./components/BottomNav";
 import ProfileSettings from "./page/ProfileSettings";
 import UserProfileUpdate from "./page/UserProfileUpdate";
+import TicketPage from "./page/TicketPage";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -49,7 +47,7 @@ const MainRoutes = () => {
 
 
   // Define routes where BottomNav should be hidden
-  const hiddenRoutes = ["/", "/search", "/addEvent", "/detailsScreen/*", "/userProfile", "/verifyEmail","/proflleSettings","/tickets"];
+  const hiddenRoutes = ["/", "/search", "/detailsScreen/*", "/userProfile", "/verifyEmail","/proflleSettings","/tickets"];
 
   return (
     <>
@@ -63,11 +61,10 @@ const MainRoutes = () => {
         <Route path="/detailsScreen/:id" element={<DetailScreen />} />
         <Route path="/app" element={<EventsPage />} />
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="/e" element={<EditUserProfile />} />
         <Route path="/editProfile" element={<UserProfileUpdate />} />
         <Route path="/verifyEmail" element={ user?.isVerified ? <ProfileSettings />: <VerifyEmailPage />} />
         <Route path="/qr" element={<QRScanner />} />
-        <Route path="/eve" element={<EventListingPage />} />
+        <Route path="/tickets" element={<TicketPage />} />
       </Routes>
 
       {/* Conditionally Render BottomNav */}
