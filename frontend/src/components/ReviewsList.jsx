@@ -6,6 +6,8 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_REVIEWS } from "../graphql/query/event";
 import { useSelector } from "react-redux";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
+
 
 const ReviewSection = ({ eventId }) => {
   const [reviews, setReviews] = useState([]);
@@ -65,7 +67,7 @@ const ReviewSection = ({ eventId }) => {
   };
 
   return (
-    <div className="space-y-6 w-[100%]  h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col ">
+    <div className="space-y-6 w-[100%]  h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col  ">
       {/* <h2 className="text-2xl font-semibold">Add a Review</h2> */}
       
       <AddReview onSubmit={handleAddReview} />
@@ -77,15 +79,22 @@ const ReviewSection = ({ eventId }) => {
         ref={reviewContainerRef} 
         className="overflow-y-auto flex-1"
         style={{ maxHeight: "400px" }}
-      >
+      > 
         {reviews.map((review, index) => (
-          <div className="mt-2 " key={index} style={{marginTop: "10px"}}>
+          <div className="mt-2  " key={index} style={{marginTop: "10px"}}>
 
             <ReviewCard  {...review} />
           </div>
         ))}
         <div id="load-more" className="h-10" />
-        {loading && <AiOutlineLoading3Quarters className="animate-spin text-2xl mx-auto" />}
+         {loading && (
+                  <div className="w-full h-[full flex justify-center items-center backdrop-blur-sm">
+                    <div  className="w-[50px] h-[50px] flex justify-center items-center backdrop-blur-sm">
+        
+                    <img src={loadingSvg} alt="Loading..." className="h-[10px]" />
+                    </div>
+                  </div>
+                )}
       </div>
       
       

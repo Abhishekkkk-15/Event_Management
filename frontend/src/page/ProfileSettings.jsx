@@ -9,12 +9,14 @@ import { FcAbout } from "react-icons/fc";
 import { IoCreateOutline, IoTicketOutline } from "react-icons/io5";
 import { IoIosContact } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { showInfo } from "../utils/toast";
 
 const ProfileSettings = () => {
   const [notifications, setNotifications] = useState(true);
   const [email, setEmail] = useState(true);
   const [location, setLocation] = useState(false);
-
+  const user = useSelector(state => state.auth.user)
   return (
     <div className="min-h-screen w-ful bg-[#000000]0" style={{paddingBottom:"90px"}}>
       <div className="flex flex-col  justify-center items-center text-[#FEFEFE] gap-2 ">
@@ -47,6 +49,7 @@ const ProfileSettings = () => {
           <Link
             to="/verifyEmail"
             className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-18"
+            onClick={()=> user.isVerified ? showInfo("Email is Already verified") : ""}
           >
             <div
               className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-18"

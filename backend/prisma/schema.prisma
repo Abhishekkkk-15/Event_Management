@@ -25,7 +25,7 @@ model User {
   bookings  Booking[]
   reviews   Review[]
   isVerified Boolean  @default(false)
-  verificationCode String? 
+  wishList WishList[]
 }
 
 model Event {
@@ -47,6 +47,7 @@ model Event {
   bookedSlots Int       @default(0)
   bookings    Booking[]
   reviews     Review[]
+  wishList WishList[]
 }
 
 model Booking {
@@ -71,4 +72,12 @@ model Review {
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model WishList{
+   id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
 }

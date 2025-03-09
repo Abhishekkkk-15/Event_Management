@@ -28,11 +28,11 @@ exports.eventResolver = {
                         OR: [
                             {
                                 title: {
-                                    contains: "Sports"
+                                    contains: query
                                 }
                             }, {
                                 description: {
-                                    contains: "Sports"
+                                    contains: query
                                 }
                             }
                         ]

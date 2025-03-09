@@ -12,17 +12,27 @@ scalar Upload
         avatar:String
         bookings: [Booking]  
         isVerified: Boolean
+        wishList: [WishList]
     }
 type AuthUser{
-  id: String!
+         id: String!
         email: String!
         name: String!
         avatar:String
         isVerified: Boolean
+        wishList: [WishList]
 }
     input UpdateUserInput {
   name: String!
-  email: String!
+  email: String!  
+}
+
+type WishList{
+  id: ID
+  eventId: ID
+  event:Event
+        user:User
+        userId: ID
 }
 
 type Booking{
@@ -31,6 +41,7 @@ type Booking{
         event:Event
         user:User
         userId: ID
+        tickets: ID
     },
 
     type Query{
@@ -44,8 +55,12 @@ type Booking{
         login(input:LoginInput!): User
         updateUser(userInput: UpdateUserInput!): User!
         logout: String!
+        addToWishList(eventId: String!): Message
+        removeFromWishList(Id: String!): Message
     }
-
+    type Message{
+        message:String
+    }
     input SignUpInput {
     email: String
     password: String

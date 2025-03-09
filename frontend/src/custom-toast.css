@@ -1,6 +1,7 @@
 /* Customize the Toast container */
 .Toastify__toast {
-    border-radius: 20px; /* For rounded corners (3x1 shape) */
+  width: 380px !important;
+    border-radius: 50%; /* For rounded corners (3x1 shape) */
     padding: 16px; /* Adjust padding for your design */
     background-color: #ff5733; /* Set your custom background color */
     color: white; /* Set text color */
@@ -11,7 +12,8 @@
   
   /* Optionally customize success, error, info, and other toast types */
   .Toastify__toast--success {
-    background-color: #28a745; /* Green for success */
+    background-color: #28a745;
+    
   }
   
   .Toastify__toast--error {

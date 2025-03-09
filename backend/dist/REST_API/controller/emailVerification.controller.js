@@ -35,14 +35,7 @@ const sendVerificationCode = async (req, res) => {
               `,
         });
         await mailTransporter_1.transporter.sendMail(mailOptions(user.email, verificationCode));
-        await db_1.db.user.update({
-            where: {
-                id: userId
-            },
-            data: {
-                verificationCode
-            }
-        });
+        await redis_1.redisClient.set(userId, verificationCode);
         res.status(201).json({ success: true, message: "Verification Email Send!!" });
     }
     catch (error) {
@@ -57,14 +50,10 @@ const verifiyEmail = async (req, res) => {
         return res.status(404).json({ success: false, message: "Verification code not provided!!" });
     const userId = req.user.payload.id;
     try {
-        const user = await db_1.db.user.findFirst({
-            where: {
-                id: userId
-            }
-        });
+        const user = await redis_1.redisClient.get(userId);
         if (!user)
             return res.status(404).json({ success: false, message: "User not found!!" });
-        if (verificationCode != user.verificationCode)
+        if (verificationCode != user)
             return res.json({ success: false, message: "Verification code not matched!!" });
         await db_1.db.user.update({
             where: {

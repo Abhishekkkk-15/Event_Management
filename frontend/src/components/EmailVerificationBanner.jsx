@@ -18,7 +18,7 @@ const EmailVerificationBanner = () => {
       <div className="flex items-center gap-3">
         <AlertCircle className="w-6 h-6 text-yellow-600" />
         <div>
-          <AlertTitle>Email Verification Needed</AlertTitle>
+        
           <AlertDescription>
             Please verify your email to access all features.
           </AlertDescription>

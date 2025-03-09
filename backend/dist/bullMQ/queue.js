@@ -24,9 +24,9 @@ exports.sendEmailQueue = new bullmq_1.Queue('send-email-queue', {
 });
 // Worker
 const addEventWorker = new bullmq_2.Worker('add-event-queue', async (job) => {
+    const { event, files, userId } = job.data;
     try {
         console.log("Processing job", job.id);
-        const { event, files, userId } = job.data;
         const date = new Date(event.date).toISOString();
         const images = [];
         for (const filePath of files) { // ✅ Now it contains file paths
@@ -59,8 +59,8 @@ const addEventWorker = new bullmq_2.Worker('add-event-queue', async (job) => {
     catch (error) {
         console.error("Error processing event job:", error);
         exports.sendEmailQueue.add("failure-email", {
-            userEmail: job.data.userEmail,
-            eventTitle: job.data.event.title,
+            userEmail: event.userEmail,
+            eventTitle: event.title,
             errorMessage: error.message
         });
         throw error;

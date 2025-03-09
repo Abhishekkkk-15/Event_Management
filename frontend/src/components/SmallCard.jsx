@@ -1,115 +1,138 @@
-import React from "react";
+import React, { useState } from "react";
 import { GoArrowUpRight, GoHeart, GoLocation } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { CiLocationOn, CiTimer } from "react-icons/ci";
+import TicketModel from "./TicketModal ";
 
 function SmallCard({ data }) {
   const navigate = useNavigate();
-  const formattedDate = data?.date
-    ? new Date(Number(data.date)).toLocaleDateString("en-US", {
+  const [isOpen, setIsOpen] = useState(false)
+  const timestamp = Number(data?.event.date); // Ensure it's a number
+
+  const formattedDate = timestamp
+    ? new Date(timestamp).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
       })
     : "Invalid Date";
 
-  const handleNavigate = (id) => {
-    navigate(`/detailsScreen/${id}`);
-  };
-  const [month, day] = formattedDate.split(" ");
+  let isExpired = timestamp < Date.now();
+
+      function toSet(){
+        setIsOpen(false)
+      }
+      
+  if(isOpen){
+    return (
+      <TicketModel data={data} setIsOpen={toSet} />
+    )
+  }
 
   return (
     <div
-      className=" bg-[#181818] h-[10rem] rounded-3xl w-full overflow-hidden flex flex-col p-3 gap-5 "
+      className={` ${
+        isExpired ? "bg-[#181818]" : "bg-[#F2F862]" 
+      }  h-[10rem] rounded-3xl w-full  flex flex-col p-3 gap-5 ${
+        isExpired ? "text-[#F1F1F1]" : "text-[#000000]"
+      } `}
       style={{ padding: "20px" }}
     >
       {/* Image background */}
 
-      <div className="h-[80px] w-full flex flex-row items-center gap-1 " >
-        <div className="h-[10px] w-full  flex flex-row items-center justify-start rounded-3xl gap-4">
+      <div className="h-[80px] w-full flex flex-row items-center gap-1 ">
+        <div className="h-[50%] w-full  flex flex-row items-center justify-start rounded-3xl gap-4">
           <img
-            src={`${data?.eventImages[0].replace(
+            src={`${data?.event?.eventImages[0].replace(
               "/upload/",
-              "/upload/w_100,h_100/"
+              "/upload/w_70,h_70/"
             )}`}
             alt="Event"
             className="object-cover rounded-3xl"
           />
-          <div
-            className="flex flex-col items-center"
-            style={{ marginRight: "200px" }}
-          >
-            <span className="text-[#FEFEFE] font-bold text-[20px] ml-1 ">
-              {data.title}
+          <div className="flex flex-col justify-start w-[60%]">
+            <span
+              className={`${
+                isExpired ? "text-[#FEFEFEF]" : "text-[#000000]"
+              } font-bold text-[20px] `}
+            >
+              {data?.event?.title}
+            </span>
+            <span
+              className={`${
+                isExpired ? "text-[#F1F1F1]" : "text-[#000000]"
+              }  text-[18px] `}
+            >
+              {data?.event?.category}
             </span>
           </div>
         </div>
-        <div className="h-full w-[40px] flex justify-center items-center" >
-            <GoArrowUpRight/>
+        <div className="h-full w-[30%] flex justify-end items-center">
+          <div
+            className={`relative top-0 right-0 ${isExpired ? "bg-white/20":"bg-black/20"} bg-black/20 rounded-full h-[50px] w-[50px] flex justify-center items-center ${
+              isExpired ? "text-[#F1F1F1]" : "text-[#000000]"
+            } flex-col font-bold text-sm`}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <GoArrowUpRight size={20} />
+          </div>
         </div>
       </div>
 
-      {/* Content section */}
-      <div
-        className="flex "
-        style={{ paddingLeft: "16px", paddingRight: "16px" }}
-      >
-        <div className="flex items-center justify-between ">
-          <div
-            className="flex flex-col items-center"
-            style={{ marginRight: "200px" }}
-          >
-            {/* <div className="flex justify-center items-center">
-              <GoLocation size={16} className="text-[#FEFEFE]" />
-              <span className="text-[#FEFEFE]">{data.location}</span>
-            </div> */}
+      <div className="flex items-center justify-between w-full px-4 gap-3">
+        <div className="flex items-center justify-evenly h-10 w-[30%]  ">
+          <div>
+            <CiTimer
+              className={`${isExpired ? "text-[#C1C1C1]" : "text-[#000000]"}`}
+              size={20}
+            />
           </div>
-          {/* <div>
-            <span className="text-[#FEFEFE] font-bold text-[28px]">
-              ₹{data.price}
-            </span>
-          </div> */}
+          <span
+            className={`text-[16px] ${
+              isExpired ? "text-[#C1C1C1]" : "text-[#000000]"
+            }`}
+          >
+            {data.event?.startAt}
+          </span>
         </div>
-      </div>
-      <div className="flex items-center justify-evenly w-full px-4">
+        |
+        <div className="flex items-center h-10 w-[40%] gap-2">
+          <div>
+            <CiLocationOn size={20} />
+          </div>
+          <span className={`text-[16px] ${isExpired ?  "text-[#C1C1C1]" : "text-[#000000]"}`}>{data.event?.location}</span>
+        </div>
         <div
-          className="relative flex flex-row h-20 w-[16%] items-center  right-3"
+          className="relative flex flex-row h-[50%] w-[20%%] items-center justify-center  left-3"
           style={{ padding: "5px" }}
         >
-          {data?.bookings?.length >= 2 && (
-            <Avatar
-              className=" h-12 w-12 bg-[#F2Fb62] flex items-center justify-center border-2 border-white gap-3"
-              style={{ border: "2px solid white" }}
-            >
-              <span>{data?.bookings?.length}+</span>
-            </Avatar>
-          )}
-
-          {data?.bookings?.length >= 2 ? (
+          {data?.event?.bookings?.length >= 2 ? (
             <>
               <Avatar
-                className="relative h-12 w-12 right-4 border-2 border-white"
+                className="relative h-8 w-8 left-6 border-2 border-white"
                 style={{ border: "2px solid white" }}
               >
-                <AvatarImage src={data?.bookings[0]?.user?.avatar} />
+                <AvatarImage src={data?.event?.bookings[0]?.user?.avatar} />
               </Avatar>
 
               <Avatar
-                className="relative h-12 w-12 right-6 border-2 border-white"
+                className="relative h-8 w-8 left-3 border-2 border-white"
                 style={{ border: "2px solid white" }}
               >
-                <AvatarImage src={data?.bookings[1]?.user?.avatar} />
+                <AvatarImage src={data?.event?.bookings[1]?.user?.avatar} />
               </Avatar>
             </>
           ) : (
             ""
           )}
-        </div>
-        <div
-          className=" bg-[#F2F862] h-12 w-[60%] rounded-3xl flex items-center justify-center"
-          style={{ marginLeft: "50px" }}
-          onClick={() => handleNavigate(data?.id)}
-        >
-          <button className="bg-[#F2F862] ">Buy Ticket</button>
+          {data?.event?.bookings?.length >= 2 && (
+            <Avatar
+              className=" h-8 w-8 bg-[#F2Fb62] flex items-center justify-center border-2 border-white gap-3"
+              style={{ border: "2px solid white" }}
+            >
+              <span className="text-[8px]">{data?.event?.bookings?.length}+</span>
+            </Avatar>
+          )}
         </div>
       </div>
     </div>

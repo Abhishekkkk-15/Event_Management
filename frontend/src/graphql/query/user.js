@@ -8,6 +8,11 @@ const GET_AUTH_USER = gql`
       email
       avatar
       isVerified
+     wishList{
+      event{
+        id
+      }
+     }
     }
   }
 `;
@@ -29,6 +34,7 @@ const GET_LOGGED_USER_INFO = gql`
       bookings {
         id
         userId
+        tickets
         event {
           id
           title
@@ -36,11 +42,23 @@ const GET_LOGGED_USER_INFO = gql`
           price
           eventImages
           date
+          startAt
+          category
           bookings {
             user {
               avatar
             }
           }
+        }
+      }
+      wishList{
+        id
+        user{
+          name
+        }
+        event{
+          id 
+          title
         }
       }
     }

@@ -21,7 +21,7 @@ const CreateEventForm = () => {
   const [maxSlots, setMaxSlots] = useState("");
   const [files, setFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
@@ -88,6 +88,20 @@ const CreateEventForm = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTimeChange = (e, type) => {
+    const time = e.target.value; // Example: "23:00"
+    const [hours, minutes] = time.split(":").map(Number);
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format
+
+    const formattedTime = `${formattedHours}:${minutes
+      .toString()
+      .padStart(2, "0")} ${ampm}`;
+    if (type == "endAt") setEndAt(formattedTime);
+    if (type == "startAt") setStartAt(formattedTime);
   };
 
   return (
@@ -190,7 +204,7 @@ const CreateEventForm = () => {
                     type="time"
                     className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
                     placeholder="John Doe"
-                    onChange={(e) => setStartAt(e.target.value)}
+                    onChange={(e) => handleTimeChange(e, "startAt")}
                     required
                   />
                 </div>
@@ -214,7 +228,7 @@ const CreateEventForm = () => {
                     type="time"
                     className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
                     placeholder="11:00 PM"
-                    onChange={(e) => setEndAt(e.target.value)}
+                    onChange={(e) => handleTimeChange(e, "endAt")}
                     required
                   />
                 </div>

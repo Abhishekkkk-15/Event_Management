@@ -37,6 +37,9 @@ exports.userResolver = {
             const userInfo = await db_1.db.user.findUnique({
                 where: {
                     id: user.payload.id
+                },
+                include: {
+                    wishList: true
                 }
             });
             if (!userInfo) {
@@ -49,6 +52,7 @@ exports.userResolver = {
                 name: userInfo.name,
                 avatar: userInfo.avatar || "",
                 isVerified: userInfo.isVerified,
+                wishList: userInfo.wishList || []
             };
             await redis_js_1.redisClient.set(`user:${user.payload.id}`, JSON.stringify(chachData), {
                 EX: 600
@@ -74,6 +78,30 @@ exports.userResolver = {
                 }
             });
             return userBookings;
+        },
+        wishList: async (parent) => {
+            const wishList = await db_1.db.wishList.findMany({
+                where: {
+                    userId: parent.id
+                }
+            });
+            return wishList;
+        }
+    },
+    WishList: {
+        user: async (parent) => {
+            return await db_1.db.user.findFirst({
+                where: {
+                    id: parent.userId
+                }
+            });
+        },
+        event: async (parent) => {
+            return await db_1.db.event.findFirst({
+                where: {
+                    id: parent.eventId
+                }
+            });
         }
     },
     Upload: graphql_upload_minimal_1.GraphQLUpload,
@@ -168,6 +196,28 @@ exports.userResolver = {
                     user: null
                 };
             }
+        },
+        addToWishList: async (_, { eventId }, { req, res, user }) => {
+            if (!user)
+                throw new Error("UnAuntincated user!!");
+            const wish = await db_1.db.wishList.create({
+                data: {
+                    userId: user.payload.id,
+                    eventId: eventId
+                }
+            });
+            redis_js_1.redisClient.del(`user:${user.payload.id}`);
+            return { message: "Done" };
+        },
+        removeFromWishList: async (_, { Id }, { req, res, user }) => {
+            if (!Id)
+                throw new Error("Id not provided");
+            await db_1.db.wishList.delete({
+                where: {
+                    id: Id
+                }
+            });
+            return { message: "Done" };
         }
     }
 };

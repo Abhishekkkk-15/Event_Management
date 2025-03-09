@@ -6,7 +6,7 @@ import EmailVerificationBanner from '../components/EmailVerificationBanner'
 function HomePage() {
   return (
     <div className='bg-[#000000]'>
-        <Header/>
+        {/* <Header/> */}
         <EmailVerificationBanner/>
         <Cards/>
     </div>

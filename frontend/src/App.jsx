@@ -14,7 +14,6 @@ import DetailScreen from "./page/DetailScreen";
 import EventsPage from "./components/New";
 import NotFoundPage from "./page/NotFoundPage";
 import VerifyEmailPage from "./components/VerifyEmailPage";
-import QRScanner from "./components/QRScanner";
 import BottomNav from "./components/BottomNav";
 import ProfileSettings from "./page/ProfileSettings";
 import UserProfileUpdate from "./page/UserProfileUpdate";
@@ -63,7 +62,7 @@ const MainRoutes = () => {
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/editProfile" element={<UserProfileUpdate />} />
         <Route path="/verifyEmail" element={ user?.isVerified ? <ProfileSettings />: <VerifyEmailPage />} />
-        <Route path="/qr" element={<QRScanner />} />
+       
         <Route path="/tickets" element={<TicketPage />} />
       </Routes>
 

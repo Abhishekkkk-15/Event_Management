@@ -1,84 +1,76 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Star } from "lucide-react";
+import { RxCross1 } from "react-icons/rx";
+import { QRCodeCanvas } from 'qrcode.react'
 
-const TicketModal = ({ isOpen, onClose, ticketCount, setTicketCount, event, handleBookEvent, mutationLoading, isBooked, ticketId, setIsBooked, user }) => {
-  if (!isOpen) return null;
+const TicketModel = ({ data, setIsOpen }) => {
+  const timestamp = Number(data?.event?.date);
+  const formattedDate = timestamp
+    ? new Date(timestamp).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      })
+    : "Invalid Date";
+    
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
-    >
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        className="bg-white p-6 rounded-xl shadow-2xl w-[90%] max-w-md relative"
-      >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition"
-        >
-          ✕
-        </button>
+    <div className="flex justify-center items-center h-[30rem] bg-gray-100 p-4" >
+      <Card className="w-80 h-full bg-white shadow-xl rounded-lg border border-gray-300 "  style={{padding:"12px"}}>
+        <div className="flex items-center text-center justify-center  ">
+          <span className="text-[#000000] w-[90%] font-bold">Ticket</span>
 
-        {/* Modal Header */}
-        <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">
-          Select Your Tickets
-        </h2>
-
-        {/* Ticket Selector */}
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-gray-700">
-            Number of Tickets:
-          </label>
-          <select
-            className="w-full p-2 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-purple-500"
-            value={ticketCount}
-            onChange={(e) => setTicketCount(Number(e.target.value))}
+          <div
+            className="w-[10%] text-center cursor-pointer "
+            onClick={() => setIsOpen(false)}
           >
-            {[...Array(event?.maxSlots || 10)].map((_, i) => (
-              <option key={i} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </select>
+            <RxCross1 size={20} className="text-[#000000] text-center" />
+          </div>
         </div>
+        <CardContent className="p-4 flex flex-col gap-3" >
+          {/* Movie Info */}
+          <div className="flex items-center justify-between gap-3 my-4">
+            <div className="rounded-lg w-[40%] h-[20%] flex justify-center items-center ">
+              <img
+                src={`${data?.event?.eventImages[0].replace(
+                  "/upload/",
+                  "/upload/w_70,h_130/"
+                )}`}
+                alt="Movie Poster"
+                className="rounded-lg w-[80%] h-18 object-cover"
+              />
+            </div>
+            <div className="w-[74%] " style={{paddingBottom:"60px"}}>
+              <span className=" font-bold text-[#000000] text-[22px] " >
+                {data?.event?.title}
+              </span>
+              <p className="text-sm text-gray-600">{data.event?.loaction}</p>
+              <p className="text-sm text-gray-600">
+                {formattedDate} | {data.event?.startAt}
+              </p>
+            </div>
+          </div>
 
-        {/* Total Price */}
-        <div className="text-lg font-medium text-gray-700 mb-4">
-          Total Amount: <span className="text-purple-600 font-semibold">₹{ticketCount * event.price}</span>
-        </div>
+          {/* Ticket Details */}
+          <div className="bg-gray-200 p-2 rounded-md h-[19%] flex items-center justify-center">
+            <p className="text-sm font-medium text-gray-800">
+              Tickets : <span className="font-bold">{data.tickets}</span>
+            </p>
+          </div>
 
-        {/* Success Message (if booked) */}
-        {isBooked && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <Congratulations eventId={ticketId} onClose={() => setIsBooked(false)} />
-          </motion.div>
-        )}
+          {/* QR Code */}
+          <div className="flex justify-center my-4">
+            <QRCodeCanvas value={data.id} />
+          </div>
 
-        {/* Buttons */}
-        <div className="flex justify-end gap-3">
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg transition hover:bg-gray-400"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-          <button
-            className="px-5 py-2 bg-purple-600 text-white rounded-lg transition hover:bg-purple-700 flex items-center justify-center"
-            onClick={() => handleBookEvent(event.id, user.email, ticketCount)}
-            disabled={mutationLoading}
-          >
-            {mutationLoading ? "Booking..." : "Confirm"}
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
+          {/* Footer */}
+          <p className="text-xs text-center text-gray-500 border-t pt-2">
+            This ticket must be scanned at the entry point. No refunds allowed.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
-export default TicketModal;
+export default TicketModel;

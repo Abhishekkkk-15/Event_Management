@@ -15,8 +15,8 @@ const ReviewCard = ({ user, createdAt, comment, rating }) => {
   };
 
   return (
-    <Card className="w-full mt-1 p-6  bg-[#404040] shadow-lg rounded-2xl transition-transform transform hover:scale-105 duration-300 ">
-      <CardContent className="flex flex-col gap-4" style={{ padding: "10px" }}>
+    <Card className="w-full mt-1 p-6 h-[100%] bg-[#404040] shadow-lg rounded-2xl transition-transform transform hover:scale-105 duration-300 ">
+      <CardContent className="flex flex-col gap-4 h-full" style={{ padding: "10px" }}>
         {/* User Info */}
         <div className="flex items-center gap-4">
           <Avatar className="w-14 h-14 border-2  shadow-sm ">
@@ -32,7 +32,7 @@ const ReviewCard = ({ user, createdAt, comment, rating }) => {
         </div>
 
         {/* Rating Stars */}
-        <div className="flex items-center gap-1 text-yellow-500">
+        <div className="flex items-center gap-1 text-yellow-500 w-full  h-full">
           {Array.from({ length: 5 }, (_, i) => (
             <Star
               key={i}
@@ -42,7 +42,7 @@ const ReviewCard = ({ user, createdAt, comment, rating }) => {
         </div>
 
         {/* Comment */}
-        <p className="text-[#FEFEFE] leading-relaxed text-sm md:text-base">
+        <p className="text-[#FEFEFE] leading-relaxed w-full text-sm md:text-base overflow-clip h-full ">
           {comment.length > 150 ? comment.substring(0, 150) + "..." : comment}
         </p>
       </CardContent>

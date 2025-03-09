@@ -51,4 +51,20 @@ const DELETE_EVENT = gql`
   }
 `
 
-export { GET_EVENT_BY_ID, CREATE_EVENT,BOOK_TICKET,DELETE_EVENT };
+const ADD_TO_WISH_LIST = gql`
+mutation addToWishList($eventId: String!){
+  addToWishList(eventId: $eventId){
+    message
+  }
+}
+`
+
+const REMOVE_FROM_WISH_LIST = gql`
+mutation addToWishList($Id: String!){
+  addToWishList(Id: $Id){
+    message
+  }
+}
+`
+
+export { GET_EVENT_BY_ID, CREATE_EVENT,BOOK_TICKET,DELETE_EVENT,ADD_TO_WISH_LIST,REMOVE_FROM_WISH_LIST };
