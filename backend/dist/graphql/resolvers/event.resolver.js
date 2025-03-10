@@ -5,8 +5,28 @@ const db_1 = require("../../lib/db");
 const redis_js_1 = require("../../services/redis.js");
 exports.eventResolver = {
     Query: {
-        events: async (_, { query, category, page, limit }, { user }) => {
-            console.log(user);
+        events: async (_, { query, category, page, limit, price }, { user }) => {
+            if (price != 0) {
+                if (category) {
+                    console.log(page);
+                    return await db_1.db.event.findMany({
+                        skip: (page - 1) * limit,
+                        take: limit,
+                        where: {
+                            price: { lte: price }, // Fetch events where price is less than or equal to 400
+                            category: category // Filter by category if provided
+                        }
+                    });
+                }
+                console.log(page);
+                return await db_1.db.event.findMany({
+                    skip: (page - 1) * limit,
+                    take: limit,
+                    where: {
+                        price: { lte: price }, // Fetch events where price is less than or equal to 400
+                    }
+                });
+            }
             if (category) {
                 const categoryData = await db_1.db.event.findMany({
                     skip: (page - 1) * limit,
@@ -20,7 +40,7 @@ exports.eventResolver = {
                 });
                 return categoryData;
             }
-            if (query) {
+            if (query && query != "") {
                 const queryData = await db_1.db.event.findMany({
                     skip: (page - 1) * limit,
                     take: limit,
@@ -39,6 +59,16 @@ exports.eventResolver = {
                     }
                 });
                 return queryData;
+            }
+            if (price != 0) {
+                return await db_1.db.event.findMany({
+                    skip: (page - 1) * limit,
+                    take: limit,
+                    where: {
+                        price: { lte: 100 }, // Fetch events where price is less than or equal to 400
+                        category: "Sports" // Filter by category if provided
+                    }
+                });
             }
             const today = new Date().toISOString();
             const data = await db_1.db.event.findMany({

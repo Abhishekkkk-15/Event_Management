@@ -12,14 +12,12 @@ const mailTransporter_1 = require("../lib/mailTransporter");
 //Queue
 exports.eventQueue = new bullmq_1.Queue('add-event-queue', {
     connection: {
-        host: "localhost",
-        port: 6379,
+        url: process.env.REDIS_URL
     }
 });
 exports.sendEmailQueue = new bullmq_1.Queue('send-email-queue', {
     connection: {
-        host: "localhost",
-        port: 6379,
+        url: process.env.REDIS_URL
     }
 });
 // Worker
@@ -67,8 +65,7 @@ const addEventWorker = new bullmq_2.Worker('add-event-queue', async (job) => {
     }
 }, {
     connection: {
-        host: "localhost",
-        port: 6379,
+        url: process.env.REDIS_URL
     }
 });
 const sendEmailWorker = new bullmq_2.Worker('send-email-queue', async (job) => {
@@ -102,7 +99,6 @@ const sendEmailWorker = new bullmq_2.Worker('send-email-queue', async (job) => {
     }
 }, {
     connection: {
-        host: "localhost",
-        port: 6379,
+        url: process.env.REDIS_URL,
     }
 });

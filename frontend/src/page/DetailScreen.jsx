@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_EVENT_BY_ID, BOOK_TICKET } from "../graphql/mutation/event.js";
+import { BOOK_TICKET } from "../graphql/mutation/event.js";
 import { CiCalendar, CiHeart } from "react-icons/ci";
 import { showError, showInfo, showSuccess } from "../utils/toast.js";
 import { ticketBooking } from "../REST_API/booking.js";
@@ -10,6 +10,7 @@ import ReviewsList from "../components/ReviewsList.jsx";
 import Congratulations from "../components/Congratulations.jsx";
 import { Avatar, AvatarImage } from "../components/ui/avatar";
 import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
+import { GET_EVENT_BY_ID } from "../graphql/query/event.js";
 
 function DetailScreen() {
   const [event, setEvent] = useState({});
@@ -47,9 +48,8 @@ function DetailScreen() {
       })
     : "Invalid Date";
 
-  if (loading) return <p>Loading...</p>;
   if (mutationError) showInfo(mutationError.message);
-    if(error) console.log(error)
+  if (error) console.log(error);
   const handleBookEvent = async (eventId, userEmail, tickets) => {
     if (!eventId && !userEmail) return;
     if (!user.isVerified) {
@@ -68,6 +68,14 @@ function DetailScreen() {
       showError(error.message);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center  backdrop-blur-sm">
+        <img src={loadingSvg} alt="Loading..." />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center h-full px-4 pb-44 gap-2 bg-[#000000]">
@@ -114,6 +122,13 @@ function DetailScreen() {
         </div>
       </div>
 
+      {loading && (
+        <div className="w-full h-[full flex justify-center items-center backdrop-blur-sm">
+          <div className="w-[50px] h-[50px] flex justify-center items-center backdrop-blur-sm">
+            <img src={loadingSvg} alt="Loading..." className="h-[10px]" />
+          </div>
+        </div>
+      )}
       {/* Title, Date & Location */}
       <div className="flex items-center justify-between h-24 w-[95%] bg-[#404040] rounded-3xl mt-4">
         <div
@@ -136,7 +151,7 @@ function DetailScreen() {
             ₹ {event?.price}
           </span>
           <span className="text-lg font-medium text-[#FEFEFE]">
-            {event?.maxSlots} Seats
+            {event?.bookings?.length || 0}/{event?.maxSlots}
           </span>
         </div>
       </div>
@@ -222,8 +237,11 @@ function DetailScreen() {
 
       {/* Modal for Ticket Selection */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg z-50" >
-          <div className="bg-[#F2F862] p-6 rounded-lg shadow-lg w-[90%] max-w-md" style={{padding:"10px"}} >
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg z-50">
+          <div
+            className="bg-[#F2F862] p-6 rounded-lg shadow-lg w-[90%] max-w-md"
+            style={{ padding: "10px" }}
+          >
             <h2 className="text-xl font-bold mb-4">Select Tickets</h2>
 
             {/* Ticket Selector */}
@@ -237,7 +255,7 @@ function DetailScreen() {
                 onChange={(e) => setTicketCount(Number(e.target.value))}
               >
                 {[...Array(4)].map((_, i) => (
-                  <option key={i} value={i + 1} >
+                  <option key={i} value={i + 1}>
                     {i + 1}
                   </option>
                 ))}
@@ -266,12 +284,15 @@ function DetailScreen() {
           </div>
         </div>
       )}
+      <div className="flex items-center justify-center"> 
+
       {isBooked && (
         <Congratulations
           ticketId={ticketId}
           onClose={() => setIsBooked(false)}
         />
       )}
+      </div>
       <div className="w-[95%] h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col">
         <ReviewsList eventId={event.id} />
       </div>

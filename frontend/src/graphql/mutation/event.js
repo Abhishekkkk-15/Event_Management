@@ -1,29 +1,6 @@
 import { gql } from "@apollo/client";
 
-const GET_EVENT_BY_ID = gql`
-  query GetEvent($eventId: String!, $limit: Int) {
-    event(id: $eventId, limit: $limit) {
-      id
-      title
-      description
-      date
-      location
-      price
-      eventImages
-      maxSlots
-      bookedSlots
-      user {
-        name
-        avatar
-      }
-      bookings {
-        user {
-          avatar
-        }
-      }
-    }
-  }
-`;
+
 
 const CREATE_EVENT = gql`
   mutation createEvent($event: CreateEventInput!, $files: [Upload!]!) {
@@ -67,4 +44,4 @@ mutation addToWishList($Id: String!){
 }
 `
 
-export { GET_EVENT_BY_ID, CREATE_EVENT,BOOK_TICKET,DELETE_EVENT,ADD_TO_WISH_LIST,REMOVE_FROM_WISH_LIST };
+export {  CREATE_EVENT,BOOK_TICKET,DELETE_EVENT,ADD_TO_WISH_LIST,REMOVE_FROM_WISH_LIST };

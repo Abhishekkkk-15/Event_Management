@@ -16,6 +16,8 @@ import { FaRegHeart } from "react-icons/fa";
 import { country } from "../country.js";
 import { VscSettings } from "react-icons/vsc";
 import { useSelector } from "react-redux";
+import { FilterDialog } from "./Filter.jsx";
+import EmailVerificationBanner from "./EmailVerificationBanner.jsx";
 
 function Cards() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,19 +25,22 @@ function Cards() {
   const [events, setEvents] = useState([]);
   const observerRef = useRef(null);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true); // Track if there's more data
+  const [hasMore, setHasMore] = useState(true); 
   const [location, setLocation] = useState({ country: "", city: "" });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [priceRange, setPriceRange] = useState(0);
   useEffect(() => {
     const handler = setTimeout(() => {
       console.log("it's getting called");
       setDebouncedSearch(searchTerm);
+    
     }, 500);
 
     return () => {
-      clearTimeout(handler); // Clears timeout if user types before 500ms
+      clearTimeout(handler); 
     };
   }, [searchTerm]);
 
@@ -43,23 +48,47 @@ function Cards() {
     country.find((c) => c.code === location.country)?.name || "India";
   console.log("User from store", user);
 
-  const handleSearching = () => {};
-
   const { loading, error, data, refetch } = useQuery(GET_EVENTS, {
     variables: {
       query: debouncedSearch || "",
       category: categoryDataToFetch,
-      limit: 6,
+      limit: 4,
       page,
+      price: parseFloat(priceRange),
     },
     fetchPolicy: "cache-and-network",
   });
-  
+
+  const filterFuntion = (category, price) => {
+    if (category == null || price == null) return;
+    const validPrice = isNaN(parseFloat(price)) ? 0 : parseFloat(price);
+    setPriceRange(validPrice);
+    console.log(parseFloat(price));
+    if (category == "All") {
+      setCategoryDataToFetch("");
+    } else {
+      setCategoryDataToFetch(category);
+    }
+    setPriceRange(parseFloat(price));
+    setPage(1);
+    setEvents([]);
+    refetch({
+      category: category,
+      price: parseFloat(price),
+      limit: 4
+    });
+  };
+
   // Refetch data when search term changes
   useEffect(() => {
     if (debouncedSearch.trim() !== "") {
       setPage(1); // Reset pagination
       setEvents([]); // Clear previous events
+      refetch();
+    } else {
+      // When search input is cleared, fetch all events again
+      setPage(1);
+      setEvents([]); // Reset events to avoid duplicates
       refetch();
     }
   }, [debouncedSearch, refetch]);
@@ -73,7 +102,7 @@ function Cards() {
       console.log("Setting new data");
       setEvents((prev) => [...prev, ...data.events]);
     }
-  }, [data]);
+  }, [data,loading]);
 
   useEffect(() => {
     if (!hasMore || loading) return;
@@ -142,14 +171,16 @@ function Cards() {
               />
             </div>
             <div
-              className="bg-white/20 h-12 w-12 flex justify-center items-center rounded-full text-[#FEFEFE]"
+              className="bg-white/20 h-12 w-12 flex justify-center items-center rounded-full"
               style={{ border: "1px solid #C1C1C1" }}
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
             >
-              <VscSettings className="text-[#FEFEFE]" size={22} />
+              <FilterDialog filterFn={filterFuntion} />
             </div>
           </div>
         </div>
       </>
+<EmailVerificationBanner/>
       <div className="h-full bg-[#000000] mt-10">
         <div
           className="flex flex-row flex-wrap  justify-start gap-4 p-4 h-14 items-center"
@@ -164,7 +195,6 @@ function Cards() {
                 setPage(1);
                 setHasMore(true);
                 setCategoryDataToFetch(c.name === "All" ? "" : c.name);
-                
               }}
             >
               <Avatar className=" h-9 w-9">

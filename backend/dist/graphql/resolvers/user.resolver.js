@@ -32,6 +32,7 @@ exports.userResolver = {
                 return { message: "User not authenticate" };
             const userInCache = await redis_js_1.redisClient.get(`user:${user.payload.id}`);
             if (userInCache) {
+                // console.log(userInCache)
                 return JSON.parse(userInCache);
             }
             const userInfo = await db_1.db.user.findUnique({

@@ -9,7 +9,7 @@ const Congratulations = ({ ticketId, onClose }) => {
       initial={{ opacity: 0, scale: 0.8, y: -20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.8, y: -20 }}
-      className="fixed top-10 right-10 bg-white shadow-lg rounded-lg p-4 w-64 z-50 border"
+      className="fixed z-50 top-50  bg-white shadow-lg rounded-lg p-4 w-64 border"
     >
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-green-600 font-semibold text-lg">🎉 Success!</h2>
@@ -21,7 +21,7 @@ const Congratulations = ({ ticketId, onClose }) => {
       <div className="flex justify-center my-3">
         <QRCodeCanvas value={ticketId} size={80} />
       </div>
-      <p className="text-xs text-gray-500 text-center">Scan to view ticket</p>
+      <p className="text-xs text-gray-500 text-center">Scan to Verify ticket</p>
     </motion.div>
   );
 };

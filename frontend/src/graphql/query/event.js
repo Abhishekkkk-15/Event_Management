@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 const GET_EVENTS = gql`
-  query ($query: String, $category: String ,$limit: Int, $page: Int) {
-    events(query: $query,category:$category, limit: $limit, page: $page) {
+  query ($query: String, $category: String ,$limit: Int, $page: Int,$price: Float) {
+    events(query: $query,category:$category, limit: $limit, page: $page, price: $price) {
       id
       title
       location
@@ -33,6 +33,31 @@ const GET_ALL_REVIEWS = gql`
 }
 `;
 
+const GET_EVENT_BY_ID = gql`
+  query GetEvent($eventId: String!, $limit: Int) {
+    event(id: $eventId, limit: $limit) {
+      id
+      title
+      description
+      date
+      location
+      price
+      eventImages
+      maxSlots
+      bookedSlots
+      user {
+        name
+        avatar
+      }
+      bookings {
+        user {
+          avatar
+        }
+      }
+    }
+  }
+`;
 
 
-export {GET_EVENTS,GET_ALL_REVIEWS}
+
+export {GET_EVENTS,GET_ALL_REVIEWS,GET_EVENT_BY_ID}

@@ -35,7 +35,9 @@ const sendVerificationCode = async (req, res) => {
               `,
         });
         await mailTransporter_1.transporter.sendMail(mailOptions(user.email, verificationCode));
-        await redis_1.redisClient.set(userId, verificationCode);
+        await redis_1.redisClient.set(userId, verificationCode, {
+            EX: 600
+        });
         res.status(201).json({ success: true, message: "Verification Email Send!!" });
     }
     catch (error) {

@@ -2,7 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.redisClient = exports.initRedis = void 0;
 const redis_1 = require("redis");
-const redisClient = (0, redis_1.createClient)();
+const redisClient = (0, redis_1.createClient)({
+    url: process.env.REDIS_URL,
+    socket: {
+        keepAlive: 1
+    },
+});
 exports.redisClient = redisClient;
 // if it not works : {
 //    url:'redis://localhost:6379'}

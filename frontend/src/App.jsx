@@ -17,11 +17,12 @@ import VerifyEmailPage from "./components/VerifyEmailPage";
 import BottomNav from "./components/BottomNav";
 import ProfileSettings from "./page/ProfileSettings";
 import UserProfileUpdate from "./page/UserProfileUpdate";
+import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 import TicketPage from "./page/TicketPage";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
-  const { data } = useQuery(GET_AUTH_USER);
+  const { data , loading} = useQuery(GET_AUTH_USER);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,6 +30,14 @@ function App() {
       dispatch(loginSuccess(data.getAuthuser));
     }
   }, [data, dispatch]);
+
+  if (loading) {
+      return (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-[#000000] backdrop-blur-sm">
+          <img src={loadingSvg} alt="Loading..." />
+        </div>
+      );
+    }
 
   return (
     <div className="bg-[#000000] min-h-screen max-h-full" style={{ height: "100%" }}>
@@ -54,7 +63,7 @@ const MainRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Auth />} />
         <Route path="/up" element={<FileUpload />} />
-        <Route path="/proflleSettings" element={<ProfileSettings />} />
+        <Route path="/proflleSettings" element={ user ? <ProfileSettings /> : <Auth />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/addEvent" element={<AddEvent />} />
         <Route path="/detailsScreen/:id" element={<DetailScreen />} />

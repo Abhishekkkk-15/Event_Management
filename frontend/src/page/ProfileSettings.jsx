@@ -8,15 +8,31 @@ import { BsCalendar4Event } from "react-icons/bs";
 import { FcAbout } from "react-icons/fc";
 import { IoCreateOutline, IoTicketOutline } from "react-icons/io5";
 import { IoIosContact } from "react-icons/io";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { showInfo } from "../utils/toast";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { showError, showInfo } from "../utils/toast";
+import axios from "axios";
+import { logoutUser as logoutApi } from "../REST_API/user";
+import { logoutUser } from "../store/slice/user.slice";
 
 const ProfileSettings = () => {
   const [notifications, setNotifications] = useState(true);
   const [email, setEmail] = useState(true);
   const [location, setLocation] = useState(false);
   const user = useSelector(state => state.auth.user)
+  const dispatch = useDispatch()
+
+  const handleLogout = async() =>{
+    try {
+      await logoutApi()
+      dispatch(logoutUser())
+      showInfo("User loged out")
+
+    } catch (error) {
+      showError("Error while logging out ")
+    }
+  }
+
   return (
     <div className="min-h-screen w-ful bg-[#000000]0" style={{paddingBottom:"90px"}}>
       <div className="flex flex-col  justify-center items-center text-[#FEFEFE] gap-2 ">
@@ -134,6 +150,7 @@ const ProfileSettings = () => {
             <div
               className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-18"
               style={{ padding: "10px" }}
+              onClick={handleLogout}
             >
               <div className="text-[#FEFEFE] w-11">
                 <CiLogout size={28} className="text-[#FEFEFE] w-11" />
