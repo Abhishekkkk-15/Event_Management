@@ -1,20 +1,41 @@
 import React, { useEffect, useState } from "react";
 import SmallCard from "../components/SmallCard";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_LOGGED_USER_INFO } from "../graphql/query/user";
 import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 import { showError } from "../utils/toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../store/slice/user.slice";
 
 function TicketPage() {
-  const { data, loading, error } = useQuery(GET_LOGGED_USER_INFO);
+  const userData = useSelector((state) => state.auth.userData);
+
   const [userBookings, setUserBookings] = useState([]);
   const [filterType, setFilterType] = useState("All");
-  console.log(data)
+  const dispatch = useDispatch();
+
+  // Lazy query to fetch user data only when needed
+  const [fetchUserData, { data, loading, error }] = useLazyQuery(GET_LOGGED_USER_INFO);
+
+  useEffect(() => {
+    // Fetch from backend only if userData is missing
+    if (!userData) {
+      console.log("Calling Api")
+      fetchUserData();
+    } else {
+      console.log("Data from Redux : ",userData.user.bookings)
+      
+      setUserBookings(userData?.user?.bookings);
+    }
+  }, []);
+
   useEffect(() => {
     if (data?.user?.bookings) {
-      setUserBookings([...data.user.bookings]);
+      dispatch(setUserData(data)); // Update Redux store
+      setUserBookings([...data.user.bookings]); // Update local state
+      // console.log([...data.user.bookings])
     }
-  }, [data]);
+  }, [data, dispatch]);
 
   // Function to check if an event is expired
   const isExpired = (date, filter) => {
@@ -47,7 +68,9 @@ function TicketPage() {
   return (
     <div className="min-h-screen w-full bg-[#000000]" style={{ paddingBottom: "90px" }}>
       <div className="flex flex-col justify-center items-center text-[#FEFEFE] gap-2">
-        <span className="font-bold w-full mt-10 text-[#FEFEFE] text-center text-[25px]">
+        <span className="font-bold w-full mt-10 text-[#FEFEFE] text-center text-[25px]"
+        style={{ marginTop: "25px" }}
+        >
           Booking's
         </span>
         {/* Category Filters */}
@@ -65,9 +88,8 @@ function TicketPage() {
           ))}
         </div>
         {/* Booking List */}
-        <div className="w-full flex flex-col justify-center items-center gap-3">
-          {userBookings
-            .filter((data) => isExpired(data.event?.date, filterType))
+        <div className="w-full flex flex-col justify-center items-center gap-3" style={{padding:"10px"}}>
+          {userBookings?.filter((data) => isExpired(data.event?.date, filterType))
             .map((data, idx) => (
               <SmallCard data={data} key={idx} />
             ))}

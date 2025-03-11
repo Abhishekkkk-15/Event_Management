@@ -37,7 +37,7 @@ model Event {
   userId      String
   startAt     String    @default("")
   endAt       String    @default("")
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id] ,onDelete: Cascade)
   eventImages String[]
   price       Float?
   category    String    @default("Sports")
@@ -58,8 +58,8 @@ model Booking {
   createdAt DateTime @default(now())
   isUsed    Boolean  @default(false)
   pricePaid Float  @default(1)
-  user  User  @relation(fields: [userId], references: [id])
-  event Event @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id],onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id],onDelete: Cascade)
 }
 
 model Review {
@@ -78,6 +78,6 @@ model WishList{
    id        String   @id @default(uuid())
   userId    String
   eventId   String
-  user  User  @relation(fields: [userId], references: [id])
-  event Event @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id],onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id],onDelete: Cascade)
 }

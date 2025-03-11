@@ -102,7 +102,7 @@ function Cards() {
       console.log("Setting new data");
       setEvents((prev) => [...prev, ...data.events]);
     }
-  }, [data,loading]);
+  }, [data]);
 
   useEffect(() => {
     if (!hasMore || loading) return;
@@ -126,9 +126,9 @@ function Cards() {
   if (error) console.log(error);
 
   const category = [
-    { img: "../../Public/CMusic.png", name: "All" },
+    { img: "", name: "All" },
     { img: "../../Public/CMusic.png", name: "Music" },
-    { img: "", name: "Sports" },
+    { img: "../../Public/CSports.png", name: "Sports" },
   ];
 
   return (

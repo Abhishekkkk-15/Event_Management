@@ -34,7 +34,7 @@ const ProfileSettings = () => {
   }
 
   return (
-    <div className="min-h-screen w-ful bg-[#000000]0" style={{paddingBottom:"90px"}}>
+    <div className="min-h-screen w-ful bg-[#000000]" style={{paddingBottom:"90px"}}>
       <div className="flex flex-col  justify-center items-center text-[#FEFEFE] gap-2 ">
         <span
           className="font-bold w-full mt-10 text-[#FEFEFE] text-center text-[25px]"
@@ -85,7 +85,9 @@ const ProfileSettings = () => {
               Bookings
             </p>
           </div>
-          <Link className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-24">
+          <Link className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-24" 
+          to={'/Events'}
+          >
             <div
               className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-24  "
               style={{ padding: "10px" }}
@@ -179,7 +181,7 @@ const ProfileSettings = () => {
             </div>
           </Link>
           <Link
-            to={"/contactUsPage"}
+            to={"/aboutUs"}
             className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-18"
           >
             <div

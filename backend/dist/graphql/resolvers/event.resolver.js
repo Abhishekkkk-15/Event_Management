@@ -13,8 +13,9 @@ exports.eventResolver = {
                         skip: (page - 1) * limit,
                         take: limit,
                         where: {
-                            price: { lte: price }, // Fetch events where price is less than or equal to 400
-                            category: category // Filter by category if provided
+                            price: { lte: price },
+                            category: category,
+                            date: { gte: new Date }
                         }
                     });
                 }
@@ -93,7 +94,9 @@ exports.eventResolver = {
             if (!fetchedEvent) {
                 throw new Error('Event not found');
             }
-            await redis_js_1.redisClient.set(`event:${id}`, JSON.stringify(fetchedEvent));
+            await redis_js_1.redisClient.set(`event:${id}`, JSON.stringify(fetchedEvent), {
+                EX: 220
+            });
             return { ...fetchedEvent, limit: limit };
         },
         bookedSlots: async (_, { id }, { user }) => {
@@ -253,7 +256,7 @@ exports.eventResolver = {
                 if (isUserValid?.userId != user.payload.id) {
                     return { success: false, message: 'authenticated' };
                 }
-                const deleteEvent = await db_1.db.event.delete({
+                await db_1.db.event.delete({
                     where: {
                         id: eventID
                     }

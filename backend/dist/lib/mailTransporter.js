@@ -12,8 +12,8 @@ exports.transporter = nodemailer_1.default.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: "jangidabhishek276@gmail.com",
-        pass: "wihb dagq jfys xgne", // Replace this with your correct App Password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS, // Replace this with your correct App Password
     }
 });
 async function sendEmail(ticketId, toEmail) {

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { showError, showSuccess } from "../utils/toast";
 
 const VerifyEmailPage = ({onVerifyCode}) => {
-  const [step, setStep] = useState("request"); // "request" or "verify"
+  const [step, setStep] = useState("request"); 
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
 
@@ -15,7 +15,7 @@ const VerifyEmailPage = ({onVerifyCode}) => {
     setLoading(true);
 
     try {
-      const { data } = await sendVerificationEmail(); // Backend function to send the email
+      const { data } = await sendVerificationEmail();
       console.log(data);
       showSuccess(data.message);
       setStep("verify");

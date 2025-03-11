@@ -29,6 +29,14 @@ const bookTicket = async (req, res) => {
                 tickets,
             }
         });
+        await db_js_1.db.event.update({
+            where: {
+                id: eventId
+            },
+            data: {
+                bookedSlots: event?.bookedSlots + tickets
+            }
+        });
         const ticketId = ticket.id;
         // console.log("It comes here")
         const pdfPath = await (0, generatePdf_1.generateTicketPDF)(ticketId, userEmail);

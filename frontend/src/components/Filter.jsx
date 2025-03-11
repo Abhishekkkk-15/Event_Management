@@ -22,6 +22,7 @@ export function FilterDialog({filterFn}) {
     { name: "Tech" },
     { name: "Sports" },
     { name: "Education" },
+    { name: "Party" },
   ];
 
 
@@ -49,7 +50,7 @@ export function FilterDialog({filterFn}) {
           {categories.map((c, idx) => (
             <div
               key={idx}
-              className={`flex items-center justify-center text-[12px] h-11 w-25 rounded-3xl ${
+              className={`flex items-center justify-center text-[14px] h-11 w-25 rounded-3xl ${
                 filterType === c.name ? "bg-[#F2F862]" : "bg-gray-200"
               } cursor-pointer`}
               onClick={() => setFilterType(c.name)}
@@ -68,6 +69,7 @@ export function FilterDialog({filterFn}) {
             step={10}
             onValueChange={(value) => setPriceRange(value)}
             className="w-full"
+
           />
         </div>
 

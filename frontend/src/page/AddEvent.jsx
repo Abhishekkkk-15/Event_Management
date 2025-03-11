@@ -12,6 +12,15 @@ import {
 } from "../components/ui/card";
 import { Label } from "../components/ui/label";
 import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 const CreateEventForm = () => {
   const [title, setTitle] = useState("");
@@ -278,15 +287,33 @@ const CreateEventForm = () => {
                     paddingRight: "10px",
                   }}
                 >
-                  <input
-                    type="text"
-                    className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
-                    placeholder="Sports"
-                    onChange={(e) => setCategory(e.target.value)}
-                    minLength={5}
-                    maxLength={20}
-                    required
-                  />
+                  <Select onValueChange={(value) => setCategory(value)}>
+                    <SelectTrigger className="w-full border  rounded-3xl px-4 py-2 ">
+                      <SelectValue
+                        placeholder="Select Category"
+                        className="text-gray-500 float-end"
+                      />
+                    </SelectTrigger>
+
+                    <SelectContent className="w-full bg-[#F2F826] shadow-lg rounded-lg overflow-hidden">
+                      {[
+                        "Sports",
+                        "Party",
+                        "Tech",
+                        "Education",
+                        "Music",
+                        "Concerts",
+                      ].map((category, index) => (
+                        <SelectItem
+                          key={index + 1}
+                          value={category}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div className="w-full">
@@ -357,10 +384,13 @@ const CreateEventForm = () => {
             </div>
             <div
               type="submit"
-              className=" bg-[#F2F862] h-12 w-[100%] rounded-3xl flex items-center justify-center cursor-pointer"
+              className=" bg-[#F2F862] h-12 w-[100%] text-[#000000] text-[22px] rounded-3xl flex items-center justify-center cursor-pointer"
               onClick={(e) => handleSubmit(e)}
             >
-              <button className="bg-[#F2F862] " disabled={loading}>
+              <button
+                className="bg-[#F2F862] text-[#000000]"
+                disabled={loading}
+              >
                 {loading ? "Creating..." : "Create Event"}
               </button>
             </div>

@@ -25,11 +25,20 @@ const GET_LOGGED_USER_INFO = gql`
       isVerified
       events {
         id
-        date
-        bookedSlots
-        maxSlots
-        title
-        price
+          title
+          location
+          price
+          eventImages
+          date
+          startAt
+          category
+          bookedSlots
+          maxSlots
+          bookings {
+            user {
+              avatar
+            }
+          }
       }
       bookings {
         id

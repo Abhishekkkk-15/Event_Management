@@ -12,7 +12,7 @@ import store from "./store/store.js";
 
 const client = new ApolloClient({
   link: createUploadLink({
-    uri: "http://localhost:4000/graphql",
+    uri: import.meta.env.VITE_GRAPHQL_END_POINT,
     credentials: "include", // Ensures cookies are included in requests
   }),
   cache: new InMemoryCache(),

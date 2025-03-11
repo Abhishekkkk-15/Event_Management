@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { BOOK_TICKET } from "../graphql/mutation/event.js";
+import { ADD_TO_WISH_LIST, BOOK_TICKET } from "../graphql/mutation/event.js";
 import { CiCalendar, CiHeart } from "react-icons/ci";
 import { showError, showInfo, showSuccess } from "../utils/toast.js";
 import { ticketBooking } from "../REST_API/booking.js";
@@ -11,10 +11,27 @@ import Congratulations from "../components/Congratulations.jsx";
 import { Avatar, AvatarImage } from "../components/ui/avatar";
 import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 import { GET_EVENT_BY_ID } from "../graphql/query/event.js";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Button } from "../components/ui/button";
+import { FaHeart } from "react-icons/fa6";
 
 function DetailScreen() {
   const [event, setEvent] = useState({});
   const user = useSelector((state) => state.auth.user);
+  const userWishList = user?.wishList?.map((event) => event.event.id) || [];
   console.log("user from detail : ", user);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,6 +44,8 @@ function DetailScreen() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
   const [ticketId, setTicketId] = useState("");
+ const [addToWishList, { loading:wishlistLoading, error:wishListError, data:wishListData }] = useMutation(ADD_TO_WISH_LIST);
+
   const [bookSlot, { loading: mutationLoading, error: mutationError }] =
     useMutation(BOOK_TICKET);
 
@@ -68,7 +87,19 @@ function DetailScreen() {
       showError(error.message);
     }
   };
-
+const wishListFunction =async () =>{
+  if(userWishList.includes(event.id)) return showInfo("Allready in wish list")
+ try {
+  const res = await addToWishList({
+     variables:{
+       eventId: event.id
+     }
+   })
+   showSuccess("Added to your wish list")
+ } catch (error) {
+  console.log(error)
+ }
+}
   if (loading) {
     return (
       <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center  backdrop-blur-sm">
@@ -76,7 +107,7 @@ function DetailScreen() {
       </div>
     );
   }
-
+  console.log(event?.bookedSlots);
   return (
     <div className="flex flex-col items-center h-full px-4 pb-44 gap-2 bg-[#000000]">
       {/* Image Section */}
@@ -132,7 +163,7 @@ function DetailScreen() {
       {/* Title, Date & Location */}
       <div className="flex items-center justify-between h-24 w-[95%] bg-[#404040] rounded-3xl mt-4">
         <div
-          className="w-44 flex flex-col text-wrap"
+          className="w-[80%] flex flex-col text-wrap"
           style={{ marginLeft: "16px" }}
         >
           <span className="font-bold text-2xl text-[#FEFEFE]">
@@ -151,7 +182,7 @@ function DetailScreen() {
             ₹ {event?.price}
           </span>
           <span className="text-lg font-medium text-[#FEFEFE]">
-            {event?.bookings?.length || 0}/{event?.maxSlots}
+            {event?.bookedSlots || 0}/{event?.maxSlots}
           </span>
         </div>
       </div>
@@ -229,69 +260,74 @@ function DetailScreen() {
           Buy Ticket
         </div>
 
-        <div className="text-[#FEFEFE] flex items-center justify-center  w-[60px]">
-          <CiHeart className="w-full h-14 text-center bg-gray-500 rounded-full " />
+        <div className="text-[#FEFEFE] flex items-center justify-center  rounded-full bg-gray-500 w-16 h-16"
+        onClick={wishListFunction}
+        >
+          {userWishList.includes(event.id) ? (
+            <FaHeart size={40} className="text-white" />
+          ) : (
+            <CiHeart className="  rounded-full " size={40} />
+          )}
         </div>
       </div>
       {/* { isBooked && <Congratulations eventId={ticketId} onClose={()=> setIsBooked(false)}/>} */}
 
       {/* Modal for Ticket Selection */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg z-50">
-          <div
+      <div>
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent
             className="bg-[#F2F862] p-6 rounded-lg shadow-lg w-[90%] max-w-md"
-            style={{ padding: "10px" }}
+            style={{ padding: "10px", background: "#F2F862" }}
           >
-            <h2 className="text-xl font-bold mb-4">Select Tickets</h2>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">
+                Select Tickets
+              </DialogTitle>
+            </DialogHeader>
 
             {/* Ticket Selector */}
             <div className="mb-4 flex flex-col gap-2">
               <label className="block text-lg font-medium">
                 Number of Tickets:
               </label>
-              <select
-                className="w-full p-2 border rounded-lg mt-2]"
-                value={ticketCount}
-                onChange={(e) => setTicketCount(Number(e.target.value))}
+              <Select
+                value={String(ticketCount)}
+                onValueChange={(value) => setTicketCount(Number(value))}
               >
-                {[...Array(4)].map((_, i) => (
-                  <option key={i} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-full border rounded-lg p-2">
+                  <SelectValue placeholder="Select tickets" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[...Array(4)].map((_, i) => (
+                    <SelectItem key={i} value={String(i + 1)}>
+                      {i + 1}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-              <div>Total amount : {Math.floor(ticketCount * event.price)}</div>
+              <div className="text-lg font-medium">
+                Total amount: {Math.floor(ticketCount * event.price)}
+              </div>
             </div>
 
             {/* Buttons */}
-            <div className="flex justify-end gap-2 z-30">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded-lg cursor-pointer"
-                onClick={() => setIsModalOpen(false)}
-              >
+            <DialogFooter className="flex justify-end flex-row gap-4">
+              <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
                 Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-[#F2F862] text-white rounded-lg cursor-pointer"
+              </Button>
+              <Button
+                className="bg-[#F2F862] text-black hover:bg-[#e6e652]"
                 onClick={() =>
                   handleBookEvent(event.id, user.email, ticketCount)
                 }
+                disabled={mutationLoading}
               >
                 {mutationLoading ? "Booking..." : "Confirm"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="flex items-center justify-center"> 
-
-      {isBooked && (
-        <Congratulations
-          ticketId={ticketId}
-          onClose={() => setIsBooked(false)}
-        />
-      )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="w-[95%] h-[500px]  bottom-0 right-0 shadow-lg p-4 overflow-hidden flex flex-col">
         <ReviewsList eventId={event.id} />
