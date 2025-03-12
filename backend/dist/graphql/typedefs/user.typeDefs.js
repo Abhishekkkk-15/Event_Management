@@ -42,6 +42,7 @@ type Booking{
         user:User
         userId: ID
         tickets: ID
+        isUsed: Boolean
     },
 
     type Query{

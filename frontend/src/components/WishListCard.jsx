@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 import { GoArrowUpRight, GoHeart, GoLocation } from "react-icons/go";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { CiLocationOn, CiTimer } from "react-icons/ci";
-import TicketModel from "./TicketModal ";
+import { MdDeleteOutline } from "react-icons/md";
+import { useMutation } from "@apollo/client";
+import { REMOVE_FROM_WISH_LIST } from "../graphql/mutation/event";
+import { showError, showSuccess } from "../utils/toast";
 
-function SmallCard({ data }) {
+
+function WishListCard({ data,onDelete ,idx}) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const timestamp = Number(data?.event.date); // Ensure it's a number
-
+const [remove_from_wish_list,{loading,error}] = useMutation(REMOVE_FROM_WISH_LIST,{
+    variables:{
+        Id: data.id
+    }
+})
+console.log(idx)
   const formattedDate = timestamp
     ? new Date(timestamp).toLocaleDateString("en-US", {
         month: "short",
@@ -22,6 +31,7 @@ function SmallCard({ data }) {
   function toSet() {
     setIsOpen(false);
   }
+  if(error) console.log(error)
 
   return (
     <div
@@ -45,13 +55,13 @@ function SmallCard({ data }) {
             className="object-cover rounded-3xl"
           />
           <div className="flex flex-col justify-start w-[60%]">
-            <span
+            <Link to={`/detailsScreen/${data?.event?.id}`}
               className={`${
                 isExpired ? "text-[#FEFEFEF]" : "text-[#000000]"
               } font-bold text-[20px] `}
             >
               {data?.event?.title}
-            </span>
+            </Link>
             <span
               className={`${
                 isExpired ? "text-[#F1F1F1]" : "text-[#000000]"
@@ -62,9 +72,23 @@ function SmallCard({ data }) {
           </div>
         </div>
         <div className="h-full w-[30%] flex justify-end items-center">
-         
-            <TicketModel data={data} isExpired={isExpired} />
-        
+          <div
+            className={`relative top-0 right-0 ${
+              isExpired ? "bg-white/20" : "bg-black/20"
+            } bg-black/20 rounded-full h-[50px] w-[50px] flex justify-center items-center ${
+              isExpired ? "text-[#F1F1F1]" : "text-[#000000]"
+            } flex-col font-bold text-sm cursor-pointer`}
+            onClick={ async() => {
+               await remove_from_wish_list().then(() =>{
+                 showSuccess("Removed from Wish List")
+               onDelete(idx)
+
+                })
+               .catch((err) => showError("Error while Removing from wish List",error) )
+            }}
+          >
+            <MdDeleteOutline size={20} />
+          </div>
         </div>
       </div>
 
@@ -136,4 +160,4 @@ function SmallCard({ data }) {
   );
 }
 
-export default SmallCard;
+export default WishListCard;

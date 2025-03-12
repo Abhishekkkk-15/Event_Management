@@ -148,9 +148,9 @@ function Cards() {
               <span className="text-[#C1C1C1] text-[12px]">Welcome back</span>
               <span className="text-[#FEFEFE] text-[16px]">{user?.name}</span>
             </div>
-            <div className="bg-white/20 h-12 w-12 flex justify-center items-center rounded-full">
+            <Link to={"/wishlist"} className="bg-white/20 h-12 w-12 flex justify-center items-center rounded-full">
               <FaRegHeart className="text-[#F2F862]" size={22} />
-            </div>
+            </Link>
           </div>
 
           {/* Search Bar - Positioned at Bottom Center */}
@@ -205,16 +205,9 @@ function Cards() {
           ))}
         </div>
 
-        {/* <Link
-        to="/addEvent"
-        className="fixed bottom-19 right-14 h-12 w-12 flex justify-center items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-300 z-50"
-      >
-        <IoMdAdd className="h-10 w-5" />
-      </Link> */}
-
         <div
           className="flex justify-center items-center flex-col gap-3 lg:grid lg:grid-cols-3"
-          style={{ paddingBottom: "10px" }}
+          style={{ padding:"10px"}}
         >
           {events.map((event, index) => (
             <Card data={event} key={index} />

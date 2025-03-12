@@ -213,6 +213,7 @@ exports.userResolver = {
         removeFromWishList: async (_, { Id }, { req, res, user }) => {
             if (!Id)
                 throw new Error("Id not provided");
+            console.log("first");
             await db_1.db.wishList.delete({
                 where: {
                     id: Id

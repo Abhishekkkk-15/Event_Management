@@ -37,8 +37,8 @@ mutation addToWishList($eventId: String!){
 `
 
 const REMOVE_FROM_WISH_LIST = gql`
-mutation addToWishList($Id: String!){
-  addToWishList(Id: $Id){
+mutation RemoveFromWishList($Id: String!) {
+  removeFromWishList(Id: $Id) {
     message
   }
 }

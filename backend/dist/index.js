@@ -30,9 +30,9 @@ const app = (0, express_1.default)();
 app.use(statusMonitor);
 app.get('/status', statusMonitor.pageRoute);
 app.use((0, cookie_parser_1.default)());
-app.use(express_1.default.json({ limit: "10mb" }));
+app.use(express_1.default.json({ limit: "15mb" }));
 // app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(body_parser_1.default.urlencoded({ limit: "10mb", extended: true }));
+app.use(body_parser_1.default.urlencoded({ limit: "15mb", extended: true }));
 // app.use(graphqlUploadExpress({t
 //   maxFileSize:5*1024*1024,
 //   maxFiles:3

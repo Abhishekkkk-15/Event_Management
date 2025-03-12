@@ -48,6 +48,7 @@ scalar Upload
         createdAt: String!
         event:Event
         user:User
+        
     },
 
  

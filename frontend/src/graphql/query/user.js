@@ -44,6 +44,7 @@ const GET_LOGGED_USER_INFO = gql`
         id
         userId
         tickets
+        
         event {
           id
           title
@@ -66,8 +67,21 @@ const GET_LOGGED_USER_INFO = gql`
           name
         }
         event{
-          id 
+          id
           title
+          location
+          price
+          eventImages
+          date
+          startAt
+          category
+          bookedSlots
+          maxSlots
+          bookings {
+            user {
+              avatar
+            }
+          }
         }
       }
     }

@@ -9,6 +9,8 @@ import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 import { IoIosQrScanner } from "react-icons/io";
 import QRCodeScanner from "../components/QRCodeScanner ";
 import { QrReader } from "react-qr-reader";
+import axios from "axios";
+import { ticketScanner } from "../REST_API/booking";
 
 function ManageEventsPage() {
   const userData = useSelector((state) => state.auth.userData);
@@ -40,6 +42,8 @@ function ManageEventsPage() {
       dispatch(setUserData(data));
     }
   }, [userData, data]);
+  const eventTitleAndId =
+    data?.user?.events?.map((d) => ({ id: d.id, title: d.title })) || [];
 
   if (loading) {
     return (
@@ -52,11 +56,6 @@ function ManageEventsPage() {
     showError("Error", error.message);
   }
 
-  if (isQrOpen) {
-    return (
-    <QRCodeScanner/>
-    );
-  }
   return (
     <div
       className="min-h-screen w-full bg-[#000000]"
@@ -70,18 +69,24 @@ function ManageEventsPage() {
           Event's
         </span>
         <div
-          className="h-full w-full flex flex-col"
+          className="h-full w-full flex flex-col gap-3"
           style={{ padding: "10px" }}
         >
           {events?.map((e, idx) => (
             <UserEventCard data={e} key={idx} />
           ))}
         </div>
-        <div
-          className="fixed bottom-28 right-12 bg-[#F2F862] h-13 w-13 rounded-3xl flex items-center justify-center"
-          onClick={() => setIsQrOpen(true)}
-        >
-          <IoIosQrScanner className="text-[#000000] " size={28} />
+        {events?.length <= 0 && (
+          <div className="h-full w-full flex items-center justify-center" style={{marginTop:"60px"}} >
+            <img src="/empty-box.png" />
+          </div>
+        )}
+        <div className="fixed bottom-28 right-12 bg-[#F2F862] h-13 w-13 rounded-3xl flex items-center justify-center cursor-pointer">
+          <QRCodeScanner
+            isQrOpen={isQrOpen}
+            setIsQrOpen={setIsQrOpen}
+            events={eventTitleAndId}
+          />
         </div>
       </div>
     </div>

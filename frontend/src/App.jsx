@@ -25,6 +25,7 @@ import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 import TicketPage from "./page/TicketPage";
 import ManageEventsPage from "./page/ManageEventsPage";
 import AboutUsPage from "./page/AboutUsPage";
+import WishlistPage from "./page/WishlistPage";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -98,6 +99,7 @@ const MainRoutes = () => {
         <Route path="/tickets" element={<TicketPage />} />
         <Route path="/Events" element={<ManageEventsPage />} />
         <Route path="/aboutUs" element={<AboutUsPage />} />
+        <Route path="/wishList" element={<WishlistPage />} />
       </Routes>
 
       {/* Conditionally Render BottomNav */}

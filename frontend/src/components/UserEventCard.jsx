@@ -7,9 +7,11 @@ import { MdDeleteOutline } from "react-icons/md";
 import { useMutation } from "@apollo/client";
 import { DELETE_EVENT } from "../graphql/mutation/event";
 import { showError, showSuccess } from "../utils/toast";
+import DeleteEventDialog from "./DeleteEventDialog";
 function UserEventCard({ data }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [onClose,setOnClose] = useState(false)
   const timestamp = Number(data?.date); // Ensure it's a number
   console.log("From card : ", data);
   const [deleteEvemt, { loading, error }] = useMutation(DELETE_EVENT, {
@@ -24,11 +26,7 @@ function UserEventCard({ data }) {
       })
     : "Invalid Date";
 
-  let isExpired = timestamp < Date.now();
-
-  function toSet() {
-    setIsOpen(false);
-  }
+  let isExpired = timestamp <= Date.now();
 
   const handleDeleteEvent = async () => {
     try {
@@ -38,7 +36,7 @@ function UserEventCard({ data }) {
       showError("Error while deleting Event, Try Again");
       console.log(error)
     }
-  };
+  };  
 
   return (
     <div
@@ -85,9 +83,10 @@ function UserEventCard({ data }) {
             } bg-black/20 rounded-full h-[50px] w-[50px] flex justify-center items-center ${
               isExpired ? "text-[#F1F1F1]" : "text-[#000000]"
             } flex-col font-bold text-sm cursor-pointer`}
-            onClick={handleDeleteEvent}
+            onClick={() => setOnClose(!onClose)}
+            
           >
-            <MdDeleteOutline size={20} />
+            <DeleteEventDialog onClose={setOnClose} open={onClose} onDelete={handleDeleteEvent}  />
           </div>
         </div>
       </div>

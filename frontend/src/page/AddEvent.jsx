@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { showError, showSuccess } from "../utils/toast";
+import { showError, showInfo, showSuccess } from "../utils/toast";
 import axios from "axios";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -40,6 +40,17 @@ const CreateEventForm = () => {
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
+    if (selectedFiles.length < 2 || selectedFiles.length > 3) {
+      showInfo("You must upload between 2 and 3 images.");
+      return;
+    }
+    const maxSize = 5 * 1024 * 1024; // 15MB in bytes
+    for (const file of selectedFiles) {
+      if (file.size > maxSize) {
+        showInfo("Each Image Must be under 5MB.");
+        return;
+      }
+    }
     setFiles(selectedFiles);
     const previews = selectedFiles.map((file) => URL.createObjectURL(file));
     setImagePreviews(previews);
@@ -47,14 +58,15 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (files.length < 2) {
-      showError("You need to upload at least two images.");
-      return;
-    }
     if (!user) {
       showError("Please login to create an event");
       return;
     }
+    if (files.length < 2) {
+      showError("You need to upload at least two images.");
+      return;
+    }
+    
 
     const formData = new FormData();
     formData.append("title", title);

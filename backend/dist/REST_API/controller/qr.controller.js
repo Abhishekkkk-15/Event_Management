@@ -74,44 +74,54 @@ exports.downloadTicket = downloadTicket;
 const verifyTicket = async (req, res) => {
     const { ticketId, eventId } = req.body;
     const userId = req.user.payload.id;
-    console.log("its getting called ");
     let event;
     const eventFromCached = await redis_js_1.redisClient.get(`event:${eventId}`);
-    if (eventFromCached) {
-        console.log("DATA from cached");
-        event = JSON.parse(eventFromCached);
-    }
-    else {
-        event = await db_js_1.db.event.findFirst({
-            where: {
-                id: eventId
-            }
-        });
-    }
-    const booking = await db_js_1.db.booking.findUnique({
-        where: {
-            id: ticketId
-        }
-    });
-    if (!event && !booking) {
+    if (!eventId && !ticketId) {
         return res.status(400).json({ success: false, messsage: "Event or Ticket not found" });
     }
-    console.log(event?.userId, userId);
-    if (event?.userId != userId) {
-        return res.status(400).json({ success: false, messsage: "Not Admin" });
-    }
-    if (booking?.isUsed) {
-        return res.status(404).json({ success: false, message: "Ticket already used" });
-    }
-    await redis_js_1.redisClient.set(`event:${eventId}`, JSON.stringify(event));
-    await db_js_1.db.booking.update({
-        where: {
-            id: ticketId
-        },
-        data: {
-            isUsed: true
+    try {
+        if (eventFromCached) {
+            event = JSON.parse(eventFromCached);
         }
-    });
-    return res.json({ success: true, message: "Ticket Booked" });
+        else {
+            event = await db_js_1.db.event.findFirst({
+                where: {
+                    id: eventId
+                }
+            });
+        }
+        const booking = await db_js_1.db.booking.findUnique({
+            where: {
+                id: ticketId
+            }
+        });
+        if (!event && !booking) {
+            return res.status(400).json({ success: false, messsage: "Event or Ticket not found" });
+        }
+        console.log("Event Id ", eventId);
+        console.log("Ticket  Id ", ticketId);
+        console.log("Ticket  Id ", req.body);
+        console.log(event?.userId, userId);
+        if (event?.userId != userId) {
+            console.log(event?.userId, userId);
+            return res.status(400).json({ success: false, messsage: "Not Admin" });
+        }
+        if (booking?.isUsed) {
+            return res.status(200).json({ success: false, message: "Ticket already used" });
+        }
+        await redis_js_1.redisClient.set(`event:${eventId}`, JSON.stringify(event));
+        await db_js_1.db.booking.update({
+            where: {
+                id: ticketId
+            },
+            data: {
+                isUsed: true
+            }
+        });
+        return res.json({ success: true, message: "Ticket Booked", tickets: booking?.tickets });
+    }
+    catch (error) {
+        console.log(error);
+    }
 };
 exports.verifyTicket = verifyTicket;
