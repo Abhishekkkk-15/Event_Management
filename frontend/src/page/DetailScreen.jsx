@@ -187,7 +187,7 @@ const wishListFunction =async () =>{
       </div>
 
       {/* Description Section */}
-      <div className="min-h-48 max-h-64 bg-[#404040] rounded-3xl w-[95%] flex flex-col ">
+      <div className="min-h-48 max-h-96 bg-[#404040] rounded-3xl w-[95%] flex flex-col ">
         <div className="flex flex-col items-center h-full 4 gap-2">
           {/* Description Section */}
           <div

@@ -45,9 +45,9 @@ const wishListFunction =async () =>{
 }
 if(error) console.log(error)
   return (
-    <div className="relative bg-[#181818] h-[18rem] w-[26rem] max-w-[27rem] min-w-[25rem] rounded-3xl overflow-hidden flex flex-col items-center  p-3">
+    <div className="relative bg-[#181818] h-[288px]  rounded-3xl overflow-hidden flex flex-col items-center  p-3">
       {/* Image background */}
-      <div className="relative h-[75%] w-[96%] flex items-center justify-center rounded-3xl overflow-hidden" style={{marginBottom:"10px"}}>
+      <div className="relative h-[75%] w-[96%] flex items-center justify-center rounded-3xl overflow-hidden" style={{marginBottom:"10px", marginTop:"10px"}}>
         <img
           src={`${data?.eventImages[0].replace(
             "/upload/",
