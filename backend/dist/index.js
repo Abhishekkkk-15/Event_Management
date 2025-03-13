@@ -41,7 +41,7 @@ app.use(body_parser_1.default.urlencoded({ limit: "15mb", extended: true }));
 // }));
 app.use(authincate_1.default);
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173',
+    origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
     credentials: true,
 }));
 const startServer = async () => {
@@ -74,8 +74,8 @@ const startServer = async () => {
     }
     else {
         // In worker process, create the server and listen to port
-        http_1.default.createServer(app).listen(4000, () => {
-            console.log(`Worker ${process.pid} started and listening on port 4000`);
+        http_1.default.createServer(app).listen(process.env.PORT, () => {
+            console.log(`Worker ${process.pid} started and listening on port ${process.env.PORT}`);
         });
     }
 };
