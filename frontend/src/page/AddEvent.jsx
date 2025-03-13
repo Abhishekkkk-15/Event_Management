@@ -88,7 +88,7 @@ const CreateEventForm = () => {
         formData,
         {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+         
         }
       );
       showSuccess("Email will be sent when the event is approved and created");
