@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
+
 import {
   Card,
   CardContent,
@@ -9,38 +12,30 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { Label } from "../components/ui/label";
-import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar";
 import { useSelector } from "react-redux";
-import { showError, showSuccess } from "../utils/toast";
-import { updateUserProfile } from "../REST_API/user";
+import { showError, showInfo, showSuccess } from "../utils/toast";
+import { resetPassword} from "../REST_API/user";
+import {  useParams } from "react-router-dom";
 
-const UserProfileUpdate = () => {
-  const [file, setFile] = useState(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+const ForgetPasswordPage = () => {
+  const [newPassword, setNewPassword] = useState("");
+  const [RePassword, setRePassword] = useState("");
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
+  const [showPassword, setShowPassword] = useState(true);
+  
+  const { token } = useParams();
+  console.log(token)
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
-    setPreview(URL.createObjectURL(selectedFile));
-  };
-
-  const handleUpload = async () => {
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("avatar", file);
-
+  const handleForgetPassword = async () => {
+    if(newPassword != RePassword) return showInfo("New password does not match Repeat password")
     try {
-      const {data} = await updateUserProfile(formData)
-      console.log(data)
-      showSuccess("Profile Updated successfully!");
+      const { data } = await resetPassword({token:token,newPassword});
+      console.log(data);
+      showSuccess(data.message);
     } catch (error) {
-      showError("Error while Updating Profile! Try again");
+      showError(error.message);
     } finally {
       setLoading(false);
     }
@@ -51,27 +46,11 @@ const UserProfileUpdate = () => {
       <Card className="w-[100%] max-w-lg p-6 shadow-lg border bg-[#000000] ">
         <CardHeader>
           <CardTitle className="text-center text-xl font-semibold">
-            Update Profile
+            Reset Password
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center space-y-4 gap-3 w-full h-full ">
-            <label className="relative cursor-pointer">
-              <Avatar className="w-24 h-24">
-                {preview ? (
-                  <AvatarImage src={preview} alt="User Avatar" />
-                ) : (
-                  <AvatarImage src={user?.avatar} alt="User Avatar" />
-                )}
-              </Avatar>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </label>
-
             {/* <Label htmlFor="name">Name</Label> */}
             <div className="w-full flex flex-col items-center justify-center gap-3">
               <div className="w-full flex flex-col items-center justify-center gap-2  ">
@@ -79,7 +58,7 @@ const UserProfileUpdate = () => {
                   className="font-medium text-[#FEFEFE] w-[80%]  "
                   htmlFor="email"
                 >
-                  Name
+                  New Password
                 </label>
 
                 <div
@@ -88,21 +67,29 @@ const UserProfileUpdate = () => {
                 >
                   <Input
                     id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder={`${user.name}`}
+                    type={showPassword ? "password" : "text"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new Password"
                     className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE] "
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-[#FEFEFE]  focus:outline-none " 
+                    style={{marginRight:"10px"}}
+                  >
+                    {showPassword ? <FiEyeOff/> : <FiEye />}
+                  </button>
                 </div>
               </div>
               <div className="w-full flex flex-col items-center justify-center gap-2  ">
-                <label
+                <Label
                   className="font-medium text-[#FEFEFE] w-[80%]  "
                   htmlFor="email"
                 >
-                  E-mail
-                </label>
+                  Re Enter password
+                </Label>
 
                 <div
                   className="h-10 w-[80%] bg-white/20 rounded-3xl flex items-center px-4 shadow-lg text-[#FEFEFE]"
@@ -110,18 +97,25 @@ const UserProfileUpdate = () => {
                 >
                   <Input
                     id="name"
-                    type="text"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={`${user.email}`}
+                    type={showPassword ? "password" : "text"}
+                    value={RePassword}
+                    onChange={(e) => setRePassword(e.target.value)}
+                    placeholder="Repeate Your Password"
                     className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE] "
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-[#FEFEFE]  focus:outline-none " 
+                    style={{marginRight:"10px"}}
+                  >
+                    {showPassword ? <FiEyeOff/> : <FiEye />}
+                  </button>
                 </div>
               </div>
-
               <div
                 className=" bg-[#F2F862] h-12 w-[80%] rounded-3xl flex items-center justify-center cursor-pointer text-black"
-                onClick={(e) => handleUpload()}
+                onClick={(e) => handleForgetPassword()}
                 style={{ marginTop: "10px" }}
               >
                 <button className="bg-[#F2F862] ">Update</button>
@@ -134,4 +128,4 @@ const UserProfileUpdate = () => {
   );
 };
 
-export default UserProfileUpdate;
+export default ForgetPasswordPage;

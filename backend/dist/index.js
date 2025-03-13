@@ -21,8 +21,10 @@ const verification_route_1 = __importDefault(require("./REST_API/routes/verifica
 const review_route_1 = __importDefault(require("./REST_API/routes/review.route"));
 const event_route_1 = __importDefault(require("./REST_API/routes/event.route"));
 const user_route_1 = __importDefault(require("./REST_API/routes/user.route"));
+const forgetEmail_route_1 = __importDefault(require("./REST_API/routes/forgetEmail.route"));
 const dotenv_1 = require("dotenv");
 const body_parser_1 = __importDefault(require("body-parser"));
+const auth_1 = __importDefault(require("./lib/auth"));
 const statusMonitor = require('express-status-monitor')();
 const app = (0, express_1.default)();
 (0, redis_1.initRedis)();
@@ -51,13 +53,14 @@ const startServer = async () => {
     });
     await server.start();
     app.use('/events', event_route_1.default);
+    app.use('/forgetPassword', forgetEmail_route_1.default);
     app.use('/graphql', (0, express4_1.expressMiddleware)(server, {
         context: async ({ req, res }) => ({ req, res, user: req.user }),
     }));
-    app.use('/booking', booking_route_js_1.default);
-    app.use('/emailVerification', verification_route_1.default);
-    app.use('/review', review_route_1.default);
-    app.use('/user', user_route_1.default);
+    app.use('/booking', auth_1.default, booking_route_js_1.default);
+    app.use('/emailVerification', auth_1.default, verification_route_1.default);
+    app.use('/review', auth_1.default, review_route_1.default);
+    app.use('/user', auth_1.default, user_route_1.default);
     if (cluster_1.default.isMaster) {
         const numCPUs = os_1.default.cpus().length;
         console.log(`Master process ${process.pid} forking ${numCPUs} workers...`);

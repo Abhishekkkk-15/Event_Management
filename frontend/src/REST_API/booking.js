@@ -1,7 +1,7 @@
 import axios from "axios"
 
-const BASE_URL = 'http://localhost:4000'
-axios.defaults.baseURL = "http://localhost:4000"
+const BASE_URL = import.meta.env.VITE_REST_END_POINT
+axios.defaults.baseURL = import.meta.env.VITE_REST_END_POINT
 axios.defaults.withCredentials = true
 
 export const ticketScanner = async(data)=> axios.post("/booking/validate-ticket",data)

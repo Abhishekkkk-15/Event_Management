@@ -26,12 +26,13 @@ import TicketPage from "./page/TicketPage";
 import ManageEventsPage from "./page/ManageEventsPage";
 import AboutUsPage from "./page/AboutUsPage";
 import WishlistPage from "./page/WishlistPage";
+import ForgetPasswordPage from "./page/ForgetPasswordPage";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
   const { data, loading } = useQuery(GET_AUTH_USER);
   const dispatch = useDispatch();
-
+console.log(import.meta.env.VITE_REST_END_POINT)
   useEffect(() => {
     if (data) {
       dispatch(loginSuccess(data.getAuthuser));
@@ -74,12 +75,14 @@ const MainRoutes = () => {
     "/tickets",
     "/aboutUs",
     "/Events",
+    "/wishlist",
+    "/editProfile"
   ];
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={user ? <HomePage /> : <Auth/>} />
         <Route path="/login" element={<Auth />} />
         <Route path="/up" element={<FileUpload />} />
         <Route
@@ -87,19 +90,20 @@ const MainRoutes = () => {
           element={user ? <ProfileSettings /> : <Auth />}
         />
         <Route path="/signUp" element={<SignUp />} />
-        <Route path="/addEvent" element={<AddEvent />} />
-        <Route path="/detailsScreen/:id" element={<DetailScreen />} />
+        <Route path="/addEvent" element={user ? <AddEvent /> : <Auth/>} />
+        <Route path="/detailsScreen/:id" element={ user ?  <DetailScreen /> : <Auth/>} />
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="/editProfile" element={<UserProfileUpdate />} />
+        <Route path="/editProfile" element={ user ? <UserProfileUpdate /> : <Auth/>} />
         <Route
           path="/verifyEmail"
           element={user?.isVerified ? <ProfileSettings /> : <VerifyEmailPage />}
         />
 
-        <Route path="/tickets" element={<TicketPage />} />
-        <Route path="/Events" element={<ManageEventsPage />} />
+        <Route path="/tickets" element={ user ? <TicketPage /> : <Auth/>} />
+        <Route path="/Events" element={ user ? <ManageEventsPage /> : <Auth/>} />
         <Route path="/aboutUs" element={<AboutUsPage />} />
-        <Route path="/wishList" element={<WishlistPage />} />
+        <Route path="/wishlist" element={ user ? <WishlistPage /> : <Auth/>} />
+        <Route path="/forgetpassword/:token" element={<ForgetPasswordPage />} />
       </Routes>
 
       {/* Conditionally Render BottomNav */}

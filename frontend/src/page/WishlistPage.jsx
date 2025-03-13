@@ -117,7 +117,8 @@ function WishlistPage() {
             ))}
         </div>
         {userWishlist?.length <= 0 && (
-          <div className="h-full w-full flex items-center justify-center" style={{marginTop:"60px"}} >
+          <div className="h-full w-full flex items-center justify-center flex-col gap-10" style={{marginTop:"60px"}} >
+            <span className="text-4xl font-semibold text-[#FEFEFE] " >No Event's</span>
             <img src="/empty-box.png" />
           </div>
         )}

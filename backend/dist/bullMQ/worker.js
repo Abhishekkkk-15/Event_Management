@@ -9,6 +9,7 @@ const db_1 = require("../lib/db");
 const bullmq_1 = require("bullmq");
 const mailTransporter_1 = require("../lib/mailTransporter");
 const queue_1 = require("./queue");
+const fs_1 = __importDefault(require("fs"));
 exports.addEventWorker = new bullmq_1.Worker('add-event-queue', async (job) => {
     const { event, files, userId } = job.data;
     try {
@@ -18,6 +19,7 @@ exports.addEventWorker = new bullmq_1.Worker('add-event-queue', async (job) => {
         for (const filePath of files) { // ✅ Now it contains file paths
             const uploadedUrl = await (0, cloudinaryConfig_1.default)(filePath); // ✅ Upload directly
             images.push(uploadedUrl);
+            fs_1.default.unlinkSync(filePath);
         }
         const newEvent = await db_1.db.event.create({
             data: {
@@ -57,7 +59,7 @@ exports.addEventWorker = new bullmq_1.Worker('add-event-queue', async (job) => {
     }
 });
 exports.sendEmailWorker = new bullmq_1.Worker('send-email-queue', async (job) => {
-    const { userEmail, eventTitle, errorMessage, eventDate, ticketId } = job.data;
+    const { userEmail, eventTitle, errorMessage, eventDate, ticketId, tickets, eventTitleForBookEvent } = job.data;
     if (job.name === "success-email") {
         console.log(`Sending success email to ${userEmail}`);
         console.log("job id : ", job.id);
@@ -82,8 +84,9 @@ exports.sendEmailWorker = new bullmq_1.Worker('send-email-queue', async (job) =>
     else if (job.name === "book-ticket-email") {
         console.log(`Sending ticket email to ${userEmail}`);
         console.log("job id : ", job.id);
+        console.log(eventTitleForBookEvent);
         // Send ticket email
-        (0, mailTransporter_1.sendEmail)(ticketId, userEmail);
+        (0, mailTransporter_1.sendEmail)(ticketId, userEmail, eventTitleForBookEvent, tickets);
     }
 }, {
     connection: {

@@ -8,7 +8,7 @@ import { MdDeleteOutline } from "react-icons/md";
 const DeleteEventDialog = ({ open, onClose, onDelete }) => {
   return (
     <Dialog open={open} onOpenChange={onClose} >
-        <DialogTrigger>
+        <DialogTrigger className="cursor-pointer">
             <MdDeleteOutline size={20} />
 
         </DialogTrigger>

@@ -8,6 +8,7 @@ import loginImage from "../assets/login-image.webp"; // Add your image here
 import { CiSearch } from "react-icons/ci";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { showError, showSuccess } from "../utils/toast";
+import ForgetPasswordDialog from "../components/ForgetPasswordDialog ";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setIsOpen] = useState(false)
   const [showPassword, setShowPassword] = useState(true);
 
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
@@ -95,14 +97,14 @@ export default function Login() {
                   </button>
                 </div>
                 <div className="text-end w-full" style={{ marginTop: "7px" }}>
-                  <Link
-                    to="/forget-password"
+                  <div
+                    
                     className="text-[#C1C1C1] text-sm"
                   >
                     <span className="text-[#C1C1C1] text-sm">
-                      Forgot Password?
+                      <ForgetPasswordDialog open={open} setIsOpen={setIsOpen} />
                     </span>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </div>

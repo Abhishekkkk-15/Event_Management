@@ -7,13 +7,14 @@ const redisClient = (0, redis_1.createClient)({
     socket: {
         tls: true,
         rejectUnauthorized: false,
-        keepAlive: 10000,
-        reconnectStrategy: (retries) => Math.min(retries * 50, 1000),
+        keepAlive: 60000, // Increased keep-alive time
+        reconnectStrategy: (retries) => Math.min(retries * 200, 5000), // Improved reconnect strategy
     },
+    pingInterval: 10000, // Send PING every 10 seconds
 });
 exports.redisClient = redisClient;
 const initRedis = async () => {
-    redisClient.on("error", (err) => console.log("Redis Error:", err));
+    redisClient.on("error", (err) => console.log("❌ Redis Error:", err));
     try {
         await redisClient.connect();
         console.log("✅ Connected to Redis!");
@@ -22,9 +23,14 @@ const initRedis = async () => {
         console.error("❌ Redis connection failed:", error);
     }
     redisClient.on("end", async () => {
-        console.log("Redis connection lost. Reconnecting...");
-        await redisClient.quit();
-        await redisClient.connect();
+        console.log("⚠️ Redis connection lost. Checking connection...");
+        try {
+            await redisClient.ping();
+        }
+        catch (error) {
+            console.log("🔄 Reconnecting to Redis...");
+            await redisClient.connect();
+        }
     });
 };
 exports.initRedis = initRedis;

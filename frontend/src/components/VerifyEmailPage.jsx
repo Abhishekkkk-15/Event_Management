@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   sendVerificationEmail,
   verifyCode,
@@ -6,10 +6,31 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { showError, showSuccess } from "../utils/toast";
 
-const VerifyEmailPage = ({onVerifyCode}) => {
-  const [step, setStep] = useState("request"); 
+const VerifyEmailPage = ({ onVerifyCode }) => {
+  const [step, setStep] = useState("request");
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
+  const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
+  const [start, setStart] = useState(false);
+
+  useEffect(() => {
+    if (step === "request") return;
+    if (timeLeft <= 0) return;
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, step]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
+      2,
+      "0"
+    )}`;
+  };
 
   const handleSendVerification = async () => {
     setLoading(true);
@@ -19,7 +40,8 @@ const VerifyEmailPage = ({onVerifyCode}) => {
       console.log(data);
       showSuccess(data.message);
       setStep("verify");
-      setLoading(false)
+
+      setLoading(false);
     } catch (error) {
       showError("Failed to send verification email. Try again.");
     } finally {
@@ -28,7 +50,7 @@ const VerifyEmailPage = ({onVerifyCode}) => {
   };
 
   const handleVerifyCode = async (code) => {
-    console.log(code)
+    console.log(code);
     if (!code.trim()) {
       showError("Please enter the verification code.");
       return;
@@ -80,23 +102,22 @@ const VerifyEmailPage = ({onVerifyCode}) => {
                 type="text"
                 className="bg-white/20 h-full w-full outline-none placeholder:text-[#FEFEFE]"
                 onChange={(e) => setCode(e.target.value)}
-
               />
             </div>
             <div className=" bg-[#F2F862] h-10 w-[50%] rounded-3xl flex items-center justify-center cursor-pointer">
               <button
-                onClick={()=>handleVerifyCode(code)}
+                onClick={() => handleVerifyCode(code)}
                 disabled={loading}
                 className="bg-[#F2F862]"
               >
                 {loading ? "Verifying..." : "Verify Code"}
               </button>
             </div>
+            <div className="text-center text-[#F2F862] text-3xl">
+              Time Left: {formatTime(timeLeft)}
+            </div>
           </>
         )}
-        <Badge className="mt-4 px-3 py-1 text-sm bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg">
-          Email Verification
-        </Badge>
       </div>
     </div>
   );

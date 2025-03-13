@@ -34,7 +34,6 @@ function Cards() {
   const [priceRange, setPriceRange] = useState(0);
   useEffect(() => {
     const handler = setTimeout(() => {
-      console.log("it's getting called");
       setDebouncedSearch(searchTerm);
     
     }, 500);
@@ -46,7 +45,6 @@ function Cards() {
 
   const countryName =
     country.find((c) => c.code === location.country)?.name || "India";
-  console.log("User from store", user);
 
   const { loading, error, data, refetch } = useQuery(GET_EVENTS, {
     variables: {
@@ -99,7 +97,7 @@ function Cards() {
         setHasMore(false);
         return;
       }
-      console.log("Setting new data");
+   
       setEvents((prev) => [...prev, ...data.events]);
     }
   }, [data]);

@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 const AboutUsPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center mb-14 text-[white] " style={{padding:"10px"}}>
-      <div className="w-full max-w-4xl shadow-lg p-8 border-2 border-white rounded-4xl" style={{ padding:"10px"}}>
+      <div className="w-full max-w-4xl shadow-lg p-8 border-2 border-white rounded-4xl" style={{ padding:"10px", marginBottom:"55px"}}>
         <h1 className="text-[44px] font-bold text-center mb-6 text-[#F2F826]" style={{fontSize:"33px"}}>
           About Our Event Management Platform
         </h1>

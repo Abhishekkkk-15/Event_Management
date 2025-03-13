@@ -16,7 +16,6 @@ const TicketDialog = ({ open, setIsOpen, data, isExpired }) => {
         day: "numeric",
       })
     : "Invalid Date";
-console.log("Data",data)
   return (
     <Dialog open={open} onOpenChange={setIsOpen}>
       <DialogTrigger>

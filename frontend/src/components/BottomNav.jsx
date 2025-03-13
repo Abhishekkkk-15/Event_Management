@@ -1,6 +1,7 @@
 import { Home, Search, Ticket, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { MdEventNote } from "react-icons/md";
 
 const BottomNav = () => {
   let navigate = useNavigate();
@@ -34,20 +35,20 @@ const BottomNav = () => {
       <button
         className="flex items-center justify-between p-2 bg-gray-800 text-white  w-24 h-10"
         onClick={() => {
-          setActive("/search");
-          navigate("/search");
+          setActive("/Events");
+          navigate("/Events");
         }}
         style={{
-          backgroundColor: active === "/search" ? "#F2F862" : "transparent",
+          backgroundColor: active === "/Events" ? "#F2F862" : "transparent",
           borderRadius: "30px 30px 30px 30px",
           padding: "8px",
         }}
       >
-        <Search
+        <MdEventNote 
           size={20}
-          className={`${active == "/search" ? "text-black" : "text-white"}`}
+          className={`${active == "/Events" ? "text-black" : "text-white"}`}
         />
-        {active === "/search" && <span>Search</span>}
+        {active === "/Events" && <span>Manage</span>}
       </button>
 
       <button

@@ -56,7 +56,7 @@ exports.userResolver = {
                 wishList: userInfo.wishList || []
             };
             await redis_js_1.redisClient.set(`user:${user.payload.id}`, JSON.stringify(chachData), {
-                EX: 600
+                EX: 180
             });
             // console.log(userInfo)
             return userInfo;

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.updateUser = void 0;
+const redis_1 = require("../../services/redis");
 const cloudinaryConfig_1 = __importDefault(require("../../lib/cloudinaryConfig"));
 const db_1 = require("../../lib/db");
 const updateUser = async (req, res) => {
@@ -11,9 +12,16 @@ const updateUser = async (req, res) => {
         const { name, email } = req.body;
         const { id } = req.user.payload;
         const file = req.file;
-        const user = await db_1.db.user.findUnique({
-            where: { id }
-        });
+        let user;
+        const userInCache = await redis_1.redisClient.get(`user:${id}`);
+        if (userInCache) {
+            user = JSON.parse(userInCache);
+        }
+        else {
+            user = await db_1.db.user.findUnique({
+                where: { id }
+            });
+        }
         if (file) {
             const avatar = await (0, cloudinaryConfig_1.default)(file.path);
             await db_1.db.user.update({
@@ -36,20 +44,22 @@ const updateUser = async (req, res) => {
                 email: email || user.email
             }
         });
-        return res.send(updatedUser);
+        await redis_1.redisClient.del(`user:${id}`);
+        await redis_1.redisClient.set(`user:${id}`, JSON.stringify(user));
+        return res.status(200).json({ message: "User Profile Updated" });
     }
     catch (error) {
-        res.status(500).send(error);
+        res.status(500).json({ message: "Error whilte updating user Profile" });
     }
 };
 exports.updateUser = updateUser;
 const logout = async (req, res) => {
     try {
         res.clearCookie('token');
-        res.send('logout');
+        res.status(200).json({ message: "logout successfully" });
     }
     catch (error) {
-        res.status(500).send(error);
+        res.status(500).json({ message: "Error whilte updating user Profile" });
     }
 };
 exports.logout = logout;

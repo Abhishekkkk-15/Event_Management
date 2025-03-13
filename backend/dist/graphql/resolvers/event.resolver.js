@@ -6,34 +6,37 @@ const redis_js_1 = require("../../services/redis.js");
 exports.eventResolver = {
     Query: {
         events: async (_, { query, category, page, limit, price }, { user }) => {
+            const today = new Date(); // ✅ Get today's date
+            today.setHours(0, 0, 0, 0);
             if (price != 0) {
                 if (category) {
-                    console.log(page);
                     return await db_1.db.event.findMany({
                         skip: (page - 1) * limit,
                         take: limit,
                         where: {
                             price: { lte: price },
                             category: category,
-                            date: { gte: new Date }
+                            date: { gte: today }
                         }
                     });
                 }
-                console.log(page);
                 return await db_1.db.event.findMany({
                     skip: (page - 1) * limit,
                     take: limit,
                     where: {
-                        price: { lte: price }, // Fetch events where price is less than or equal to 400
+                        price: { lte: price },
+                        date: { gte: today }
                     }
                 });
             }
             if (category) {
+                console.log(category);
                 const categoryData = await db_1.db.event.findMany({
                     skip: (page - 1) * limit,
                     take: limit,
                     where: {
-                        category: category
+                        category: category,
+                        date: { gte: today }
                     },
                     orderBy: {
                         date: 'asc'
@@ -49,34 +52,29 @@ exports.eventResolver = {
                         OR: [
                             {
                                 title: {
-                                    contains: query
+                                    contains: query,
+                                    mode: "insensitive"
                                 }
                             }, {
                                 description: {
-                                    contains: query
+                                    contains: query,
+                                    mode: "insensitive"
                                 }
                             }
-                        ]
+                        ],
+                        date: { gte: today }
                     }
                 });
                 return queryData;
             }
-            if (price != 0) {
-                return await db_1.db.event.findMany({
-                    skip: (page - 1) * limit,
-                    take: limit,
-                    where: {
-                        price: { lte: 100 }, // Fetch events where price is less than or equal to 400
-                        category: "Sports" // Filter by category if provided
-                    }
-                });
-            }
-            const today = new Date().toISOString();
             const data = await db_1.db.event.findMany({
                 skip: (page - 1) * limit,
                 take: limit,
+                where: {
+                    date: { gte: today }
+                },
                 orderBy: {
-                    date: 'desc'
+                    date: 'asc'
                 }
             });
             return data;
@@ -95,7 +93,7 @@ exports.eventResolver = {
                 throw new Error('Event not found');
             }
             await redis_js_1.redisClient.set(`event:${id}`, JSON.stringify(fetchedEvent), {
-                EX: 220
+                EX: 180
             });
             return { ...fetchedEvent, limit: limit };
         },
@@ -212,37 +210,6 @@ exports.eventResolver = {
         }
     },
     Mutation: {
-        // createEvent: async (_: any, { event, files }: { event: CreateEventInput, files: any }, { user }: any) => {
-        //     if (!user) {
-        //         throw new Error('Not authenticated');
-        //     }
-        //     if (!files || !Array.isArray(files) || files.length < 2) {
-        //         throw new Error("There should be at least two images");
-        //     }
-        //     console.log("Files received (before resolving):", files);
-        //     try {
-        //         const resolvedFiles = await Promise.all(
-        //             files.map(async (filePromise: any, index: number) => {
-        //                 console.log(`Resolving file ${index + 1} promise...`);
-        //                 const file = await filePromise; // Explicitly resolve each file promise
-        //                 console.log(`File ${index + 1} resolved:`, file);
-        //                 return file;
-        //             })
-        //         );
-        //         console.log("All files resolved:", resolvedFiles);
-        //         const job = await eventQueue.add("create-event", {
-        //             event,
-        //             files: resolvedFiles,
-        //             userId: user.id
-        //         });
-        //         console.log(`Job added to queue: ${job.id}`);
-        //         return { message: "Event creation job queued", jobId: job.id };
-        //     } catch (error) {
-        //         console.error("Error resolving file uploads:", error);
-        //         throw new Error("Failed to resolve file uploads");
-        //     }
-        // }
-        // ,
         deleteEvent: async (_, { eventID }, { user }) => {
             try {
                 if (!user) {

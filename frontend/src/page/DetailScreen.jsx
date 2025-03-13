@@ -32,7 +32,6 @@ function DetailScreen() {
   const [event, setEvent] = useState({});
   const user = useSelector((state) => state.auth.user);
   const userWishList = user?.wishList?.map((event) => event.event.id) || [];
-  console.log("user from detail : ", user);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
@@ -138,7 +137,7 @@ const wishListFunction =async () =>{
         </div>
 
         {/* Dots for Image Navigation */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        <div className="absolute bottom-4 left-1/2 md:hidden lg:hidden transform -translate-x-1/2 flex gap-2">
           {event?.eventImages?.map((_, index) => (
             <div
               key={index}
@@ -252,7 +251,7 @@ const wishListFunction =async () =>{
       </div>
 
       {/* Buy Ticket Button */}
-      <div className="fixed bottom-10 flex w-[95%] items-center gap-4 z-50 ">
+      <div className="fixed bottom-5 flex w-[95%] items-center gap-4 z-50 ">
         <div
           onClick={() => setIsModalOpen(true)}
           className="flex items-center text-2xl justify-center h-16 w-[80%] bg-gradient-to-r bg-[#F2F862] rounded-3xl text-[#000000] text-center cursor-pointer"

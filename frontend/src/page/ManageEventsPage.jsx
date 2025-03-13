@@ -13,8 +13,7 @@ import axios from "axios";
 import { ticketScanner } from "../REST_API/booking";
 
 function ManageEventsPage() {
-  const userData = useSelector((state) => state.auth.userData);
-  console.log("Redux UserData:", userData);
+  const userData = useSelector((state) => state.auth.userData);;
 
   const [events, setEvents] = useState([]);
   const [isQrOpen, setIsQrOpen] = useState(false);
@@ -26,7 +25,7 @@ function ManageEventsPage() {
 
   useEffect(() => {
     if (!userData) {
-      console.log("Api calling");
+      
       fetchUserData();
       // dispatch(setUserData(data));
     } else {
@@ -42,6 +41,13 @@ function ManageEventsPage() {
       dispatch(setUserData(data));
     }
   }, [userData, data]);
+
+  const removeItem = (index) => {
+    const newArray = [...events]; // Create a copy to avoid mutating state
+    newArray.splice(index, 1); // Remove 1 item at the given index
+    setEvents(newArray); // Update state
+  };
+
   const eventTitleAndId =
     data?.user?.events?.map((d) => ({ id: d.id, title: d.title })) || [];
 
@@ -73,11 +79,12 @@ function ManageEventsPage() {
           style={{ padding: "10px" }}
         >
           {events?.map((e, idx) => (
-            <UserEventCard data={e} key={idx} />
+            <UserEventCard data={e} key={idx} idx={idx} removeItem={removeItem} />
           ))}
         </div>
         {events?.length <= 0 && (
-          <div className="h-full w-full flex items-center justify-center" style={{marginTop:"60px"}} >
+          <div className="h-full w-full flex items-center justify-center flex-col gap-10" style={{marginTop:"60px"}} >
+            <span className="text-4xl font-semibold text-[#FEFEFE] " >No Event's </span>
             <img src="/empty-box.png" />
           </div>
         )}

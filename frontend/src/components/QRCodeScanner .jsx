@@ -10,11 +10,11 @@ import { Button } from "./ui/button";
 import { QrReader } from "react-qr-reader";
 import { IoIosQrScanner, IoIosRefresh } from "react-icons/io";
 import { ticketScanner } from "../REST_API/booking";
+import { showError } from "../utils/toast";
 
 const QRCodeScanner = ({ isQrOpen, setIsQrOpen, events }) => {
   const [scanResult, setScanResult] = useState(null);
   const selectEventRef = useRef("");
-  console.log("Ref : ", selectEventRef);
   const [selectedEvent, setSelectedEvent] = useState(selectEventRef.current);
   const lastScanned = useRef(null);
   const [seats, setSeats] = useState(0);
@@ -23,7 +23,7 @@ const QRCodeScanner = ({ isQrOpen, setIsQrOpen, events }) => {
   const handleScanQrCode = async (ticketId) => {
     try {
       if (!ticketId) {
-        console.log("Its returning");
+        
         return;
       }
       const { data } = await ticketScanner({
@@ -33,9 +33,10 @@ const QRCodeScanner = ({ isQrOpen, setIsQrOpen, events }) => {
       setScanResult(data.message);
       setSeats(data.tickets);
       setSuccess(data.success);
-      console.log("Scanned Ticket Data:", data);
+     
     } catch (error) {
       console.log("Error scanning ticket:", error);
+      showError("error : ",error)
     }
   };
 

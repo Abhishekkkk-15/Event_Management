@@ -8,7 +8,7 @@ import { useMutation } from "@apollo/client";
 import { DELETE_EVENT } from "../graphql/mutation/event";
 import { showError, showSuccess } from "../utils/toast";
 import DeleteEventDialog from "./DeleteEventDialog";
-function UserEventCard({ data }) {
+function UserEventCard({ data, idx, removeItem }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [onClose,setOnClose] = useState(false)
@@ -32,6 +32,7 @@ function UserEventCard({ data }) {
     try {
       await deleteEvemt();
       showSuccess("Event Deleted Successfully!!");
+      removeItem(idx)
     } catch (error) {
       showError("Error while deleting Event, Try Again");
       console.log(error)

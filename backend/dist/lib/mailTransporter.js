@@ -16,7 +16,7 @@ exports.transporter = nodemailer_1.default.createTransport({
         pass: process.env.EMAIL_PASS, // Replace this with your correct App Password
     }
 });
-async function sendEmail(ticketId, toEmail) {
+async function sendEmail(ticketId, toEmail, eventTitleForBookEvent, tickets) {
     // Read QR code and PDF files
     const qrImage = fs_1.default.readFileSync(`./tickets/qrcode-${ticketId}.png`).toString('base64');
     const pdfPath = `./tickets/ticket-${ticketId}.pdf`;
@@ -24,7 +24,10 @@ async function sendEmail(ticketId, toEmail) {
     const htmlContent = `
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
       <div style="max-width: 600px; background: white; padding: 20px; margin: auto; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+      
         <h2 style="color: #007bff;">🎟 Your Event Ticket</h2>
+        <h1>${eventTitleForBookEvent}</h1>
+      <h2> No of Seat's : ${tickets}</h2>
         <p style="color: #555;">Scan the QR code below to access your ticket:</p>
         <img src="cid:qrcode" alt="QR Code" style="width: 200px; border: 2px solid #ddd; padding: 5px; border-radius: 10px;"/>
         <p style="margin-top: 20px;">
@@ -49,6 +52,8 @@ async function sendEmail(ticketId, toEmail) {
         ]
     });
     console.log('✅ Email sent successfully!');
+    console.log("Deleting PDF : ", fs_1.default.unlinkSync(pdfPath));
+    console.log("Deleting QR Png : ", fs_1.default.unlinkSync(`./tickets/qrcode-${ticketId}.png`));
 }
 const successMailOptions = (userEmail, eventTitle, eventDate) => ({
     from: '"Event Manager" <your-email@example.com>', // Replace with your email
@@ -64,7 +69,7 @@ const successMailOptions = (userEmail, eventTitle, eventDate) => ({
               <p>You can manage your event and view more details from your dashboard.</p>
               <p>Thank you for using our platform!</p>
               <hr style="border: 0; border-top: 1px solid #ddd;">
-              <p style="color: #555;">Best Regards, <br><strong>Event Manager Team</strong></p>
+              <p style="color: #555;">Best Regards, <br><strong>Event Buddy Team</strong></p>
           </div>
       </div>
   `,

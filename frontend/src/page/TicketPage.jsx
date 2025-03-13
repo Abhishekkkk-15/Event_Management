@@ -15,16 +15,14 @@ function TicketPage() {
   const dispatch = useDispatch();
 
   // Lazy query to fetch user data only when needed
-  const [fetchUserData, { data, loading, error }] = useLazyQuery(GET_LOGGED_USER_INFO);
+  const [fetchUserData, { data, loading, error }] =
+    useLazyQuery(GET_LOGGED_USER_INFO);
 
   useEffect(() => {
     // Fetch from backend only if userData is missing
     if (!userData) {
-      console.log("Calling Api")
       fetchUserData();
     } else {
-      console.log("Data from Redux : ",userData.user.bookings)
-      
       setUserBookings(userData?.user?.bookings);
     }
   }, []);
@@ -66,10 +64,14 @@ function TicketPage() {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-[#000000]" style={{ paddingBottom: "90px" }}>
+    <div
+      className="min-h-screen w-full bg-[#000000]"
+      style={{ paddingBottom: "90px" }}
+    >
       <div className="flex flex-col justify-center items-center text-[#FEFEFE] gap-2">
-        <span className="font-bold w-full mt-10 text-[#FEFEFE] text-center text-[25px]"
-        style={{ marginTop: "25px" }}
+        <span
+          className="font-bold w-full mt-10 text-[#FEFEFE] text-center text-[25px]"
+          style={{ marginTop: "25px" }}
         >
           Booking's
         </span>
@@ -88,14 +90,24 @@ function TicketPage() {
           ))}
         </div>
         {/* Booking List */}
-        <div className="w-full flex flex-col justify-center items-center gap-3" style={{padding:"10px"}}>
-          {userBookings?.filter((data) => isExpired(data.event?.date, filterType))
+        <div
+          className="w-full flex flex-col justify-center items-center gap-3"
+          style={{ padding: "10px" }}
+        >
+          {userBookings
+            ?.filter((data) => isExpired(data.event?.date, filterType))
             .map((data, idx) => (
               <SmallCard data={data} key={idx} />
             ))}
         </div>
         {userBookings?.length <= 0 && (
-          <div className="h-full w-full flex items-center justify-center" style={{marginTop:"60px"}} >
+          <div
+            className="h-full w-full flex items-center justify-center flex-col gap-10"
+            style={{ marginTop: "60px" }}
+          >
+            <span className="text-4xl font-semibold text-[#FEFEFE] ">
+              No Ticket'ss
+            </span>
             <img src="/empty-box.png" />
           </div>
         )}

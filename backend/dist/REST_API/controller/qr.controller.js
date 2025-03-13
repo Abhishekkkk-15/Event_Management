@@ -27,8 +27,12 @@ const bookTicket = async (req, res) => {
                 userId,
                 eventId,
                 tickets,
-            }
+            },
+            include: {
+                event: true, // This fetches the associated event details
+            },
         });
+        console.log(ticket.event.title);
         await db_js_1.db.event.update({
             where: {
                 id: eventId
@@ -39,7 +43,7 @@ const bookTicket = async (req, res) => {
         });
         const ticketId = ticket.id;
         // console.log("It comes here")
-        const pdfPath = await (0, generatePdf_1.generateTicketPDF)(ticketId, userEmail);
+        const pdfPath = await (0, generatePdf_1.generateTicketPDF)(ticketId, userEmail, ticket.event.title, tickets);
         console.log(pdfPath);
         const mailOptions = {
             from: "jangidabhishek276@gmail.com",
@@ -53,7 +57,9 @@ const bookTicket = async (req, res) => {
         };
         queue_1.sendEmailQueue.add("book-ticket-email", {
             ticketId,
-            userEmail
+            userEmail,
+            eventTitleForBookEvent: ticket.event.title,
+            tickets: tickets
         });
         // await   sendTicketEmail(ticketId,ticketId,userEmail)       
         return res.json({ success: true, message: "Ticket generated", ticketId });

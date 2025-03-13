@@ -125,7 +125,7 @@ function SmallCard({ data }) {
               className=" h-8 w-8 bg-[#F2Fb62] flex items-center justify-center border-2 border-white gap-3"
               style={{ border: "2px solid white" }}
             >
-              <span className="text-[8px]">
+              <span className={`text-[8px] ${isExpired ? "text-[#000000]" : "text-[#000000]"}`}>
                 {data?.event?.bookings?.length}+
               </span>
             </Avatar>

@@ -84,7 +84,7 @@ const CreateEventForm = () => {
     setLoading(true);
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/events/create",
+        `${import.meta.env.VITE_REST_END_POINT}/events/create`,
         formData,
         {
           withCredentials: true,

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = require("jsonwebtoken");
-const authenticate = (req, res, next) => {
+const auth = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
         next();
-        return;
+        return res.status(404).json({ message: " User not authenticated" });
     }
     try {
         const decoded = (0, jsonwebtoken_1.verify)(token, process.env.JWT_SECRET);
@@ -14,7 +14,7 @@ const authenticate = (req, res, next) => {
     }
     catch (error) {
         console.log(error);
-        throw new Error('Invalid or expired token');
+        return res.status(404).json({ message: " User not authenticated or Token expired" });
     }
 };
-exports.default = authenticate;
+exports.default = auth;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GoArrowUpRight, GoHeart, GoLocation } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage } from "./ui/avatar";
@@ -13,6 +13,7 @@ function Card({ data }) {
   const user = useSelector(state => state.auth?.user?.wishList)
   const userWishList = user?.map(event => event.event.id) || [];
  const [addToWishList, { loading, error, data:wishListData }] = useMutation(ADD_TO_WISH_LIST);
+ const [forDate, setForDate] = useState("")
 
   const formattedDate = data?.date
     ? new Date(Number(data.date)).toLocaleDateString("en-US", {
@@ -20,12 +21,15 @@ function Card({ data }) {
         day: "numeric",
       })
     : "Invalid Date";
+    
 
   const handleNavigate = (id) => {
     navigate(`/detailsScreen/${id}`);
   };
   const [month, day] = formattedDate.split(" ");
-
+useEffect(() =>{
+  if(formattedDate) setForDate
+})
 const wishListFunction =async () =>{
   if(userWishList.includes(data.id)) return showInfo("Allready in wish list")
  try {
