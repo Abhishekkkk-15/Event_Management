@@ -124,9 +124,9 @@ function Cards() {
   if (error) console.log(error);
 
   const category = [
-    { img: "", name: "All" },
-    { img: "../../Public/CMusic.png", name: "Music" },
-    { img: "../../Public/CSports.png", name: "Sports" },
+    { img: "/AllEvents.png", name: "All" },
+    { img: "/MusicEvents.png", name: "Music" },
+    { img: "/SportsEvents.png", name: "Sports" },
   ];
 
   return (

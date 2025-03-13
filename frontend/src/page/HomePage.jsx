@@ -5,7 +5,7 @@ import EmailVerificationBanner from '../components/EmailVerificationBanner'
 
 function HomePage() {
   return (
-    <div className='bg-[#000000] '>
+    <div className='bg-[#000000] h-full '>
         <Cards/>
     </div>
   )

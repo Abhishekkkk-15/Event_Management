@@ -166,20 +166,7 @@ const ProfileSettings = () => {
           <div className="h-10 w-[90%]">
             <p className="float-start font-bold text-[#FEFEFE] text-[20px] "></p>
           </div>
-          <Link
-            to={"/contactUsPage"}
-            className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-18"
-          >
-            <div
-              className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-18"
-              style={{ padding: "10px" }}
-            >
-              <div className="text-[#FEFEFE] w-11">
-                <IoIosContact size={28} className="text-[#FEFEFE] w-11" />
-              </div>
-              <span className="w-80 text-[20px]">Contact us</span>
-            </div>
-          </Link>
+       
           <Link
             to={"/aboutUs"}
             className="bg-[#181818] w-[90%] flex flex-row justify-between items-center rounded-2xl h-18"

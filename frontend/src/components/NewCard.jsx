@@ -45,26 +45,26 @@ const wishListFunction =async () =>{
 }
 if(error) console.log(error)
   return (
-    <div className="relative bg-[#181818] h-[288px]  rounded-3xl overflow-hidden flex flex-col items-center  p-3">
+    <div className="relative bg-[#181818] h-[300px]  rounded-3xl overflow-hidden flex flex-col items-center  p-3">
       {/* Image background */}
-      <div className="relative h-[75%] w-[96%] flex items-center justify-center rounded-3xl overflow-hidden" style={{marginBottom:"10px", marginTop:"10px"}}>
+      <div className="relative h-[80%] w-[96%] flex items-center justify-center rounded-3xl overflow-hidden" style={{marginBottom:"10px", marginTop:"10px"}}>
         <img
           src={`${data?.eventImages[0].replace(
             "/upload/",
-            "/upload/w_400,h_190,c_fill/"
+            "/upload/w_400,h_190,/"
           )}`}
           alt="Event"
           className="w-full h-full object-cover rounded-3xl"
         />
 
         {/* Date badge */}
-        <div className="absolute top-7 left-3 bg-white/20 rounded-full h-12 w-12 flex justify-center items-center text-[#FEFEFE] flex-col font-bold text-sm">
+        <div className="absolute top-3 left-3 bg-white/20 rounded-full h-12 w-12 flex justify-center items-center text-[#FEFEFE] flex-col font-bold text-sm">
           <span>{month}</span>
           <span>{day}</span>
         </div>
 
         {/* Favorite icon */}
-        <div className="absolute top-7 right-3 bg-white/20 rounded-full h-12 w-12 flex justify-center items-center cursor-pointer"
+        <div className="absolute top-3 right-3 bg-white/20 rounded-full h-12 w-12 flex justify-center items-center cursor-pointer"
         onClick={wishListFunction}
         >
           {userWishList?.includes(data.id) ?<FaHeart size={22} className="text-white" /> : <GoHeart size={22} className="text-white" />  }
