@@ -41,7 +41,7 @@ app.use(body_parser_1.default.urlencoded({ limit: "15mb", extended: true }));
 // }));
 app.use(authincate_1.default);
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
 }));
 const startServer = async () => {
