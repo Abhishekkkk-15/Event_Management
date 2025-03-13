@@ -9,6 +9,8 @@ import { CiSearch } from "react-icons/ci";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { showError, showSuccess } from "../utils/toast";
 import ForgetPasswordDialog from "../components/ForgetPasswordDialog ";
+import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
+
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -35,7 +37,13 @@ export default function Login() {
       console.error("Login Error:", err);
     }
   };
-
+ if (loading) {
+    return (
+      <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white/30 backdrop-blur-sm">
+        <img src={loadingSvg} alt="Loading..." />
+      </div>
+    );
+  }
   return (
     <div className="flex min-h-screen justify-center items-center w-full ">
       {/* Login Form Container (Centered) */}

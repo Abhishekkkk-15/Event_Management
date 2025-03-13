@@ -62,6 +62,10 @@ const CreateEventForm = () => {
       showError("Please login to create an event");
       return;
     }
+    if(!user.isVerifed){
+      showInfo("Please Verify your email")
+      return
+    }
     if (files.length < 2) {
       showError("You need to upload at least two images.");
       return;
