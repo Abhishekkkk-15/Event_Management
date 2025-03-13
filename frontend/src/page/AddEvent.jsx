@@ -62,7 +62,7 @@ const CreateEventForm = () => {
       showError("Please login to create an event");
       return;
     }
-    if(!user.isVerifed){
+    if(!user.isVerified){
       showInfo("Please Verify your email")
       return
     }
