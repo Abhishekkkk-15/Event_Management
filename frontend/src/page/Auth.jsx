@@ -140,8 +140,11 @@ export default function Login() {
           <div className="text-center w-full">
             <p className="text-sm text-[#C1C1C1]">
               Don't have an account?{" "}
-              <Link to="/signUp" className="text-blue-500 hover:text-blue-600">
+              <Link to="/signUp" className="text-[#F2F862]">
+              <span className="text-[#F2F862]">
+
                 Sign Up
+              </span>
               </Link>
             </p>
           </div>
