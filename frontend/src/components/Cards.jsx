@@ -92,14 +92,20 @@ function Cards() {
 
   useEffect(() => {
     if (data) {
-      if (data.events.length === 0) {
+      if (data.events.length == 0) {
         setHasMore(false);
         return;
       }
    
-      setEvents((prev) => [...prev, ...data.events]);
+      setEvents((prev) => {
+        const newEvents = data.events.filter(
+          (event) => !prev.some((e) => e.id === event.id) // Ensure no duplicates
+        );
+        return [...prev, ...newEvents];
+      });
     }
-  }, [data]);
+
+  }, [data,loading]);
 
   useEffect(() => {
     if (!hasMore || loading) return;
