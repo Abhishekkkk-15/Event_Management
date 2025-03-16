@@ -37,7 +37,7 @@ export default function Login() {
       setTimeout(() => navigate("/"), 3000);
       showSuccess("Login successfully")
     } catch (err) {
-      showError(error.message)
+      showError("Invalid Email or password")
       console.error("Login Error:", err);
     }
   };
