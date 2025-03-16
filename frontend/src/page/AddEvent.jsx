@@ -35,6 +35,7 @@ const CreateEventForm = () => {
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("")
 
   const user = useSelector((state) => state.auth.user);
 
@@ -110,6 +111,7 @@ const CreateEventForm = () => {
     } catch (error) {
       showError("Upload failed. Try again!",error);
       console.error(error);
+      setError(error)
     } finally {
       setLoading(false);
     }
@@ -311,7 +313,7 @@ const CreateEventForm = () => {
                       />
                     </SelectTrigger>
 
-                    <SelectContent className="w-full bg-[#F2F826] shadow-lg rounded-lg overflow-hidden">
+                    <SelectContent className="w-full bg-[#F2F826] shadow-lg rounded-lg overflow-hidden" style={{padding:"10px"}}>
                       {[
                         "Sports",
                         "Party",
@@ -410,6 +412,7 @@ const CreateEventForm = () => {
                 {loading ? "Creating..." : "Create Event"}
               </button>
             </div>
+            {error && <p>{error}</p>}
           </form>
         </CardContent>
       </Card>
