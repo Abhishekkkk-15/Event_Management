@@ -124,7 +124,7 @@ const wishListFunction =async () =>{
               key={index}
               src={`${image.replace(
                 "/upload/",
-                "/upload/w_380,h_340,c_fill/"
+                "/upload/w_380,h_340/"
               )}`}
               alt={`Event Image ${index}`}
               className="w-full object-fit rounded-3xl"
