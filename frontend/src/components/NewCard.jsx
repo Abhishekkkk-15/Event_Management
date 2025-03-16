@@ -11,7 +11,7 @@ import { showInfo, showSuccess } from "../utils/toast";
 function Card({ data }) {
   const navigate = useNavigate();
   const user = useSelector(state => state.auth?.user?.wishList)
-  const userWishList = user?.map(event => event.event.id) || [];
+  const userWishList = user?.map(event => event?.event?.id) || [];
  const [addToWishList, { loading, error, data:wishListData }] = useMutation(ADD_TO_WISH_LIST);
  const [forDate, setForDate] = useState("")
 

@@ -31,7 +31,7 @@ import { FaHeart } from "react-icons/fa6";
 function DetailScreen() {
   const [event, setEvent] = useState({});
   const user = useSelector((state) => state.auth.user);
-  const userWishList = user?.wishList?.map((event) => event.event.id) || [];
+  const userWishList = user?.wishList?.map((event) => event?.event?.id) || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ticketCount, setTicketCount] = useState(1);
@@ -56,7 +56,6 @@ function DetailScreen() {
     }
     // console.log(data?.event?.bookings[0].user.avatar)
   }, [loading]);
-  console.log(event);
 
   const formattedDate = event?.date
     ? new Date(Number(event?.date)).toLocaleDateString("en-US", {

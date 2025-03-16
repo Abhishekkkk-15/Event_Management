@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GoArrowUpRight, GoHeart, GoLocation } from "react-icons/go";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { CiLocationOn, CiTimer } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
@@ -61,13 +61,14 @@ function UserEventCard({ data, idx, removeItem }) {
             className="object-cover rounded-3xl"
           />
           <div className="flex flex-col justify-start w-[60%]">
-            <span
+            <Link 
+            to={`/detailsScreen/${data?.id}`}
               className={`${
                 isExpired ? "text-[#FEFEFEF]" : "text-[#000000]"
               } font-bold text-[20px] `}
             >
               {data?.title}
-            </span>
+            </Link>
             <span
               className={`${
                 isExpired ? "text-[#F1F1F1]" : "text-[#000000]"
