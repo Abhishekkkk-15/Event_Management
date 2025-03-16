@@ -14,6 +14,7 @@ const GET_EVENTS = gql`
           avatar
         }
       }
+        bookedSlots
     }
   }
 `;

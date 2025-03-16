@@ -80,10 +80,10 @@ exports.eventResolver = {
             return data;
         },
         event: async (_, { id, limit }, { user }) => {
-            const cachedEvent = await redis_js_1.redisClient.get(`event:${id}`);
-            if (cachedEvent) {
-                return JSON.parse(cachedEvent);
-            }
+            // const cachedEvent = await redisClient.get(`event:${id}`)
+            // if (cachedEvent) {
+            //     return JSON.parse(cachedEvent)
+            // }
             const fetchedEvent = await db_1.db.event.findUnique({
                 where: {
                     id: id

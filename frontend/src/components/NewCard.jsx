@@ -13,6 +13,7 @@ function Card({ data }) {
   const user = useSelector(state => state.auth?.user?.wishList)
   const userWishList = user?.map(event => event?.event?.id) || [];
  const [addToWishList, { loading, error, data:wishListData }] = useMutation(ADD_TO_WISH_LIST);
+ const [addedTo,setAddedTo] = useState(false)
  const [forDate, setForDate] = useState("")
 
   const formattedDate = data?.date
@@ -39,6 +40,7 @@ const wishListFunction =async () =>{
      }
    })
    showSuccess("Added to your wish list")
+   setAddedTo(true)
  } catch (error) {
   console.log(error)
  }
@@ -67,7 +69,7 @@ if(error) console.log(error)
         <div className="absolute top-3 right-3 bg-white/20 rounded-full h-12 w-12 flex justify-center items-center cursor-pointer"
         onClick={wishListFunction}
         >
-          {userWishList?.includes(data.id) ?<FaHeart size={22} className="text-white" /> : <GoHeart size={22} className="text-white" />  }
+          {userWishList?.includes(data.id) || addedTo ?<FaHeart size={22} className="text-white" /> : <GoHeart size={22} className="text-white" />  }
           {/* <GoHeart size={22} className="text-white" /> 
           <FaHeart size={22} className="text-white" /> */}
         </div>
@@ -107,7 +109,7 @@ if(error) console.log(error)
               className=" h-12 w-12 bg-[#F2Fb62] flex items-center justify-center border-2 border-white gap-3"
               style={{ border: "2px solid white" }}
             >
-              <span>{data?.bookings?.length}+</span>
+              <span>{data?.bookedSlots}+</span>
             </Avatar>
           )}
 
