@@ -14,7 +14,7 @@ const storage = multer_1.default.diskStorage({
     filename: (req, file, cb) => {
         console.log(file);
         const ext = path_1.default.extname(file.originalname);
-        cb(null, file.fieldname + "-" + Date.now() + ".png");
+        cb(null, file.fieldname + "-" + Date.now());
     }
 });
 // Set a file size limit (2MB per file)

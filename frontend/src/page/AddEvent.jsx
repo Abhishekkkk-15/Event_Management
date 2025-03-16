@@ -412,7 +412,7 @@ const CreateEventForm = () => {
                 {loading ? "Creating..." : "Create Event"}
               </button>
             </div>
-            {error && <p>{error}</p>}
+            {error && <p>{error?.message}</p>}
           </form>
         </CardContent>
       </Card>
