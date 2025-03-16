@@ -7,7 +7,6 @@ import { showError, showInfo, showSuccess } from "../utils/toast.js";
 import { ticketBooking } from "../REST_API/booking.js";
 import { useSelector } from "react-redux";
 import ReviewsList from "../components/ReviewsList.jsx";
-import Congratulations from "../components/Congratulations.jsx";
 import { Avatar, AvatarImage } from "../components/ui/avatar";
 import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 import { GET_EVENT_BY_ID } from "../graphql/query/event.js";
@@ -54,7 +53,6 @@ function DetailScreen() {
       setEvent(data?.event);
       setAvatars(data.event.bookings);
     }
-    // console.log(data?.event?.bookings[0].user.avatar)
   }, [loading]);
 
   const formattedDate = event?.date
@@ -75,7 +73,7 @@ function DetailScreen() {
     }
     try {
       const { data } = await ticketBooking({ eventId, userEmail, tickets });
-      console.log(data);
+      
       setIsModalOpen(false);
       setIsBooked(true);
       setTicketId(data.ticketId);
@@ -105,7 +103,6 @@ const wishListFunction =async () =>{
       </div>
     );
   }
-  console.log(event?.bookedSlots);
   return (
     <div className="flex flex-col items-center h-full px-4 pb-44 gap-2 bg-[#000000]">
       {/* Image Section */}
@@ -221,7 +218,7 @@ const wishListFunction =async () =>{
                   className=" h-12 w-12 bg-[#F2Fb62] flex items-center justify-center border-2 border-white gap-3"
                   style={{ border: "2px solid white" }}
                 >
-                  <span>{event?.bookings?.length}+</span>
+                  <span>{event?.bookedSlots || 0}+</span>
                 </Avatar>
               )}
 

@@ -23,10 +23,10 @@ function WishlistPage() {
   useEffect(() => {
     // Fetch from backend only if userData is missing
     if (!userData) {
-      console.log("Calling Api");
+     
       fetchUserData();
     } else {
-      console.log("Data from Redux : ", userData.user.wishList);
+  
 
       setUserWishlist(userData?.user?.wishList);
     }

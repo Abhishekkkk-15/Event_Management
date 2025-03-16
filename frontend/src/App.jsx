@@ -32,7 +32,6 @@ function App() {
   const user = useSelector((state) => state.auth.user);
   const { data, loading } = useQuery(GET_AUTH_USER);
   const dispatch = useDispatch();
-console.log(import.meta.env.VITE_REST_END_POINT)
   useEffect(() => {
     if (data) {
       dispatch(loginSuccess(data.getAuthuser));

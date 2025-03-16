@@ -13,7 +13,7 @@ function UserEventCard({ data, idx, removeItem }) {
   const [isOpen, setIsOpen] = useState(false);
   const [onClose,setOnClose] = useState(false)
   const timestamp = Number(data?.date); // Ensure it's a number
-  console.log("From card : ", data);
+
   const [deleteEvemt, { loading, error }] = useMutation(DELETE_EVENT, {
     variables: {
       eventID: data.id,

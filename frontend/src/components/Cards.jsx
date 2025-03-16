@@ -61,7 +61,6 @@ function Cards() {
     if (category == null || price == null) return;
     const validPrice = isNaN(parseFloat(price)) ? 0 : parseFloat(price);
     setPriceRange(validPrice);
-    console.log(parseFloat(price));
     if (category == "All") {
       setCategoryDataToFetch("");
     } else {
