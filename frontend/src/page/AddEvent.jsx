@@ -108,7 +108,7 @@ const CreateEventForm = () => {
       setStartAt("");
       setEndAt("");
     } catch (error) {
-      showError("Upload failed. Try again!");
+      showError("Upload failed. Try again!",error);
       console.error(error);
     } finally {
       setLoading(false);
