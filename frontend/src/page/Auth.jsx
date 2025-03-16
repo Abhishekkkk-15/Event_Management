@@ -7,7 +7,7 @@ import { loginSuccess } from "../store/slice/user.slice";
 import loginImage from "../assets/login-image.webp"; // Add your image here
 import { CiSearch } from "react-icons/ci";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { showError, showSuccess } from "../utils/toast";
+import { showError, showInfo, showSuccess } from "../utils/toast";
 import ForgetPasswordDialog from "../components/ForgetPasswordDialog ";
 import loadingSvg from "/Double Ring@1x-1.0s-200px-200px.svg";
 
@@ -25,10 +25,14 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if(!email || !password){
+      return showInfo("All fields are required")
+    }
     try {
       const response = await login({
         variables: { input: { email, password } },
       });
+
       dispatch(loginSuccess(response.data.login));
       setTimeout(() => navigate("/"), 3000);
       showSuccess("Login successfully")
