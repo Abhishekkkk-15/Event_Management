@@ -62,6 +62,7 @@ const bookTicket = async (req, res) => {
             tickets: tickets
         });
         // await   sendTicketEmail(ticketId,ticketId,userEmail)       
+        await redis_js_1.redisClient.del(`event:${eventId}`);
         return res.json({ success: true, message: "Ticket generated", ticketId });
     }
     catch (error) {

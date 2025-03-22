@@ -45,7 +45,7 @@ const updateUser = async (req, res) => {
             }
         });
         await redis_1.redisClient.del(`user:${id}`);
-        await redis_1.redisClient.set(`user:${id}`, JSON.stringify(user));
+        //    await redisClient.set(`user:${id}`,JSON.stringify(user))
         return res.status(200).json({ message: "User Profile Updated" });
     }
     catch (error) {

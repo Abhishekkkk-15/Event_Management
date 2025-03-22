@@ -40,8 +40,8 @@ function TicketPage() {
     if (!date) return false;
     const timestamp = Number(date);
     if (filter === "All") return true;
-    if (filter === "Expired") return timestamp < Date.now();
-    if (filter === "Not-Expired") return !(timestamp < Date.now());
+    if (filter === "Expired") return timestamp <= Date.now();
+    if (filter === "Not-Expired") return !(timestamp <= Date.now());
   };
 
   if (loading) {

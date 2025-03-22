@@ -7,7 +7,7 @@ const redisClient = (0, redis_1.createClient)({
     socket: {
         tls: true,
         rejectUnauthorized: false,
-        keepAlive: 60000, // Increased keep-alive time
+        keepAlive: 30, // Increased keep-alive time
         reconnectStrategy: (retries) => Math.min(retries * 200, 5000), // Improved reconnect strategy
     },
     pingInterval: 10000, // Send PING every 10 seconds
