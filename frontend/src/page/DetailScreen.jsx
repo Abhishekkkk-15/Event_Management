@@ -38,6 +38,7 @@ function DetailScreen() {
   const { loading, error, data } = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId: id, limit: 2 },
   });
+  const [date, setDate] = useState("");
   const [avatars, setAvatars] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
@@ -52,16 +53,20 @@ function DetailScreen() {
     if (data?.event) {
       setEvent(data?.event);
       setAvatars(data.event.bookings);
-    }
-  }, [loading]);
-
-  const formattedDate = event?.date
-    ? new Date(Number(event?.date)).toLocaleDateString("en-US", {
+      if(!data?.event?.date) return
+    const formattedDate = data?.event?.date
+    ? new Date(Number(data?.event?.date)).toLocaleDateString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
       })
     : "Invalid Date";
+
+    setDate(formattedDate)
+    }
+
+  }, [loading]);  
+
 
   if (mutationError) showInfo(mutationError.message);
   if (error) console.log(error);
@@ -113,7 +118,7 @@ const wishListFunction =async () =>{
       >
         {/* Image Slider */}
         <div
-          className="flex transition-all duration-700 ease-in-out gap-x-2 rounded-3xl"
+          className="flex transition-all duration-700 ease-in-out gap-x-2 rounded-3xl lg:w-full"
           style={{
             transform: `translateX(-${currentIndex * 102}%)`,
             marginTop: "17px",
@@ -166,7 +171,7 @@ const wishListFunction =async () =>{
           </span>
           <div className="flex items-center text-[#FEFEFE] ">
             <CiCalendar />
-            {formattedDate} . {event?.location?.slice(0, 10)}
+            {date} . {event?.location?.slice(0, 10)}
           </div>
         </div>
         <div
@@ -183,7 +188,7 @@ const wishListFunction =async () =>{
       </div>
 
       {/* Description Section */}
-      <div className="min-h-48 max-h-96 bg-[#404040] rounded-3xl w-[95%] flex flex-col ">
+      <div className="min-h-48 max-h-[30rem] bg-[#404040] rounded-3xl w-[95%] flex flex-col ">
         <div className="flex flex-col items-center h-full 4 gap-2">
           {/* Description Section */}
           <div

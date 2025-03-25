@@ -39,10 +39,11 @@ function TicketPage() {
   const isExpired = (date, filter) => {
     if (!date) return false;
     const timestamp = Number(date);
+    
     if (filter === "All") return true;
     if (filter === "Expired") return timestamp <= Date.now();
-    if (filter === "Not-Expired") return !(timestamp <= Date.now());
-  };
+    if (filter === "Not-Expired") return timestamp >= Date.now(); // Fix: Use `>` instead of `!(<)`
+};
 
   if (loading) {
     return (

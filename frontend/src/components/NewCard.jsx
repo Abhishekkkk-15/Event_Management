@@ -51,7 +51,12 @@ if(error) console.log(error)
       {/* Image background */}
       <div className="relative h-[80%] w-[96%] flex items-center justify-center rounded-3xl overflow-hidden" style={{marginBottom:"10px", marginTop:"10px"}}>
         <img
-          src={`${data?.eventImages[0].replace(
+          src={`${
+            data?.eventImages[Math.floor(Math.random() * data?.eventImages?.length)].replace(
+              "/upload/",
+              "/upload/w_400,h_190,/"
+            )||
+            data?.eventImages[0].replace(
             "/upload/",
             "/upload/w_400,h_190,/"
           )}`}

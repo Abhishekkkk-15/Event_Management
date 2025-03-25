@@ -17,7 +17,7 @@ function SmallCard({ data }) {
       })
     : "Invalid Date";
 
-  let isExpired = timestamp < Date.now();
+  let isExpired = timestamp <= Date.now();
 
   function toSet() {
     setIsOpen(false);
