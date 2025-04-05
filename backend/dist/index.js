@@ -25,6 +25,8 @@ const forgetEmail_route_1 = __importDefault(require("./REST_API/routes/forgetEma
 const dotenv_1 = require("dotenv");
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = __importDefault(require("./lib/auth"));
+const eventProducer_1 = require("./services/kafka/producers/eventProducer");
+const eventConsumer_1 = require("./services/kafka/consumers/eventConsumer");
 const statusMonitor = require('express-status-monitor')();
 const app = (0, express_1.default)();
 (0, redis_1.initRedis)();
@@ -44,6 +46,11 @@ app.use((0, cors_1.default)({
     origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
     credentials: true,
 }));
+function initKafkaService() {
+    (0, eventProducer_1.connectProducer)();
+    (0, eventConsumer_1.startEventConsumer)();
+}
+initKafkaService();
 const startServer = async () => {
     const server = new server_1.ApolloServer({
         typeDefs: typedefs_1.typeDefs,
