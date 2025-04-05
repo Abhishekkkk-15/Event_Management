@@ -3,22 +3,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startEventConsumer = void 0;
+exports.startEventConsumer3 = void 0;
 const fs_1 = __importDefault(require("fs"));
 const kafkaClient_1 = require("../kafkaClient");
 const consumer = kafkaClient_1.kafka.consumer({ groupId: 'event-creation-group' });
 const cloudinaryConfig_1 = __importDefault(require("../../../lib/cloudinaryConfig"));
 const db_1 = require("../../../lib/db");
 const queue_1 = require("../../../bullMQ/queue");
-const startEventConsumer = async () => {
+const startEventConsumer3 = async () => {
     await consumer.connect();
     await consumer.subscribe({ topic: "create-events", fromBeginning: true });
     try {
         await consumer.run({
             eachMessage: async ({ topic, message }) => {
-                console.log("consumer1");
                 const data = JSON.parse(message.value?.toString() || "{}");
                 const { event, files, userId } = data;
+                console.log("event Consumer3");
                 try {
                     console.log("📥 Kafka: Processing event creation");
                     const date = new Date(event.date).toISOString();
@@ -64,4 +64,4 @@ const startEventConsumer = async () => {
         console.error("Failed to process Kafka message", error);
     }
 };
-exports.startEventConsumer = startEventConsumer;
+exports.startEventConsumer3 = startEventConsumer3;

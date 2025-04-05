@@ -27,6 +27,8 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = __importDefault(require("./lib/auth"));
 const eventProducer_1 = require("./services/kafka/producers/eventProducer");
 const eventConsumer_1 = require("./services/kafka/consumers/eventConsumer");
+const eventConsumer2_1 = require("./services/kafka/consumers/eventConsumer2");
+const eventConsumer3_1 = require("./services/kafka/consumers/eventConsumer3");
 const statusMonitor = require('express-status-monitor')();
 const app = (0, express_1.default)();
 (0, redis_1.initRedis)();
@@ -49,6 +51,8 @@ app.use((0, cors_1.default)({
 function initKafkaService() {
     (0, eventProducer_1.connectProducer)();
     (0, eventConsumer_1.startEventConsumer)();
+    (0, eventConsumer2_1.startEventConsumer2)();
+    (0, eventConsumer3_1.startEventConsumer3)();
 }
 initKafkaService();
 const startServer = async () => {
