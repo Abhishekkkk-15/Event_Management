@@ -4,69 +4,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyTicket = exports.downloadTicket = exports.bookTicket = void 0;
-const generatePdf_1 = require("../../lib/generatePdf");
 const db_js_1 = require("../../lib/db.js");
 const fs_1 = __importDefault(require("fs"));
 const redis_js_1 = require("../../services/redis.js");
-const queue_1 = require("../../bullMQ/queue");
-// import {} from "../../../"
+const ticketBooking_1 = require("../../services/kafka/producers/ticketBooking");
 const bookTicket = async (req, res) => {
     const { eventId, userEmail, tickets } = req.body;
     try {
         const event = await db_js_1.db.event.findFirst({
-            where: {
-                id: eventId
-            }
+            where: { id: eventId },
         });
-        if (event.bookedSlots > event.maxSlots) {
-            return res.status(400).json({ success: false, message: "Tickets are full" });
+        if (!event || event.bookedSlots >= event.maxSlots) {
+            return res.status(400).json({ success: false, message: "Tickets are full or event not found" });
         }
         const userId = req.user.payload.id;
-        const ticket = await db_js_1.db.booking.create({
-            data: {
-                userId,
-                eventId,
-                tickets,
-            },
-            include: {
-                event: true, // This fetches the associated event details
-            },
-        });
-        console.log(ticket.event.title);
-        await db_js_1.db.event.update({
-            where: {
-                id: eventId
-            },
-            data: {
-                bookedSlots: event?.bookedSlots + tickets
-            }
-        });
-        const ticketId = ticket.id;
-        // console.log("It comes here")
-        const pdfPath = await (0, generatePdf_1.generateTicketPDF)(ticketId, userEmail, ticket.event.title, tickets);
-        console.log(pdfPath);
-        const mailOptions = {
-            from: "jangidabhishek276@gmail.com",
-            to: userEmail,
-            subject: "Your Event Ticket",
-            text: `Downlaod your ticker : http://localhost:5000/download-ticket/${ticketId}`,
-            attacments: [{
-                    filePath: 'Event-Ticket.pdf',
-                    path: pdfPath
-                }]
-        };
-        queue_1.sendEmailQueue.add("book-ticket-email", {
-            ticketId,
+        const messagePayload = {
+            eventId,
             userEmail,
-            eventTitleForBookEvent: ticket.event.title,
-            tickets: tickets
-        });
-        // await   sendTicketEmail(ticketId,ticketId,userEmail)       
+            tickets,
+            userId,
+        };
+        (0, ticketBooking_1.ticketBooking)(messagePayload);
         await redis_js_1.redisClient.del(`event:${eventId}`);
-        return res.json({ success: true, message: "Ticket generated", ticketId });
+        return res.status(200).json({ success: true, message: "Ticket request received. You'll receive your ticket shortly." });
     }
     catch (error) {
-        res.status(500).json({ success: false, message: "Error generating ticket" });
+        console.error("Error booking ticket:", error);
+        return res.status(500).json({ success: false, message: "Error booking ticket" });
     }
 };
 exports.bookTicket = bookTicket;

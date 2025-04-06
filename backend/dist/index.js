@@ -29,6 +29,10 @@ const eventProducer_1 = require("./services/kafka/producers/eventProducer");
 const eventConsumer_1 = require("./services/kafka/consumers/eventConsumer");
 const eventConsumer2_1 = require("./services/kafka/consumers/eventConsumer2");
 const eventConsumer3_1 = require("./services/kafka/consumers/eventConsumer3");
+const ticketBooking_1 = require("./services/kafka/producers/ticketBooking");
+const ticketBookingConsumer1_1 = require("./services/kafka/consumers/ticketBookingConsumer1");
+const ticketBookingConsumer2_1 = require("./services/kafka/consumers/ticketBookingConsumer2");
+const ticketBookingConsumer3_1 = require("./services/kafka/consumers/ticketBookingConsumer3");
 const statusMonitor = require('express-status-monitor')();
 const app = (0, express_1.default)();
 (0, redis_1.initRedis)();
@@ -50,6 +54,10 @@ app.use((0, cors_1.default)({
 }));
 function initKafkaService() {
     (0, eventProducer_1.connectProducer)();
+    (0, ticketBooking_1.connectTicketBookingProducer)();
+    (0, ticketBookingConsumer1_1.startTicketBookingConsumer1)();
+    (0, ticketBookingConsumer2_1.startTicketBookingConsumer2)();
+    (0, ticketBookingConsumer3_1.startTicketBookingConsumer3)();
     (0, eventConsumer_1.startEventConsumer)();
     (0, eventConsumer2_1.startEventConsumer2)();
     (0, eventConsumer3_1.startEventConsumer3)();

@@ -52,7 +52,9 @@ async function sendEmail(ticketId, toEmail, eventTitleForBookEvent, tickets) {
         ]
     });
     console.log('✅ Email sent successfully!');
-    console.log("Deleting PDF : ", fs_1.default.unlinkSync(pdfPath));
+    console.log("Deleting PDF : ", fs_1.default.unlink(pdfPath, () => {
+        console.log("deleted");
+    }));
     console.log("Deleting QR Png : ", fs_1.default.unlinkSync(`./tickets/qrcode-${ticketId}.png`));
 }
 const successMailOptions = (userEmail, eventTitle, eventDate) => ({
