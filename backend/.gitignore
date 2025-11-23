@@ -16,3 +16,4 @@ build/
 *.js
 *.js.map
 ca.pem
+desktop.ini

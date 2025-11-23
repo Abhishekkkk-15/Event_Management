@@ -11,7 +11,7 @@ backend/node_modules/
 
 # Ignore the frontend build folder (if any)
 frontend/build/
-backend/dist
+backend/dist/
 
 # Ignore Docker volumes
 !docker-compose.yml/
