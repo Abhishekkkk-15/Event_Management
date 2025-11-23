@@ -12,7 +12,6 @@ const express4_1 = require("@apollo/server/express4");
 const cors_1 = __importDefault(require("cors"));
 const typedefs_1 = require("./graphql/typedefs");
 const resolvers_1 = require("./graphql/resolvers");
-const authincate_1 = __importDefault(require("./lib/authincate"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 // import { graphqlUploadExpress  } from 'graphql-upload';
 const redis_1 = require("./services/redis");
@@ -47,7 +46,7 @@ app.use(body_parser_1.default.urlencoded({ limit: "15mb", extended: true }));
 //   maxFileSize:5*1024*1024,
 //   maxFiles:3
 // }));
-app.use(authincate_1.default);
+// app.use(authenticate);
 app.use((0, cors_1.default)({
     origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
     credentials: true,

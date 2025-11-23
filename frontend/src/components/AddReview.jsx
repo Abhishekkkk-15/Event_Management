@@ -24,7 +24,8 @@ const AddReview = ({ onSubmit }) => {
     <Card className="w-full bg-[#404040] shadow-md rounded-2xl " style={{ padding: "10px", backgroundColor: "#404040" }}>
       <CardContent className="flex flex-col gap-4">
         {/* Star Rating Input */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2"
+        >
           {Array.from({ length: 5 }, (_, i) => (
             <Star
               key={i}

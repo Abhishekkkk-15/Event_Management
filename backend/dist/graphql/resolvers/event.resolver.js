@@ -91,6 +91,7 @@ exports.eventResolver = {
                     id: id
                 }
             });
+            console.log(fetchedEvent);
             if (!fetchedEvent) {
                 throw new Error('Event not found');
             }

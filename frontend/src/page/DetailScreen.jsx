@@ -38,6 +38,7 @@ function DetailScreen() {
   const { loading, error, data } = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId: id, limit: 2 },
   });
+  console.log(data)
   const [date, setDate] = useState("");
   const [avatars, setAvatars] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
