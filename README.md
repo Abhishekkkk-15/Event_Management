@@ -53,7 +53,7 @@ Event Buddy is a scalable event management and ticketing system designed to hand
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/Abhishekkkk-15/Event_Management
 
 # Install dependencies
 npm install
