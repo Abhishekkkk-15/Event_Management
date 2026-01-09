@@ -16,3 +16,4 @@ backend/dist
 # Ignore Docker volumes
 !docker-compose.yml/
 desktop.ini
+.tmp/*
